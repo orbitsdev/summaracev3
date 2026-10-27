@@ -1,0 +1,15 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.summarace.app'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.summarace.app'
+        minSdk 24
+        targetSdk 35
+        versionCode 3
+        versionName '1.3.0'
+    }
+    buildTypes { release { minifyEnabled false } }
+    // keep compressed assets readable by the WebView
+    androidResources { noCompress += ['mp3', 'woff2'] }
+}
