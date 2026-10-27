@@ -2033,7 +2033,15 @@ function storyVocab(){
   return new Set(norm(all).split(" ").flatMap(w=>[w,stem(w)]));
 }
 // names in the story: words that start with a capital letter in the middle of a sentence
-function storyNames(){const out=new Set();[L.s.passage||"",...L.s.text].join(" ").split(/[.!?"“”]+\s*/).forEach(sent=>sent.split(/\s+/).slice(1).forEach(w=>{const c=w.replace(/[^A-Za-z'’]/g,"").replace(/['’]s$/,"");if(/^[A-Z][a-z]{2,}$/.test(c))out.add(c.toLowerCase())}));return out}
+function storyNames(){if(L._nm&&L._nm.s===L.s)return L._nm.v;
+  // a name: never written in small letters in the story, and either capitalised mid-sentence, named in a story-part answer, or not an everyday word
+  const cap=new Set(),low=new Set(),mid=new Set(),ans=new Set(),clean=w=>w.replace(/[^A-Za-z'’]/g,"").replace(/['’]s$/,"");
+  const body=[L.s.passage||"",...L.s.text].join(" ");
+  [L.s.title,body].join(" ").split(/\s+/).forEach(w=>{const c=clean(w);if(c.length<3)return;if(/^[A-Z][a-z]+$/.test(c))cap.add(c.toLowerCase());else if(/^[a-z]+$/.test(c))low.add(c)});
+  body.split(/[.!?:;"“”]+\s*/).forEach(sent=>sent.split(/\s+/).slice(1).forEach(w=>{const c=clean(w);if(/^[A-Z][a-z]{2,}$/.test(c))mid.add(c.toLowerCase())}));
+  const e=L.s.swbst||{};SW.forEach(([k])=>{if(e[k])String(e[k].answer).split(/\s+/).forEach(w=>{const c=clean(w);if(/^[A-Z][a-z]{2,}$/.test(c))ans.add(c.toLowerCase())})});
+  if(!EN)EN=new Set(String(window.SR_WORDS||"").split(" "));
+  const v=new Set([...cap].filter(w=>!low.has(w)&&!STOP.has(w)&&!FUNC.has(w)&&!COMMON.has(w)&&(mid.has(w)||ans.has(w)||!EN.has(w))));L._nm={s:L.s,v};return v}
 function scoreSummary(text){
   const low=" "+norm(text)+" ",e=L.s.swbst;
   const pts=e?SW.map(([k,lab])=>({key:k,label:lab,words:e[k].words})):(L.s.keyPoints||[]).map(k=>({key:k.label,label:k.label,words:k.words}));
@@ -2077,6 +2085,65 @@ function storyShare(toks){
   if(main.length<4)return 1;
   return main.filter(w=>vocab.has(w)||vocab.has(stem(w))).length/main.length;
 }
+/* Option A: a closer offline check. It splits the summary into parts (at periods and at but / so / then / because),
+   finds which story part each piece is about, and checks three common mistakes:
+   a "not" or "never" that the story does not have, story parts told in the wrong order, and the wrong character doing something. */
+const NEG=/\b(not|never|no|nobody|nothing|nowhere|cannot|can't|won't|don't|doesn't|didn't|isn't|wasn't|weren't|wouldn't|couldn't|shouldn't|hasn't|haven't|hadn't|aren't|refused)\b/;
+const CUE={wanted:/\b(want|wants|wanted|wish|wished|hoped|needed|dreamed)\b/,but:/^but\b|\b(problem|however)\b/,so:/^so\b/,then:/^(then|finally|in the end|at last)\b/};
+let _swk=null;
+function swKeys(){
+  if(_swk&&_swk.s===L.s)return _swk;
+  const e=L.s.swbst||{},nm=storyNames(),cnt={},sets={};
+  SW.slice(1).forEach(([k])=>{if(!e[k])return;const st=new Set();
+    [...(e[k].words||[]),...norm(e[k].answer).split(" ")].forEach(w=>{w=norm(w).replace(/'s$/,"");if(w.length>2&&!STOP.has(w)&&!FUNC.has(w)&&!COMMON.has(w)&&!nm.has(w))st.add(stem(w))});
+    sets[k]=st;st.forEach(w=>cnt[w]=(cnt[w]||0)+1)});
+  // who does each part in the story: the first character named in its answer (Wanted belongs to the main character)
+  const names=[...nm],first=t=>{const ws=norm(t).split(" ").map(w=>w.replace(/'s$/,""));for(const w of ws)if(nm.has(w))return w;return null};
+  const hero=first(e.somebody?e.somebody.answer:"");
+  const actor={};SW.slice(1).forEach(([k])=>{if(e[k])actor[k]=k==="wanted"?hero:first(e[k].answer)});
+  const neg={};SW.slice(1).forEach(([k])=>{if(e[k])neg[k]=NEG.test(norm(e[k].answer))});
+  _swk={s:L.s,sets,cnt,actor,neg,nm,hero};
+  // a "not" in Teacher Mira's example also counts as part of the story
+  pieces(L.s.modelSummary||"").forEach(p=>{const m=pieceIs(p);if(m&&NEG.test(p.n))neg[m]=true});
+  return _swk;
+}
+function pieces(text){
+  const out=[];String(text).split(/(?<=[.!?;])\s+/).forEach((sent,si)=>{
+    sent.split(/,?\s+(?=\b(?:but|so|then|because|until|finally)\b)/i).forEach(c=>{const raw=c.trim();if(raw.split(/\s+/).length>=2)out.push({raw,n:norm(raw),si})})});
+  return out;
+}
+// which story part a piece is about (null when it is not clear)
+function pieceIs(p){
+  const K=_swk,toks=p.n.split(" ").map(stem),sc={};
+  Object.keys(K.sets).forEach(k=>{let v=0;new Set(toks).forEach(t=>{if(K.sets[k].has(t))v+=1/K.cnt[t]});if(CUE[k]&&CUE[k].test(p.n))v+=.6;sc[k]=v});
+  const ks=Object.keys(sc).sort((a,b)=>sc[b]-sc[a]);
+  return sc[ks[0]]>=.45&&sc[ks[0]]-(sc[ks[1]]||0)>=.2?ks[0]:null;
+}
+function meaningChecks(text){
+  const K=swKeys(),ps=pieces(text),out=[],snip=t=>{t=t.replace(/[.,!?;:]+$/,"");return t.length>60?t.slice(0,57)+"…":t};
+  // show a name the way the story writes it, e.g. "Baba Yaga"
+  const body=[L.s.passage||"",...L.s.text].join(" "),full=w=>{const m=body.match(new RegExp("\\b"+w[0].toUpperCase()+w.slice(1)+"(?:\\s+[A-Z][a-z]+)?"));return m?m[0]:w[0].toUpperCase()+w.slice(1)};
+  const lab=k=>(SW.find(x=>x[0]===k)||[])[1]||k;
+  ps.forEach(p=>{p.k=pieceIs(p)});
+  // 1. a "not" or "never" the story does not have
+  ps.forEach(p=>{const m=p.n.match(NEG);if(!m||!p.k||K.neg[p.k])return;
+    out.push({kind:"not",msg:`Check “${esc(snip(p.raw))}”. Does the story really say “${esc(m[1])}”? Read the ${esc(lab(p.k))} part again.`})});
+  // 2. the wrong character: the piece names a different story character first
+  ps.forEach(p=>{if(!p.k)return;const want=K.actor[p.k];if(!want)return;
+    // only the doer counts: the first word after but / so / then (a pronoun like "he" is never flagged)
+    const ws=p.n.split(" ").map(w=>w.replace(/'s$/,""));while(ws.length&&/^(but|so|then|and|finally|because|until|later|at|last|in|the|end)$/.test(ws[0]))ws.shift();
+    const who=K.nm.has(ws[0])?ws[0]:null;if(!who||who===want)return;
+    // "Bella would not let Molly..." still names the right one first; only flag a clear swap
+    out.push({kind:"who",msg:`Check who did it: “${esc(snip(p.raw))}”. In the story, it was ${esc(full(want))}, not ${esc(full(who))}.`})});
+  // 3. story parts told in the wrong order (a part told early with because / after / before / since / when is fine)
+  const rank={wanted:1,but:2,so:3,then:4},seen={};ps.forEach(p=>{if(p.k&&!seen[p.k])seen[p.k]=p});
+  const ks=Object.keys(seen).sort((a,b)=>rank[a]-rank[b]);
+  for(let i=0;i<ks.length;i++)for(let j=i+1;j<ks.length;j++){const A=seen[ks[i]],B=seen[ks[j]];
+    if(B.si<A.si&&!/\b(because|after|before|since|when)\b/.test(B.n)&&!out.some(o=>o.kind==="order"))
+      out.push({kind:"order",msg:`Check the order: you told “${esc(lab(ks[j]))}” before “${esc(lab(ks[i]))}”. Tell what happened first, then next, then how it ended.`})}
+  return out;
+}
+
 const SW_TOLD={somebody:"You told who the story is about.",wanted:"You told what they wanted.",but:"You told the problem.",so:"You told what they did about it.",then:"You told how it ended."};
 function checkSummary(){setTimeout(()=>{const c=$("#sumChips");if(c&&c.children.length)c.scrollIntoView({block:"nearest",behavior:"smooth"})},80);
   const text=$("#sumText").value.trim(),n=words(text),fb=$("#sumChips");
@@ -2097,22 +2164,23 @@ function checkSummary(){setTimeout(()=>{const c=$("#sumChips");if(c&&c.children.
   const e=L.s.swbst||{},res=scoreSummary(text),hit=res.filter(r=>r.hit).length,need=Math.min(res.length,Math.max(3,res.length-1));
   const who=!res.length||res[0].hit,main=mainIdeaHit(text)||(res.length>0&&hit===res.length);
   // correctness: details taken from wrong answer choices, and names that are not in the story
-  const low=new Set(toks.map(stem)),off=offStoryWords(),wrongBits=[...off.entries()].filter(([st])=>low.has(st)).map(([,v])=>v);
-  const names=strangerNames(text);
+  const low=new Set(toks.map(stem)),off=offStoryWords(),wrongBits=[...off.entries()].filter(([st,v])=>low.has(st)&&!NEG.test(v.word)).map(([,v])=>v);
+  const names=strangerNames(text),mean=meaningChecks(text);
   const rows=res.map(r=>{
     if(r.hit)return row("hit","✓ "+esc(r.label),SW_TOLD[r.key]||"Found it.");
     const sw=SW.find(x=>x[0]===r.key),q=sw?sw[3]:"Add this part.",clue=e[r.key]&&e[r.key].words&&e[r.key].words[0];
     return row("miss","Add: "+esc(r.label),esc(q)+(sumTries>1&&clue?` Hint: think about “${esc(clue)}”.`:""));
   });
   rows.push(main?row("hit","✓ Main idea","Your summary tells what the whole story is about."):row("miss","Main idea","What is the whole story mostly about? Say it in your own words."));
+  mean.forEach(m=>rows.push(row("miss",m.kind==="order"?"Check the order":m.kind==="who"?"Check who":"Check this",m.msg)));
   wrongBits.forEach(b=>rows.push(row("miss","Check this",`Is “${esc(b.word)}” really in the story? Read that part again.`)));
   names.forEach(nm=>rows.push(row("miss","Check the name",`I can't find “${esc(nm)}” in this story. Who is the character?`)));
   fb.innerHTML=rows.join("");
-  const blockWrong=wrongBits.length>0&&sumTries<3;
+  const blockWrong=(wrongBits.length>0||mean.length>0)&&sumTries<3;
   if(hit>=need&&who&&main&&!blockWrong){
     sfx.win();mood("happy");L.score.summary=Math.max(0,(hit-wrongBits.length*.5)/res.length);
     $("#sumModel").innerHTML=`<b>Teacher Mira's example:</b> ${esc(L.s.modelSummary)}`;
-    say(hit===res.length&&!wrongBits.length?"Excellent! Your summary has every story element, and it matches the story.":"Good summary! You told the main idea in your own words.");
+    say(hit===res.length&&!wrongBits.length&&!mean.length?"Excellent! Your summary has every story element, and it matches the story.":"Good summary! You told the main idea in your own words.");
     $("#sumCheck").textContent="See my results";$("#sumCheck").onclick=finishLevel;
   }else{
     sfx.bad();mood("think");
@@ -3310,7 +3378,7 @@ const Race=(()=>{
     stop(){running=false;cancelAnimationFrame(raf);cancelAnimationFrame(endRaf)}
   };
 })();
-if(location.hash==="#hq"){window.SR_RACE=Race;window.SR_FLOW={startLevel,startRace,startOrder,startSummary,checkSummary,finishLevel,get L(){return L}}} // test hook
+if(location.hash==="#hq"){window.SR_RACE=Race;window.SR_FLOW={meaningChecks,pieces,pieceIs,swKeys,startLevel,startRace,startOrder,startSummary,checkSummary,finishLevel,get L(){return L}}} // test hook
 
 goLearner();
 // Offline install support when hosted on a website (not used inside the artifact viewer or from a local file).
