@@ -2100,7 +2100,8 @@ function swKeys(){
   // who does each part in the story: the first character named in its answer (Wanted belongs to the main character)
   const names=[...nm],first=t=>{const ws=norm(t).split(" ").map(w=>w.replace(/'s$/,""));for(const w of ws)if(nm.has(w))return w;return null};
   const hero=first(e.somebody?e.somebody.answer:"");
-  const actor={};SW.slice(1).forEach(([k])=>{if(e[k])actor[k]=k==="wanted"?hero:first(e[k].answer)});
+  const all=t=>norm(t).split(" ").map(w=>w.replace(/'s$/,"")).filter(w=>nm.has(w));
+  const actor={};SW.slice(1).forEach(([k])=>{if(e[k])actor[k]=k==="wanted"?(hero?[hero]:[]):all(e[k].answer)});
   const neg={};SW.slice(1).forEach(([k])=>{if(e[k])neg[k]=NEG.test(norm(e[k].answer))});
   _swk={s:L.s,sets,cnt,actor,neg,nm,hero};
   // a "not" in Teacher Mira's example also counts as part of the story
@@ -2127,20 +2128,20 @@ function meaningChecks(text){
   ps.forEach(p=>{p.k=pieceIs(p)});
   // 1. a "not" or "never" the story does not have
   ps.forEach(p=>{const m=p.n.match(NEG);if(!m||!p.k||K.neg[p.k])return;
-    out.push({kind:"not",msg:`Check “${esc(snip(p.raw))}”. Does the story really say “${esc(m[1])}”? Read the ${esc(lab(p.k))} part again.`})});
+    out.push({kind:"not",msg:`“${esc(snip(p.raw))}”. Does the story really say “${esc(m[1])}”? Read the ${esc(lab(p.k))} part again.`})});
   // 2. the wrong character: the piece names a different story character first
-  ps.forEach(p=>{if(!p.k)return;const want=K.actor[p.k];if(!want)return;
+  ps.forEach(p=>{if(!p.k)return;const want=K.actor[p.k];if(!want||!want.length)return;
     // only the doer counts: the first word after but / so / then (a pronoun like "he" is never flagged)
     const ws=p.n.split(" ").map(w=>w.replace(/'s$/,""));while(ws.length&&/^(but|so|then|and|finally|because|until|later|at|last|in|the|end)$/.test(ws[0]))ws.shift();
-    const who=K.nm.has(ws[0])?ws[0]:null;if(!who||who===want)return;
+    const who=K.nm.has(ws[0])?ws[0]:null;if(!who||want.includes(who))return;
     // "Bella would not let Molly..." still names the right one first; only flag a clear swap
-    out.push({kind:"who",msg:`Check who did it: “${esc(snip(p.raw))}”. In the story, it was ${esc(full(want))}, not ${esc(full(who))}.`})});
+    out.push({kind:"who",msg:`“${esc(snip(p.raw))}”. In the story, it was ${esc(full(want[0]))}, not ${esc(full(who))}.`})});
   // 3. story parts told in the wrong order (a part told early with because / after / before / since / when is fine)
-  const rank={wanted:1,but:2,so:3,then:4},seen={};ps.forEach(p=>{if(p.k&&!seen[p.k])seen[p.k]=p});
+  const sents=String(text).split(/(?<=[.!?;])\s+/).map(norm),rank={wanted:1,but:2,so:3,then:4},seen={};ps.forEach(p=>{if(p.k&&!seen[p.k])seen[p.k]=p});
   const ks=Object.keys(seen).sort((a,b)=>rank[a]-rank[b]);
   for(let i=0;i<ks.length;i++)for(let j=i+1;j<ks.length;j++){const A=seen[ks[i]],B=seen[ks[j]];
-    if(B.si<A.si&&!/\b(because|after|before|since|when)\b/.test(B.n)&&!out.some(o=>o.kind==="order"))
-      out.push({kind:"order",msg:`Check the order: you told “${esc(lab(ks[j]))}” before “${esc(lab(ks[i]))}”. Tell what happened first, then next, then how it ended.`})}
+    if(B.si<A.si&&!/\b(because|after|before|since|when)\b/.test(sents[B.si]||"")&&!out.some(o=>o.kind==="order"))
+      out.push({kind:"order",msg:`You told “${esc(lab(ks[j]))}” before “${esc(lab(ks[i]))}”. Tell what happened first, then next, then how it ended.`})}
   return out;
 }
 
@@ -2154,6 +2155,8 @@ function checkSummary(){setTimeout(()=>{const c=$("#sumChips");if(c&&c.children.
   const unknown=toks.filter(w=>!knownWord(w,vocab));
   if(unknown.length>Math.max(1,toks.length*.15)){sfx.bad();say("I can't read some of these words. Please write your summary in English, using real words.");fb.innerHTML=row("miss","Check spelling",unknown.slice(0,6).map(w=>`“${esc(w)}”`).join(", "));return}
   if(new Set(toks).size<toks.length*.5){sfx.bad();say("Some words are repeated too many times. Tell the story in sentences that make sense.");return}
+  const sc0=sentenceCount(text);
+  if(sc0>3&&n/sc0>=3){sfx.bad();say(`I count ${sc0} sentences. A summary keeps only the most important parts, so use 2 or 3 sentences.`);return}
   if(!sentenceLike(text)){sfx.bad();say("Write it in sentences, not a list of words. Use words like wanted, but, so, and then.");return}
   const sc=sentenceCount(text);
   if(sc<2){sfx.bad();say("I see only one sentence. Please write 2 or 3 sentences, with a period at the end of each one.");return}
