@@ -212,7 +212,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Molly wanted her turn on the swing, but Bella would not get off, so Molly told Bella how she felt with an I message, and then Bella got off and Molly was happy."
+  "modelSummary": "Molly wanted her turn on the swing, but Bella would not get off. So Molly told Bella how she felt with an I message. Then Bella got off and Molly was happy."
  },
  {
   "id": 2,
@@ -425,7 +425,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Duncan wanted to draw with his crayons, but they quit because they were unhappy, so he read their letters and listened, and then he tried to make every crayon happy again."
+  "modelSummary": "Duncan wanted to draw with his crayons, but they quit because they were unhappy. So he read their letters and listened. Then he tried to make every crayon happy again."
  },
  {
   "id": 3,
@@ -639,7 +639,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Jayden wanted to pick an animal for his class paper, but every animal had something bad about it, so he kept reading and thinking, and then he picked being a human."
+  "modelSummary": "Jayden wanted to pick an animal for his class paper, but every animal had something bad about it. So he kept reading and thinking. Then he picked being a human."
  },
  {
   "id": 4,
@@ -855,7 +855,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Maggie, Travis, and Lucy wanted to get out of the room, but the key was stuck in ice, so Lucy used a science idea with a metal tray, and then the ice melted and they got out."
+  "modelSummary": "Maggie, Travis, and Lucy wanted to get out of the room, but the key was stuck in ice. So Lucy used a science idea with a metal tray. Then the ice melted and they got out."
  },
  {
   "id": 5,
@@ -1070,7 +1070,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Mateo wanted a pet cat, but Santiago was old and sick and needed more help, so Mateo spent time with him and thought hard, and then he picked Santiago as his new friend."
+  "modelSummary": "Mateo wanted a pet cat, but Santiago was old and sick and needed more help. So Mateo spent time with him and thought hard. Then he picked Santiago as his new friend."
  },
  {
   "id": 6,
@@ -1285,7 +1285,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Shawn the snail wanted to get the food and drinks before anyone else, but the other snails got hungry and mad, so he left, came back to help, and then used his speed for others."
+  "modelSummary": "Shawn the snail wanted to get the food and drinks before anyone else, but the other snails got hungry and mad. So he left and came back to help. Then he used his speed for others."
  },
  {
   "id": 7,
@@ -1502,7 +1502,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Emma and Josh wanted to keep eating at their favorite Italian place, but their dad picked a new Lebanese one, so they agreed to try it, and then they were willing to taste something new."
+  "modelSummary": "Emma and Josh wanted to keep eating at their favorite Italian place, but their dad picked a new Lebanese one. So they agreed to try it. Then they were willing to taste something new."
  },
  {
   "id": 8,
@@ -1718,7 +1718,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Timmy wanted to get back his lost lunchbox, but he could not find it alone, so his friends helped him look for clues, and then they found it by the swings."
+  "modelSummary": "Timmy wanted to get back his lost lunchbox, but he could not find it alone. So his friends helped him look for clues. Then they found it by the swings."
  },
  {
   "id": 9,
@@ -1932,7 +1932,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "The Giant wanted his garden all to himself, but the kids loved to play there, so he got angry, sent them away and built a wall, and then the sad children lost their happy place."
+  "modelSummary": "The Giant wanted his garden all to himself, but the kids loved to play there. So he got angry, sent them away and built a wall. Then the sad children lost their happy place."
  },
  {
   "id": 10,
@@ -2152,7 +2152,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Omar and his family wanted a fun day at the zoo, but there were so many animals to explore, so they went to see lions, giraffes and ducks, and then made happy memories together."
+  "modelSummary": "Omar and his family wanted a fun day at the zoo, but there were so many animals to explore. So they went to see lions, giraffes and ducks. Then they made happy memories together."
  },
  {
   "id": 11,
@@ -2373,7 +2373,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Rylee wanted her wishes to come true, but each wish caused trouble for others, so she went to a museum to learn about the necklace, and then decided to stop keeping it."
+  "modelSummary": "Rylee wanted her wishes to come true, but each wish caused trouble for others. So she went to a museum to learn about the necklace. Then she decided to stop keeping it."
  },
  {
   "id": 12,
@@ -2595,7 +2595,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Visitors wanted to enjoy music, art and food in Portugal, but there were so many festivals to explore, so they went to AgitAgueda and its landmarks, and then they discovered the country's rich traditions."
+  "modelSummary": "Visitors wanted to enjoy music, art and food in Portugal, but there were so many festivals to explore. So they went to AgitAgueda and its landmarks. Then they discovered the country's rich traditions."
  },
  {
   "id": 13,
@@ -2812,7 +2812,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "The Rubin family wanted more room in their small home, but it felt too crowded, so they listened to Reb Solman and brought in relatives and animals, and then the house felt big when everyone left."
+  "modelSummary": "The Rubin family wanted more room in their small home, but it felt too crowded. So they listened to Reb Solman and brought in relatives and animals. Then the house felt big when everyone left."
  },
  {
   "id": 14,
@@ -3026,7 +3026,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Owen the baby hippo wanted a friend, but he was alone and the old tortoise Mzee stayed away from him, so Owen kept following him, and then they became best buddies."
+  "modelSummary": "Owen the baby hippo wanted a friend, but he was alone and the old tortoise Mzee stayed away from him. So Owen kept following him. Then they became best buddies."
  },
  {
   "id": 15,
@@ -3241,7 +3241,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Grandfather wanted to talk about his childhood, but Sharr and Kaze could not imagine a world without Mindcaps, so he showed them photos and told stories, and then they were amazed."
+  "modelSummary": "Grandfather wanted to talk about his childhood, but Sharr and Kaze could not imagine a world without Mindcaps. So he showed them photos and told stories. Then they were amazed."
  },
  {
   "id": 16,
@@ -3462,7 +3462,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "A father and son wanted a safe new home after a flood, but they kept having bad luck, so they stayed hopeful and kept going, and then they found treasure when they got home."
+  "modelSummary": "A father and son wanted a safe new home after a flood, but they kept having bad luck. So they stayed hopeful and kept going. Then they found treasure when they got home."
  },
  {
   "id": 17,
@@ -3676,7 +3676,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Amelia wanted to dance her tap solo well, but she was scared of messing up in front of everyone, so she practiced a lot and stayed brave, and then the crowd clapped and she felt proud."
+  "modelSummary": "Amelia wanted to dance her tap solo well, but she was scared of messing up in front of everyone. So she practiced a lot and stayed brave. Then the crowd clapped and she felt proud."
  },
  {
   "id": 18,
@@ -3894,7 +3894,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Sharr and Kaze wanted to know about Grandfather's childhood, but their future world with Mindcaps was so different, so he told them stories about cars and stew, and then they saw the past was special."
+  "modelSummary": "Sharr and Kaze wanted to know about Grandfather's childhood, but their future world with Mindcaps was so different. So he told them stories about cars and stew. Then they saw the past was special."
  },
  {
   "id": 19,
@@ -4108,7 +4108,7 @@ window.STORIES = [
     "answer": 1
    }
   ],
-  "modelSummary": "Hector wanted to find buddies at his new school, but he was nervous since nobody knew him, so he did cool ball tricks at recess, and then the kids liked him and became his friends."
+  "modelSummary": "Hector wanted to find buddies at his new school, but he was nervous since nobody knew him. So he did cool ball tricks at recess. Then the kids liked him and became his friends."
  },
  {
   "id": 20,
@@ -4323,7 +4323,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Chef Pierre hoped to cook frog legs so the queen would make him her top chef, but nobody could catch the frog, so he tried it himself and fell in, and then Slice and Dice got the job."
+  "modelSummary": "Chef Pierre hoped to cook frog legs so the queen would make him her top chef, but nobody could catch the frog. So he tried it himself and fell in. Then Slice and Dice got the job."
  },
  {
   "id": 21,
@@ -4539,7 +4539,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Stanley Marks wanted to succeed at his job to support his family, but the factory work was hard and tiring, so he learned his task and worked hard, and then he stayed for a better future."
+  "modelSummary": "Stanley Marks wanted to succeed at his job to support his family, but the factory work was hard and tiring. So he learned his task and worked hard. Then he stayed for a better future."
  },
  {
   "id": 22,
@@ -4754,7 +4754,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Doris and her family needed to keep their food cool, but the ice kept melting in the hot summer, so Mama bought an electric fridge, and then the food stayed fresh but Doris felt sorry for Charlie."
+  "modelSummary": "Doris and her family needed to keep their food cool, but the ice kept melting in the hot summer. So Mama bought an electric fridge. Then the food stayed fresh but Doris felt sorry for Charlie."
  },
  {
   "id": 23,
@@ -4969,7 +4969,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "A beginner wanted to learn to ride a skateboard, but it takes balance and safe habits, so the beginner practiced pushing and braking, and then they felt confident and ready for tricks."
+  "modelSummary": "A beginner wanted to learn to ride a skateboard, but it takes balance and safe habits. So the beginner practiced pushing and braking. Then they felt confident and ready for tricks."
  },
  {
   "id": 24,
@@ -5183,7 +5183,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Anansi the spider wanted to eat his friends' food without cooking, but every pot was ready at once, so all the webs on his legs got pulled, and then his legs grew long and he learned about greed."
+  "modelSummary": "Anansi the spider wanted to eat his friends' food without cooking, but every pot was ready at once. So all the webs on his legs got pulled. Then his legs grew long and he learned about greed."
  },
  {
   "id": 25,
@@ -5397,7 +5397,7 @@ window.STORIES = [
     "answer": 1
    }
   ],
-  "modelSummary": "Cora the hedgehog wanted her own pool to keep cool, but she had to choose which company to buy from, so she looked at reviews and prices, and then she bought one and enjoyed it."
+  "modelSummary": "Cora the hedgehog wanted her own pool to keep cool, but she had to choose which company to buy from. So she looked at reviews and prices. Then she bought one and enjoyed it."
  },
  {
   "id": 26,
@@ -5611,7 +5611,7 @@ window.STORIES = [
     "answer": 0
    }
   ],
-  "modelSummary": "Asma wanted to finish her first Ramadan fast, but she got very hungry and missed her snacks, so she kept going with her family's traditions, and then she celebrated Eid and felt proud."
+  "modelSummary": "Asma wanted to finish her first Ramadan fast, but she got very hungry and missed her snacks. So she kept going with her family's traditions. Then she celebrated Eid and felt proud."
  },
  {
   "id": 27,
@@ -5826,7 +5826,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Marusia wanted to get away from Baba Yaga and go home, but the witch locked her in, so she teamed up with a talking hedgehog to find the magic flower, and then they were set free."
+  "modelSummary": "Marusia wanted to get away from Baba Yaga and go home, but the witch locked her in. So she teamed up with a talking hedgehog to find the magic flower. Then they were set free."
  },
  {
   "id": 28,
@@ -6040,7 +6040,7 @@ window.STORIES = [
     "answer": 1
    }
   ],
-  "modelSummary": "Ocean waves move energy through the sea, but many kinds of natural forces make them, so wind, storms, earthquakes, and the moon's gravity all push the water, and then the ocean keeps moving all the time."
+  "modelSummary": "Ocean waves move energy through the sea, but many kinds of natural forces make them. So wind, storms, earthquakes, and the moon's gravity all push the water. Then the ocean keeps moving all the time."
  },
  {
   "id": 29,
@@ -6254,7 +6254,7 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Clara Barton wanted to help people, but many soldiers were hurt in the Civil War, so she brought supplies and cared for them, and then she started the American Red Cross."
+  "modelSummary": "Clara Barton wanted to help people, but many soldiers were hurt in the Civil War. So she brought supplies and cared for them. Then she started the American Red Cross."
  },
  {
   "id": 30,
@@ -6468,6 +6468,6 @@ window.STORIES = [
     "answer": 2
    }
   ],
-  "modelSummary": "Brave animals like pigeons and guide dogs wanted to protect people, but they worked in danger during wars, so they carried messages and led their owners out, and then they won the Dickin Medal."
+  "modelSummary": "Brave animals like pigeons and guide dogs wanted to protect people, but they worked in danger during wars. So they carried messages and led their owners out. Then they won the Dickin Medal."
  }
 ];

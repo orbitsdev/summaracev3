@@ -854,6 +854,32 @@ input.shake{border-color:#e8352a!important}
 #race .qbox .q .qk{font-family:var(--display);font-weight:400;color:#ff7a1a;letter-spacing:.03em;margin-right:2px}
 #race .qbox .q .qw{display:inline-block;font-family:var(--display);font-weight:400;letter-spacing:.05em;color:#fff;line-height:1.3;
   background:linear-gradient(#ffb15c,#ff6a00);border:2px solid #fff;border-radius:10px;padding:0 8px;margin:0 2px;box-shadow:0 2px 0 #b8480a;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+.otime[hidden]{display:none}
+.otime{position:absolute;top:12px;right:14px;font-family:var(--display);font-size:1.05rem;color:#fff;background:rgba(40,16,90,.55);border:2px solid #fff;border-radius:999px;padding:6px 14px;font-variant-numeric:tabular-nums}
+.otime.low{background:#e8352a;animation:optpop .5s}
+.slot.shown,.slot.right.shown{border-style:solid;border-color:#ffb000;background:#fff7dc}
+.fb{display:grid;gap:6px;margin:4px 0 0}
+.fb:empty{display:none}
+.fbrow{display:flex;gap:10px;align-items:baseline;border-radius:12px;padding:7px 12px;background:#fff;border:2px solid var(--rule);font-size:1rem;line-height:1.35}
+.fbrow b{flex:none;font-family:var(--display);font-weight:600;min-width:6.2em}
+.fbrow.hit{background:var(--go-bg);border-color:var(--go);color:#11703d}
+.fbrow.miss{background:var(--bad-bg);border-color:var(--bad);color:#8f1f16}
+.fbrow.todo{color:var(--ink-soft)}
+/* story stops: the race pauses and one question card opens; no answer text on the track or in the top bar */
+#race #rlanes{display:none!important}
+.rask{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:calc(96px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:rgba(26,20,64,.38);overflow-y:auto}
+.rask[hidden]{display:none}
+.rask .card{width:100%;max-width:620px;margin:auto;animation:popin .32s cubic-bezier(.3,1.5,.5,1)}
+.rask .opts{padding:14px}
+.rask .opt[disabled]{opacity:1}
+#race.asking .pad,#race.asking .rsay,#race.asking .qbox,#race.asking .meter{visibility:hidden}
+.rask-msg{margin:0;padding:0 16px 16px;text-align:center;font-family:var(--display);font-size:1.1rem}
+.rask-msg.good{color:#11703d}.rask-msg.bad{color:#a3241a}
+.rwho{display:none;font-size:.95rem;line-height:1.4;max-width:34ch}
+.rwho b{display:block;font-family:var(--display);font-size:1.05rem;margin-bottom:2px}
+.over.intro .rwho{display:block}
+.rpick .btn{display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.rpick .btn small{font-size:.7rem;font-weight:500;opacity:.85;letter-spacing:.02em}
 /* lane chips: shown only while the answer cards are on the track, so the view stays open between questions */
 #race #rlanes:not(.in){display:none}
 #race .lanes{gap:8px;margin-top:10px;align-items:stretch}
@@ -1135,7 +1161,7 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
       <div class="wrap">
         <div class="steps" data-step="2"></div>
         <div class="card qcard">
-          <div class="qhead"><span class="eyebrow">Story order</span><h2>Put the story parts in order</h2><p class="qsub">Somebody · Wanted · But · So · Then</p></div>
+          <div class="qhead"><span class="eyebrow">Story order</span><h2>Put the story parts in order</h2><p class="qsub">Tap the story parts below, starting with Somebody.</p><span class="otime" id="orderTime" hidden></span></div>
           <div class="slots" id="slots"></div>
         </div>
         <div class="pool" id="pool"></div>
@@ -1165,13 +1191,20 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
         <button id="bd" aria-label="Roll"><svg viewBox="0 0 24 24"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button id="br" aria-label="Move right"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
+      <div class="rask" id="rask" hidden>
+        <div class="card qcard">
+          <div class="qhead"><span class="eyebrow" id="raskNum">Story stop</span><h2 id="raskQ"></h2><p class="qsub">Take your time. The race waits while you read.</p></div>
+          <div class="opts" id="raskOpts"></div>
+          <p class="rask-msg" id="raskMsg" hidden></p>
+        </div>
+      </div>
       <div class="over" id="rover">
         <div class="card">
           <div class="eyebrow">Race stage</div>
           <h2 id="roverTitle">Escape the patrol!</h2>
           <p id="roverText" style="margin:0"></p>
           <div class="keys">Swipe left or right to change lanes, up to jump, down to roll. Keys: arrows or Space.</div>
-          <div class="rpick" id="rpick" role="group" aria-label="Choose your runner"><button class="btn alt" data-r="boy" aria-pressed="true">Max</button><button class="btn alt" data-r="girl" aria-pressed="false">Mia</button></div>
+          <div class="rwho" id="rwho"><b>Choose your runner</b>Max and Mia are two classmates who run this race for you. They play the same way, so pick the one you like.</div><div class="rpick" id="rpick" role="group" aria-label="Choose your runner"><button class="btn alt" data-r="boy" aria-pressed="true">Max<small>boy runner</small></button><button class="btn alt" data-r="girl" aria-pressed="false">Mia<small>girl runner</small></button></div>
           <button class="btn go" id="roverBtn">Start running</button><button class="rquit" id="rQuit" type="button" hidden>Quit this story</button>
         </div>
       </div>
@@ -1194,12 +1227,12 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
       <div class="wrap">
         <div class="steps" data-step="3"></div>
         <div class="card qcard sumcard">
-          <div class="qhead"><span class="eyebrow">Final stage · Summary</span><h2 id="sumTitle">Write a one-sentence summary</h2></div>
+          <div class="qhead"><span class="eyebrow">Final stage · Summary</span><h2 id="sumTitle">Write a summary in 2–3 sentences</h2></div>
           <div class="frame" id="sumFrame"></div>
-          <label for="sumText" class="meta">Write ONE sentence in English, in your own words, that tells the main idea of the story.</label>
-          <textarea id="sumText" placeholder="Write your one-sentence summary here…" spellcheck="true"></textarea>
-          <div class="row"><span class="meta" id="sumCount">0 words</span><span class="sp"></span><button class="btn go" id="sumCheck">Check my summary</button></div>
-          <div class="chips" id="sumChips"></div>
+          <label for="sumText" class="meta">Write 2–3 sentences in English, in your own words. Tell who the story is about, what they wanted, the problem, what they did, and how it ended.</label>
+          <textarea id="sumText" placeholder="Write your 2–3 sentence summary here…" spellcheck="true"></textarea>
+          <div class="row"><span class="meta" id="sumCount">0 sentences</span><span class="sp"></span><button class="btn go" id="sumCheck">Check my summary</button></div>
+          <div class="fb" id="sumChips"></div>
           <div class="why" id="sumModel"></div>
         </div>
       </div>
@@ -1282,7 +1315,7 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
     <div class="panel credits" role="dialog" aria-modal="true" aria-labelledby="credTitle">
       <div class="ribbon" id="credTitle">Credits</div>
       <button class="cbtn red x" data-close aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/></svg></button>
-      <p class="cred-lead"><b>SummaRace</b> is a reading game for Grade 4 learners: read a story, race to collect its parts, and sum it up in one sentence.</p>
+      <p class="cred-lead"><b>SummaRace</b> is a reading game for Grade 4 learners: read a story, race to collect its parts, and sum it up in 2–3 sentences.</p>
       <dl class="cred">
         <dt>Characters</dt><dd>Ultimate Animated Character Pack by Quaternius (CC0)</dd>
         <dt>3D worlds and sounds</dt><dd>Kenney (kenney.nl), CC0 · scenery made in code</dd>
@@ -1495,7 +1528,7 @@ const MIRA={
   pageQ:["Now a question about this page.","Let's see what you remember from this page.","Question time! Think about what you just read.","Here's a question about that page."],
   start:["Let's read together. Who is this story about? What do they want?","Here's a new story! Read carefully and look for the main character.","Story time! Who is in this story, and what do they want?","Let's begin. Read slowly and picture the story in your mind."],
   middle:["What problem happens? Keep reading carefully.","Keep going! Watch for the problem in the story.","What is happening now? Read carefully.","Think about what the character does next."],
-  raceCue:["Read the question, then pick your lane!","Which card has the right story part?","Think about the story, then move!","Watch out for trains!","Find the right card and run into it!","Look at all three cards, then choose.","Remember the story. Which one fits?"],
+  raceCue:["Story stop! Read the question, then tap your answer.","Take your time. Read all three answers, then choose.","Remember the story. Which one fits?","Story stop! Think about the story, then tap one."],
   raceGood:["Yes! You remembered!","Great answer, keep going!","Correct! The patrol is falling behind!","Boost! That's the right part!","Nice catch! Keep running!","You got it! Speed up!","Perfect! The patrol can't keep up!"],
   raceBad:["Not quite! That one will come back. The patrol is closing in!","Oops! Wrong card. You'll see it again soon!","Not that one! Think about the story and try again later.","Careful! That part will come back. Run faster!"],
   raceBack:["This one is back. Think about the story and try again!","Here it is again. Which card is right this time?","Second chance! Remember what happened in the story."],
@@ -1854,13 +1887,34 @@ $("#quizNext").onclick=()=>{sfx.click();const n=L.s.text.length;
   if(page<n-1){page++;sfx.swish();show("read");renderPage()}else askMain()};
 
 /* order: First / Next / Then / Last */
-let placed=[],pool=[],locked=[],firstTry=null,attempts=0,orderHint=false;
+let placed=[],pool=[],locked=[],firstTry=null,attempts=0,orderHint=false,orderShown=false,orderT=0,orderLeft=0;
+/* after a wrong order the learner has 30 seconds to fix it; the clock waits while the story is open.
+   When time runs out Teacher Mira shows the right order and the level goes on (the score keeps the first try). */
+const ORDER_SECS=30;
+function orderClock(on){
+  clearInterval(orderT);orderT=0;const el=$("#orderTime");
+  if(!on){el.hidden=true;return}
+  orderLeft=ORDER_SECS;const draw=()=>{el.textContent=`⏱ ${orderLeft}s left`;el.classList.toggle("low",orderLeft<=10)};
+  draw();el.hidden=false;
+  orderT=setInterval(()=>{
+    if(screen!=="order"){clearInterval(orderT);orderT=0;return}
+    if(!$("#storyModal").hidden)return;
+    orderLeft--;draw();if(orderLeft<=0){orderClock(false);orderTimeUp()}
+  },1000);
+}
+function orderTimeUp(){
+  const ev=orderItems().map((t,i)=>({t,i}));
+  placed=ev;pool=[];locked=ev.map(()=>true);orderShown=true;tactions();
+  renderOrder();$$("#slots .slot").forEach(b=>b.classList.add("shown"));
+  sfx.bad();mood("think");
+  say("Time's up! Here is the right order. Read it once, then let's write your summary.");
+}
 function seqWords(n){return["Somebody","Wanted","But","So","Then"].slice(0,n)}
 const orderItems=()=>SW.map(([k])=>L.s.swbst[k].answer);
 function startOrder(){
   const ev=orderItems().map((t,i)=>({t,i}));
   do{pool=shuffle(ev)}while(pool.every((e,k)=>e.i===k));
-  placed=[];locked=Array(ev.length).fill(false);firstTry=null;attempts=0;orderHint=false;
+  placed=[];locked=Array(ev.length).fill(false);firstTry=null;attempts=0;orderHint=false;orderShown=false;orderClock(false);
   show("order");renderOrder();
   say("Great running! Now put the story parts in order. Tap the Somebody part first, then Wanted, But, So, and Then. Tap a placed part to take it back.");
 }
@@ -1868,7 +1922,7 @@ function renderOrder(){
   const n=orderItems().length,w=seqWords(n);
   $("#slots").innerHTML=Array.from({length:n},(_,k)=>{
     const e=placed[k];
-    return `<button class="slot ${e?"filled":""} ${locked[k]?"right":""}" data-k="${k}" ${!e||locked[k]?"disabled":""}><span class="w">${w[k]}</span><span>${e?esc(e.t):`<span class="meta">${orderHint?esc(SW[k][3]):"Tap a story part below"}</span>`}</span></button>`}).join("");
+    return `<button class="slot ${e?"filled":""} ${locked[k]?"right":""}" data-k="${k}" ${!e||locked[k]?"disabled":""}><span class="w">${w[k]}</span><span>${e?esc(e.t):orderHint?`<span class="meta">${esc(SW[k][3])}</span>`:""}</span></button>`}).join("");
   $("#pool").innerHTML=pool.map((e,k)=>`<button class="ev" data-k="${k}">${esc(e.t)}</button>`).join("");
   $$("#pool .ev").forEach(b=>b.onclick=()=>{
     const e=pool.splice(+b.dataset.k,1)[0];
@@ -1879,8 +1933,10 @@ function renderOrder(){
     pool.push(placed[k]);placed[k]=undefined;sfx.click();renderOrder();
   });
   $("#orderCheck").disabled=placed.filter(Boolean).length<n;
+  $("#orderCheck").textContent=orderShown?"Next: write the summary":"Check order";
 }
 $("#orderCheck").onclick=()=>{
+  if(orderShown){sfx.click();L.score.order=(firstTry||0)/orderItems().length;startSummary();return}
   attempts++;
   const n=orderItems().length;let right=0;
   const slots=$$("#slots .slot");
@@ -1888,20 +1944,21 @@ $("#orderCheck").onclick=()=>{
   if(firstTry===null)firstTry=right;
   $("#orderCheck").disabled=true;
   if(right===n){
-    sfx.good();L.score.order=firstTry/n;tactions();
+    orderClock(false);sfx.good();L.score.order=firstTry/n;tactions();
     mood("happy");say(attempts===1?"Perfect order on the first try! Now use these parts to write your summary.":"All in order now! Now use these parts to write your summary.");
     setTimeout(startSummary,1600);
   }else{
     sfx.bad();orderHint=true;mood("think");
-    say("Some parts are not in the right place yet. The green ones stay. Do you want to read the story again?");
+    const first=!orderT;if(first)orderClock(true);
+    say(first?"Some parts are not in the right place yet. The green ones stay. You have 30 seconds to fix the rest. Do you want to read the story again?":"Not yet! The green ones stay. Keep going, the clock is still running.");
     tactions([["Read the story",()=>openStory(null),"alt"],["Try again",()=>{tactions();say("Ask yourself: who is it about, what did they want, and what went wrong?")}]]);
-    setTimeout(()=>{placed.forEach((e,k)=>{if(!locked[k]){pool.push(e);placed[k]=undefined}});pool=shuffle(pool);renderOrder();const pl=$("#pool");if(pl)pl.scrollIntoView({block:"nearest",behavior:"smooth"})},1300);
+    setTimeout(()=>{if(orderShown)return;placed.forEach((e,k)=>{if(!locked[k]){pool.push(e);placed[k]=undefined}});pool=shuffle(pool);renderOrder();const pl=$("#pool");if(pl)pl.scrollIntoView({block:"nearest",behavior:"smooth"})},1300);
   }
 };
 
 /* race */
-const SW_ASK={somebody:"Collect: SOMEBODY (who is the story about?)",wanted:"Collect: WANTED (what did they want?)",but:"Collect: BUT (what was the problem?)",so:"Collect: SO (what did they do about it?)",then:"Collect: THEN (how did it end?)"};
-function raceStory(){const e=L.s.swbst;return Object.assign({},L.s,{race:SW.map(([k])=>({q:SW_ASK[k],key:k,options:[e[k].answer,...e[k].wrong.slice(0,2)],answer:0}))})}
+const SW_ASK={somebody:"Who is the story about?",wanted:"What did they want?",but:"What was the problem?",so:"What did they do about it?",then:"How did the story end?"};
+function raceStory(){const e=L.s.swbst;return Object.assign({},L.s,{race:SW.map(([k,lab])=>({q:SW_ASK[k],label:lab,key:k,options:[e[k].answer,...e[k].wrong.slice(0,2)],answer:0}))})}
 function afterRace(res,coins){L.score.race=res;L.score.swbst=res;L.score.coins=coins;startOrder()}
 function startRace(){
   try{show("race");Race.prepare(raceStory(),afterRace)}
@@ -1939,19 +1996,19 @@ function renderSw(){
   });
 }
 
-/* one-sentence summary: must be real English, about this story, with the main character and most story elements */
+/* 2-3 sentence summary: must be real English, about this story, with the main character and most story elements */
 function words(t){return (t.trim().match(/[A-Za-zÀ-ÿñÑ0-9'’-]+/g)||[]).length}
 let sumTries=0,EN=null;
 function startSummary(){
-  sumTries=0;$("#sumText").value="";$("#sumChips").innerHTML="";$("#sumModel").textContent="";$("#sumCount").textContent="0 words";
+  sumTries=0;$("#sumText").value="";$("#sumChips").innerHTML="";$("#sumModel").textContent="";$("#sumCount").textContent="0 sentences";
   $("#sumCheck").textContent="Check my summary";$("#sumCheck").onclick=checkSummary;
-  $("#sumTitle").textContent=`Summarize “${L.s.title}” in one sentence`;
+  $("#sumTitle").textContent=`Summarize “${L.s.title}” in 2–3 sentences`;
   // the study design shows no SWBST guide here, only a short reflective prompt
   $("#sumFrame").innerHTML="";$("#sumFrame").hidden=true;
   show("summary");
-  say("Last stage! Write ONE sentence that tells the main idea of the story in your own words. Before you check, ask yourself: did I tell who, what they wanted, the problem, what they did, and how it ended?");
+  say("Last stage! Write 2 or 3 sentences that tell the story in your own words. Before you check, ask yourself: did I tell who, what they wanted, the problem, what they did, and how it ended?");
 }
-$("#sumText").oninput=()=>{$("#sumCount").textContent=words($("#sumText").value)+" words"};
+$("#sumText").oninput=()=>{const v=$("#sumText").value.trim(),c=v?sentenceCount(v):0;$("#sumCount").textContent=`${c} ${c===1?"sentence":"sentences"}`;$("#sumCount").classList.toggle("ok",c>=2&&c<=3)};
 function norm(t){return t.toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9ñ' ]+/g," ").replace(/\s+/g," ").trim()}
 function sentenceCount(t){return t.trim().replace(/\b(Mr|Mrs|Ms|Dr|St|Sr|Jr|Mt|Gng|Sto|Sta)\./g,"$1").replace(/[.!?]+$/,"").split(/[.!?]+\s+(?=[A-Za-z])/).length}
 function copiedRun(text){
@@ -1975,10 +2032,23 @@ function storyVocab(){
   const all=[s.title,s.passage||"",...s.text,...(s.events||[]),s.modelSummary||"",...SW.map(([k])=>e[k]?[e[k].answer,...(e[k].words||[])].join(" "):"")].join(" ");
   return new Set(norm(all).split(" ").flatMap(w=>[w,stem(w)]));
 }
+// names in the story: words that start with a capital letter in the middle of a sentence
+function storyNames(){if(L._nm&&L._nm.s===L.s)return L._nm.v;
+  // a name: never written in small letters in the story, and either capitalised mid-sentence, named in a story-part answer, or not an everyday word
+  const cap=new Set(),low=new Set(),mid=new Set(),ans=new Set(),clean=w=>w.replace(/[^A-Za-z'’]/g,"").replace(/['’]s$/,"");
+  const body=[L.s.passage||"",...L.s.text].join(" ");
+  [L.s.title,body].join(" ").split(/\s+/).forEach(w=>{const c=clean(w);if(c.length<3)return;if(/^[A-Z][a-z]+$/.test(c))cap.add(c.toLowerCase());else if(/^[a-z]+$/.test(c))low.add(c)});
+  body.split(/[.!?:;"“”]+\s*/).forEach(sent=>sent.split(/\s+/).slice(1).forEach(w=>{const c=clean(w);if(/^[A-Z][a-z]{2,}$/.test(c))mid.add(c.toLowerCase())}));
+  const e=L.s.swbst||{};SW.forEach(([k])=>{if(e[k])String(e[k].answer).split(/\s+/).forEach(w=>{const c=clean(w);if(/^[A-Z][a-z]{2,}$/.test(c))ans.add(c.toLowerCase())})});
+  if(!EN)EN=new Set(String(window.SR_WORDS||"").split(" "));
+  const v=new Set([...cap].filter(w=>!low.has(w)&&!STOP.has(w)&&!FUNC.has(w)&&!COMMON.has(w)&&(mid.has(w)||ans.has(w)||!EN.has(w))));L._nm={s:L.s,v};return v}
 function scoreSummary(text){
   const low=" "+norm(text)+" ",e=L.s.swbst;
   const pts=e?SW.map(([k,lab])=>({key:k,label:lab,words:e[k].words})):(L.s.keyPoints||[]).map(k=>({key:k.label,label:k.label,words:k.words}));
-  return pts.map(p=>({key:p.key,label:p.label,hit:p.words.some(w=>new RegExp("\\b"+norm(w).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).test(low))}));
+  // a character's name alone does not prove a story part (naming Bella is not telling the problem), except for Somebody
+  const nm=storyNames();
+  return pts.map((p,i)=>{const ws=i>0&&p.words.some(w=>!nm.has(norm(w)))?p.words.filter(w=>!nm.has(norm(w))):p.words;
+    return{key:p.key,label:p.label,hit:ws.some(w=>new RegExp("\\b"+norm(w).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).test(low))}});
 }
 // a real sentence has little joining words, not just a list of story words
 const FUNC=new Set("the a an and but so then because when after before to was were is he she they his her him them it its their of in on at for with from that who had did".split(" "));
@@ -1990,32 +2060,137 @@ function mainIdeaHit(text){
   const tw=new Set(norm(text).split(" ").map(stem));
   return ans.some(w=>tw.has(stem(w))||[...tw].some(t=>t.length>3&&(t.startsWith(stem(w).slice(0,5))||stem(w).startsWith(t.slice(0,5)))));
 }
+const COMMON=new Set("went going goes came come comes made make makes said says took take takes gave give gives looked look looks told tell tells thing things there would could should about after before because every little really just also some than when what where which while your more most very much many like want wants wanted need needs felt feel feels feeling other others again together still even".split(" "));
+// words from the wrong answer choices that never appear in the story: if a summary uses them, that detail is likely wrong
+function offStoryWords(){
+  const s=L.s,e=s.swbst||{};
+  const txt=new Set(norm([s.title,s.passage||"",...s.text].join(" ")).split(" ").map(stem));
+  const ok=new Set(norm(SW.map(([k])=>e[k]?[e[k].answer,...(e[k].words||[])].join(" "):"").join(" ")+" "+[s.modelSummary||"",s.mainIdeaText||"",...(s.events||[]),s.mainIdea?s.mainIdea.options[s.mainIdea.answer]:"",...(s.quiz||[]).map(q=>q.options?q.options[q.answer]:"")].join(" ")).split(" ").map(stem));
+  const out=new Map();
+  SW.forEach(([k,lab])=>{if(!e[k])return;(e[k].wrong||[]).forEach(w=>norm(w).split(" ").forEach(t=>{
+    const st=stem(t);if(t.length>3&&!STOP.has(t)&&!FUNC.has(t)&&!COMMON.has(t)&&!txt.has(st)&&!ok.has(st)&&!out.has(st))out.set(st,{word:t,label:lab})}))});
+  return out;
+}
+// capitalised names in the middle of a sentence that are not in the story
+function strangerNames(text){
+  const vocab=storyVocab(),seen=new Set(),out=[];
+  text.replace(/(?:^|[.!?]\s+)?([^.!?]+)/g,(m,sent)=>{sent.trim().split(/\s+/).slice(1).forEach(w=>{
+    const c=w.replace(/[^A-Za-zÀ-ÿñÑ'’-]/g,"").replace(/['’]s$/,"");
+    if(/^[A-Z][a-zà-ÿñ]{2,}$/.test(c)){const l=c.toLowerCase();if(!vocab.has(l)&&!vocab.has(stem(l))&&!seen.has(l)&&!/^(Mr|Mrs|Ms|Miss|Dr|Teacher|Mom|Mama|Dad|Papa|Grandma|Grandpa|God|English|Filipino)$/.test(c)){seen.add(l);out.push(c)}}})});
+  return out;
+}
+// share of the learner's main words that come from this story
+function storyShare(toks){
+  const vocab=storyVocab(),main=toks.filter(w=>w.length>3&&!STOP.has(w)&&!FUNC.has(w));
+  if(main.length<4)return 1;
+  return main.filter(w=>vocab.has(w)||vocab.has(stem(w))).length/main.length;
+}
+/* Option A: a closer offline check. It splits the summary into parts (at periods and at but / so / then / because),
+   finds which story part each piece is about, and checks three common mistakes:
+   a "not" or "never" that the story does not have, story parts told in the wrong order, and the wrong character doing something. */
+const NEG=/\b(not|never|no|nobody|nothing|nowhere|cannot|can't|won't|don't|doesn't|didn't|isn't|wasn't|weren't|wouldn't|couldn't|shouldn't|hasn't|haven't|hadn't|aren't|refused)\b/;
+const CUE={wanted:/\b(want|wants|wanted|wish|wished|hoped|needed|dreamed)\b/,but:/^but\b|\b(problem|however)\b/,so:/^so\b/,then:/^(then|finally|in the end|at last)\b/};
+let _swk=null;
+function swKeys(){
+  if(_swk&&_swk.s===L.s)return _swk;
+  const e=L.s.swbst||{},nm=storyNames(),cnt={},sets={};
+  SW.slice(1).forEach(([k])=>{if(!e[k])return;const st=new Set();
+    [...(e[k].words||[]),...norm(e[k].answer).split(" ")].forEach(w=>{w=norm(w).replace(/'s$/,"");if(w.length>2&&!STOP.has(w)&&!FUNC.has(w)&&!COMMON.has(w)&&!nm.has(w))st.add(stem(w))});
+    sets[k]=st;st.forEach(w=>cnt[w]=(cnt[w]||0)+1)});
+  // who does each part in the story: the first character named in its answer (Wanted belongs to the main character)
+  const names=[...nm],first=t=>{const ws=norm(t).split(" ").map(w=>w.replace(/'s$/,""));for(const w of ws)if(nm.has(w))return w;return null};
+  const hero=first(e.somebody?e.somebody.answer:"");
+  const all=t=>norm(t).split(" ").map(w=>w.replace(/'s$/,"")).filter(w=>nm.has(w));
+  const actor={};SW.slice(1).forEach(([k])=>{if(e[k])actor[k]=k==="wanted"?(hero?[hero]:[]):all(e[k].answer)});
+  const neg={};SW.slice(1).forEach(([k])=>{if(e[k])neg[k]=NEG.test(norm(e[k].answer))});
+  _swk={s:L.s,sets,cnt,actor,neg,nm,hero};
+  // a "not" in Teacher Mira's example also counts as part of the story
+  pieces(L.s.modelSummary||"").forEach(p=>{const m=pieceIs(p);if(m&&NEG.test(p.n))neg[m]=true});
+  return _swk;
+}
+function pieces(text){
+  const out=[];String(text).split(/(?<=[.!?;])\s+/).forEach((sent,si)=>{
+    sent.split(/,?\s+(?=\b(?:but|so|then|because|until|finally)\b)/i).forEach(c=>{const raw=c.trim();if(raw.split(/\s+/).length>=2)out.push({raw,n:norm(raw),si})})});
+  return out;
+}
+// which story part a piece is about (null when it is not clear)
+function pieceIs(p){
+  const K=_swk,toks=p.n.split(" ").map(stem),sc={};
+  Object.keys(K.sets).forEach(k=>{let v=0;new Set(toks).forEach(t=>{if(K.sets[k].has(t))v+=1/K.cnt[t]});if(CUE[k]&&CUE[k].test(p.n))v+=.6;sc[k]=v});
+  const ks=Object.keys(sc).sort((a,b)=>sc[b]-sc[a]);
+  return sc[ks[0]]>=.45&&sc[ks[0]]-(sc[ks[1]]||0)>=.2?ks[0]:null;
+}
+function meaningChecks(text){
+  const K=swKeys(),ps=pieces(text),out=[],snip=t=>{t=t.replace(/[.,!?;:]+$/,"");return t.length>60?t.slice(0,57)+"…":t};
+  // show a name the way the story writes it, e.g. "Baba Yaga"
+  const body=[L.s.passage||"",...L.s.text].join(" "),full=w=>{const m=body.match(new RegExp("\\b"+w[0].toUpperCase()+w.slice(1)+"(?:\\s+[A-Z][a-z]+)?"));return m?m[0]:w[0].toUpperCase()+w.slice(1)};
+  const lab=k=>(SW.find(x=>x[0]===k)||[])[1]||k;
+  ps.forEach(p=>{p.k=pieceIs(p)});
+  // 1. a "not" or "never" the story does not have
+  ps.forEach(p=>{const m=p.n.match(NEG);if(!m||!p.k||K.neg[p.k])return;
+    out.push({kind:"not",msg:`“${esc(snip(p.raw))}”. Does the story really say “${esc(m[1])}”? Read the ${esc(lab(p.k))} part again.`})});
+  // 2. the wrong character: the piece names a different story character first
+  ps.forEach(p=>{if(!p.k)return;const want=K.actor[p.k];if(!want||!want.length)return;
+    // only the doer counts: the first word after but / so / then (a pronoun like "he" is never flagged)
+    const ws=p.n.split(" ").map(w=>w.replace(/'s$/,""));while(ws.length&&/^(but|so|then|and|finally|because|until|later|at|last|in|the|end)$/.test(ws[0]))ws.shift();
+    const who=K.nm.has(ws[0])?ws[0]:null;if(!who||want.includes(who))return;
+    // "Bella would not let Molly..." still names the right one first; only flag a clear swap
+    out.push({kind:"who",msg:`“${esc(snip(p.raw))}”. In the story, it was ${esc(full(want[0]))}, not ${esc(full(who))}.`})});
+  // 3. story parts told in the wrong order (a part told early with because / after / before / since / when is fine)
+  const sents=String(text).split(/(?<=[.!?;])\s+/).map(norm),rank={wanted:1,but:2,so:3,then:4},seen={};ps.forEach(p=>{if(p.k&&!seen[p.k])seen[p.k]=p});
+  const ks=Object.keys(seen).sort((a,b)=>rank[a]-rank[b]);
+  for(let i=0;i<ks.length;i++)for(let j=i+1;j<ks.length;j++){const A=seen[ks[i]],B=seen[ks[j]];
+    if(B.si<A.si&&!/\b(because|after|before|since|when)\b/.test(sents[B.si]||"")&&!out.some(o=>o.kind==="order"))
+      out.push({kind:"order",msg:`You told “${esc(lab(ks[j]))}” before “${esc(lab(ks[i]))}”. Tell what happened first, then next, then how it ended.`})}
+  return out;
+}
+
+const SW_TOLD={somebody:"You told who the story is about.",wanted:"You told what they wanted.",but:"You told the problem.",so:"You told what they did about it.",then:"You told how it ended."};
 function checkSummary(){setTimeout(()=>{const c=$("#sumChips");if(c&&c.children.length)c.scrollIntoView({block:"nearest",behavior:"smooth"})},80);
-  const text=$("#sumText").value.trim(),n=words(text);
-  L.summaryText=text;
+  const text=$("#sumText").value.trim(),n=words(text),fb=$("#sumChips");
+  L.summaryText=text;fb.innerHTML="";
   const toks=norm(text).split(" ").filter(Boolean),vocab=storyVocab();
-  if(n<10){sfx.bad();say(`That's only ${n} ${n===1?"word":"words"}. A good one-sentence summary has about 15 to 30 words.`);return}
+  const row=(cls,lab,msg)=>`<div class="fbrow ${cls}"><b>${lab}</b><span>${msg}</span></div>`;
+  if(n<8){sfx.bad();say("Tell me more! Write 2 or 3 sentences: who the story is about, what happened, and how it ended.");return}
   const unknown=toks.filter(w=>!knownWord(w,vocab));
-  if(unknown.length>Math.max(1,toks.length*.15)){sfx.bad();say("I can't read some of these words. Please write your summary in English, using real words.");$("#sumChips").innerHTML=unknown.slice(0,6).map(w=>`<span class="chip miss">“${esc(w)}”?</span>`).join("");return}
-  if(new Set(toks).size<toks.length*.55){sfx.bad();say("Some words are repeated too many times. Tell the story in a sentence that makes sense.");return}
-  if(!sentenceLike(text)){sfx.bad();say("Write it as a sentence, not a list of words. Use words like wanted, but, so, and then.");return}
-  if(sentenceCount(text)>1){sfx.bad();say("I see more than one sentence. Join your ideas into ONE sentence with words like but, so, and then.");return}
-  if(n>45){sfx.bad();say("That sentence is very long. A summary keeps only the main idea. Try to use fewer words.");return}
+  if(unknown.length>Math.max(1,toks.length*.15)){sfx.bad();say("I can't read some of these words. Please write your summary in English, using real words.");fb.innerHTML=row("miss","Check spelling",unknown.slice(0,6).map(w=>`“${esc(w)}”`).join(", "));return}
+  if(new Set(toks).size<toks.length*.5){sfx.bad();say("Some words are repeated too many times. Tell the story in sentences that make sense.");return}
+  const sc0=sentenceCount(text);
+  if(sc0>3&&n/sc0>=3){sfx.bad();say(`I count ${sc0} sentences. A summary keeps only the most important parts, so use 2 or 3 sentences.`);return}
+  if(!sentenceLike(text)){sfx.bad();say("Write it in sentences, not a list of words. Use words like wanted, but, so, and then.");return}
+  const sc=sentenceCount(text);
+  if(sc<2){sfx.bad();say("I see only one sentence. Please write 2 or 3 sentences, with a period at the end of each one.");return}
+  if(sc>3){sfx.bad();say(`I count ${sc} sentences. A summary keeps only the most important parts, so use 2 or 3 sentences.`);return}
   if(copiedRun(text)){sfx.bad();say("Part of this is copied straight from the story. Try saying it in your own words.");return}
+  if(storyShare(toks)<.4){sfx.bad();mood("think");say(`Hmm, I don't think this is about “${L.s.title}”. Write about what happened in this story.`);tactions([["Read the story",()=>openStory(null),"alt"]]);return}
   sumTries++;
-  const res=scoreSummary(text),hit=res.filter(r=>r.hit).length,need=Math.min(res.length,Math.max(3,res.length-1));
+  const e=L.s.swbst||{},res=scoreSummary(text),hit=res.filter(r=>r.hit).length,need=Math.min(res.length,Math.max(3,res.length-1));
   const who=!res.length||res[0].hit,main=mainIdeaHit(text)||(res.length>0&&hit===res.length);
-  $("#sumChips").innerHTML=res.map(r=>`<span class="chip ${r.hit?"hit":sumTries>1?"miss":""}">${r.hit?"✓ "+esc(r.label):sumTries>1?"Missing: "+esc(r.label):"?"}</span>`).join("")+`<span class="chip ${main?"hit":sumTries>1?"miss":""}">${main?"✓ Main idea":sumTries>1?"Missing: main idea":"?"}</span>`;
-  if(hit>=need&&who&&main){
-    sfx.win();mood("happy");L.score.summary=hit/res.length;
+  // correctness: details taken from wrong answer choices, and names that are not in the story
+  const low=new Set(toks.map(stem)),off=offStoryWords(),wrongBits=[...off.entries()].filter(([st,v])=>low.has(st)&&!NEG.test(v.word)).map(([,v])=>v);
+  const names=strangerNames(text),mean=meaningChecks(text);
+  const rows=res.map(r=>{
+    if(r.hit)return row("hit","✓ "+esc(r.label),SW_TOLD[r.key]||"Found it.");
+    const sw=SW.find(x=>x[0]===r.key),q=sw?sw[3]:"Add this part.",clue=e[r.key]&&e[r.key].words&&e[r.key].words[0];
+    return row("miss","Add: "+esc(r.label),esc(q)+(sumTries>1&&clue?` Hint: think about “${esc(clue)}”.`:""));
+  });
+  rows.push(main?row("hit","✓ Main idea","Your summary tells what the whole story is about."):row("miss","Main idea","What is the whole story mostly about? Say it in your own words."));
+  mean.forEach(m=>rows.push(row("miss",m.kind==="order"?"Check the order":m.kind==="who"?"Check who":"Check this",m.msg)));
+  wrongBits.forEach(b=>rows.push(row("miss","Check this",`Is “${esc(b.word)}” really in the story? Read that part again.`)));
+  names.forEach(nm=>rows.push(row("miss","Check the name",`I can't find “${esc(nm)}” in this story. Who is the character?`)));
+  fb.innerHTML=rows.join("");
+  const blockWrong=(wrongBits.length>0||mean.length>0)&&sumTries<3;
+  if(hit>=need&&who&&main&&!blockWrong){
+    sfx.win();mood("happy");L.score.summary=Math.max(0,(hit-wrongBits.length*.5)/res.length);
     $("#sumModel").innerHTML=`<b>Teacher Mira's example:</b> ${esc(L.s.modelSummary)}`;
-    say(hit===res.length?"Excellent! Your sentence has every story element.":"Good summary! You told the main idea in your own words.");
+    say(hit===res.length&&!wrongBits.length&&!mean.length?"Excellent! Your summary has every story element, and it matches the story.":"Good summary! You told the main idea in your own words.");
     $("#sumCheck").textContent="See my results";$("#sumCheck").onclick=finishLevel;
   }else{
     sfx.bad();mood("think");
-    if(!who)say("Who is the story about? Name the main character in your sentence.");
-    else if(hit<need)say(sumTries===1?"Your sentence is missing some story parts. Did you tell who, what they wanted, the problem, what they did, and how it ended?":"The red chips show what is still missing. Add them in your own words.");
-    else say("Your sentence needs the main idea. What is the whole story mostly about?");
+    if(blockWrong)say("Some details don't match the story. Look at the red lines and fix them.");
+    else if(!who)say("Who is the story about? Name the main character in your summary.");
+    else if(hit<need)say(sumTries===1?"Your summary is missing some story parts. The red lines show what to add.":"The red lines show what is still missing. Add them in your own words.");
+    else say("Your summary needs the main idea. What is the whole story mostly about?");
     tactions([["Read the story",()=>openStory(null),"alt"]]);
     if(sumTries>=3)$("#sumModel").innerHTML=`<b>Hint, an example:</b> ${esc(L.s.modelSummary)}`;
   }
@@ -2110,7 +2285,7 @@ const Race=(()=>{
   let coinModel=null,fancy=[],perf={n:0,t:0,low:false,done:location.hash==="#hq"};
   let ok=false,renderer,scene,camera,clock,trackTex,sideTex,sky,player,pRig=null,pProc,patrol,oRig=null,oProc,dog,deco=[],objs=[],parts=[],raf=0,running=false;
   let air=0,story,done,qIdx,correct,queue=[],tries={},solved=0,gap,speed,lane,px,py,vy,roll,coins,score,state,wait,shake,boostT,ended,curGate,fovK=0,lastPy=0;
-  let K={},leaves=null,lines=[],clouds=[],sway=[],endT=0,endRaf=0;
+  let K={},leaves=null,lines=[],clouds=[],sway=[],endT=0,endRaf=0,asking=null;
   let runner="boy";try{runner=localStorage.getItem(KEY+".runner")||"boy"}catch(e){}
   if(!RUNNERS[runner])runner="boy";
   const canvas=$("#rc");
@@ -2745,6 +2920,41 @@ const Race=(()=>{
   function stepFlyers(dt){for(let i=flyers.length-1;i>=0;i--){const f=flyers[i];f.life-=dt;f.m.position.addScaledVector(f.v,dt);f.m.rotation.y+=f.spin*dt;
     f.m.scale.multiplyScalar(f.good?1+dt*.6:1-dt*1.2);f.m.traverse(n=>{if(n.material){n.material.transparent=true;n.material.opacity=Math.max(0,f.life/.8)*(n.isSprite?.75:1)}});
     if(f.life<=0){scene.remove(f.m);flyers.splice(i,1)}}}
+  // a "story stop" arch: the race pauses here and the question opens on screen
+  let stopTex;
+  function spawnStop(qq,z){
+    stopTex=stopTex||tex(1024,200,(x,w,h)=>{const gr=x.createLinearGradient(0,0,0,h);gr.addColorStop(0,"#c88bff");gr.addColorStop(1,"#6a2fc4");x.fillStyle="#ffffff";x.fillRect(0,0,w,h);x.fillStyle=gr;x.fillRect(10,10,w-20,h-20);
+      x.font='112px "SR Title","Luckiest Guy","Lilita One",Verdana';x.textAlign="center";x.textBaseline="middle";x.lineWidth=16;x.strokeStyle="#3a1460";x.strokeText("STORY STOP",w/2,h/2+8);x.fillStyle="#ffd23f";x.fillText("STORY STOP",w/2,h/2+8)});
+    const g=new THREE.Group();
+    const banner=new THREE.Mesh(new THREE.PlaneGeometry(9.4,1.85),new THREE.MeshBasicMaterial({map:stopTex,fog:false,side:THREE.DoubleSide}));banner.position.y=5.1;g.add(banner);
+    [-1,1].forEach(s=>{const p=part(CYL(.22,.26,6,12),0xffd23f,.03);p.position.set(s*4.9,3,0);g.add(p)});
+    g.position.z=z;scene.add(g);const o={type:"stop",mesh:g,q:qq,hit:false};objs.push(o);return o;
+  }
+  // at a story stop the runner stands still, the patrol waits, and one question card opens. No timer.
+  function askStop(qq){
+    running=false;asking=qq;boostT=0;slowT=0;roll=0;vy=0;py=floorAt();air=0;
+    $("#race").classList.add("asking");
+    if(pRig)playA(pRig,"Idle",1,false,.25);
+    player.position.set(px,py,0);player.rotation.set(0,0,0);
+    let last=performance.now();cancelAnimationFrame(endRaf);
+    const idle=()=>{if(running||!asking||screen!=="race")return;const n=performance.now(),dt=Math.min(.05,(n-last)/1000);last=n;
+      if(pRig)pRig.mixer.update(dt);ambient(dt);render();endRaf=requestAnimationFrame(idle)};
+    idle();
+    $("#raskNum").textContent=`Story stop ${solved+1} of ${story.race.length} · ${qq.label||""}`;
+    $("#raskQ").textContent=qq.q;$("#raskMsg").hidden=true;
+    const box=$("#raskOpts");
+    box.innerHTML=qq.options.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${"ABC"[i]}</span><span>${esc(o)}</span></button>`).join("");
+    box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(asking!==qq)return;
+      const i=+b.dataset.i,good=i===qq.answer;box.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+      b.classList.add(good?"right":"wrong",good?"pop":"shake");
+      const m=$("#raskMsg");m.hidden=false;m.className="rask-msg "+(good?"good":"bad");m.textContent=good?"Correct! Boost!":"Not quite! This question will come back later.";
+      answer(qq,good);setTimeout(()=>{if(asking===qq)resume()},good?1000:1800)});
+    $("#rask").hidden=false;rsay(tries[qq.qi]?line("raceBack"):line("raceCue"));
+    const f=box.querySelector(".opt");if(f)try{f.focus({preventScroll:true})}catch(e){}
+  }
+  function resume(){asking=null;$("#rask").hidden=true;$("#race").classList.remove("asking");
+    if(!$("#rover").hidden)return; // paused on top of the card: "Keep running" resumes
+    cancelAnimationFrame(endRaf);running=true;clock.getDelta();loop()}
   // the finish line: a checkered arch with balloons and flags across all lanes
   function spawnFinish(z){
     const g=new THREE.Group();
@@ -2872,7 +3082,7 @@ const Race=(()=>{
 
   function reset(){
     clear();flyers.forEach(f=>scene.remove(f.m));flyers=[];tipsSaid={};qIdx=0;correct=0;queue=story.race.map((_,i)=>i);tries={};solved=0;gap=60;LV=levelPlan(story.id);speed=LV.speed;slowT=0;lane=1;px=0;py=0;vy=0;roll=0;coins=0;score=0;state="run";wait=1.4;shake=0;boostT=0;ended=false;curGate=null;lastPy=0;air=0;
-    cancelAnimationFrame(endRaf);cancelAnimationFrame(cntRaf);$("#race").classList.remove("endseq","celebrate");if(rays)rays.visible=false;frame(null);flashEl.className="flash";patrol.rotation.set(0,0,0);
+    asking=null;$("#rask").hidden=true;$("#race").classList.remove("asking");cancelAnimationFrame(endRaf);cancelAnimationFrame(cntRaf);$("#race").classList.remove("endseq","celebrate");if(rays)rays.visible=false;frame(null);flashEl.className="flash";patrol.rotation.set(0,0,0);
     player.position.set(0,0,0);player.rotation.set(0,0,0);patrol.position.set(1.1,0,7);dog.position.set(-1,0,7.5);
     if(pRig)playA(pRig,"Run",1.25,false,0);if(oRig)playA(oRig,"Run",1.3,false,0);
     setQuestion(null);$("#rq").textContent="Get ready…";hud();
@@ -2881,16 +3091,14 @@ const Race=(()=>{
   function nextQuestion(){
     if(!queue.length){state="finish";setQuestion(null);$("#rq").textContent="All correct! Run through the finish line!";spawnFinish(-90);rsay(line("raceDone"));return}
     const qi=queue.shift(),raw=story.race[qi];qIdx++;
-    const order=shuffle([0,1,2]);const qq={q:raw.q,options:order.map(i=>raw.options[i]),answer:order.indexOf(raw.answer),qi};
-    curGate=spawnGate(qq,-100);setQuestion(qq);hud();
+    const order=shuffle([0,1,2]);const qq={q:raw.q,label:raw.label,options:order.map(i=>raw.options[i]),answer:order.indexOf(raw.answer),qi};
+    curGate=spawnStop(qq,-100);setQuestion(null);$("#rq").textContent=tries[qi]?"A story stop you missed is coming back. Keep running!":"Run to the next STORY STOP. Jump and grab coins!";hud();
     course();
-    rsay(tries[qi]?line("raceBack"):line("raceCue"));
   }
-  function onGate(o){
-    const good=lane===o.q.answer,qi=o.q.qi;
-    collect(o,good);
-    if(good){solved++;if(!tries[qi])correct++;gap=Math.min(100,gap+24);boostT=1.2;score+=500;sfx.good();burst(0xffd23f);flash("Correct! Boost!");$("#rsay").textContent=line("raceGood")}
-    else{tries[qi]=(tries[qi]||0)+1;queue.push(qi);gap-=22;shake=.5;sfx.bad();flash("Not quite!",true);rsay(line("raceBad"))}
+  function answer(q,good){
+    const qi=q.qi;
+    if(good){solved++;if(!tries[qi])correct++;gap=Math.min(100,gap+24);boostT=1.2;score+=500;sfx.good();burst(0xffd23f);$("#rsay").textContent=line("raceGood");speak($("#rsay").textContent)}
+    else{tries[qi]=(tries[qi]||0)+1;queue.push(qi);gap-=22;shake=.5;sfx.bad();rsay(line("raceBad"))}
     curGate=null;state="run";wait=1.0;setQuestion(null);$("#rq").textContent=good?"Nice! Next story part coming…":"Shake it off! That one will come back…";hud();
   }
   function crossFinish(){
@@ -3029,12 +3237,12 @@ const Race=(()=>{
       else if(Math.abs(dx)<10&&Math.abs(dy)<10&&e.target===canvas){const r=canvas.getBoundingClientRect();move(e.clientX<r.left+r.width/3?-1:e.clientX>r.left+r.width*2/3?1:0)}});
     const hold=(id,fn)=>{$(id).addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();fn()})};
     hold("#bl",()=>move(-1));hold("#br",()=>move(1));hold("#bj",jump);hold("#bd",doRoll);
-    $("#rpause").addEventListener("click",()=>{if(running)pause()});
+    $("#rpause").addEventListener("click",()=>{if(running||asking)pause()});
     $$("#rpick button").forEach(b=>b.addEventListener("click",()=>{sfx.click();useRunner(b.dataset.r)}));
     document.addEventListener("visibilitychange",()=>{if(document.hidden&&running)pause()});
   }
   function pause(){running=false;Music.dim(true);$("#rover").classList.remove("intro","end");$("#roverTitle").textContent="Paused";$("#roverText").textContent="Take a breath. The patrol is waiting too.";$("#rQuit").hidden=false;$("#roverBtn").textContent="Keep running";
-    $("#roverBtn").onclick=()=>{$("#rover").hidden=true;Music.dim(false);running=true;clock.getDelta();loop()};$("#rover").hidden=false}
+    $("#roverBtn").onclick=()=>{$("#rover").hidden=true;Music.dim(false);if(asking)return;running=true;clock.getDelta();loop()};$("#rover").hidden=false}
 
   // things that move even when nobody is running: clouds, swaying trees, blowing leaves, the sky following the camera
   let t=0;
@@ -3067,7 +3275,7 @@ const Race=(()=>{
       if(o.type==="train"){
         if(!o.hit&&Math.abs(px-LANES[o.lane])<1&&z+o.len/2>-.3&&z-o.len/2<.3&&py<o.roof-.45){o.hit=true;gap=bumpGap(14);slowT=.5;sideStep(o);shake=.6;sfx.bump();flash("Bump!",true);puff(px,1,-.6,8,0xffffff,.8);rsay("Trains block the lane. Switch lanes early!",1);hud()}
       }else if(!o.hit&&prevZ<0&&z>=0){
-        if(o.type==="gate"){o.hit=true;onGate(o)}
+        if(o.type==="stop"){o.hit=true;askStop(o.q);return}
         else if(o.type==="coin"&&o.lane===lane&&Math.abs(py+.9-o.y)<1.3){o.hit=true;coins++;score+=50;sfx.coin();sparkle(o.mesh.position.x,o.mesh.position.y+.4,0);scene.remove(o.mesh);hud()}
         else if(o.type==="bar"&&o.lane===lane&&py<.85){o.hit=true;gap=bumpGap(10);slowT=.4;shake=.4;sfx.hit();flash("Ouch!",true);puff(px,.8,-.4,6,0xffffff,.6);rsay("Jump over the low barriers or switch lanes!",1);hud()}
         else if(o.type==="high"&&o.lane===lane&&roll<=0&&py<1.5){o.hit=true;gap=bumpGap(10);slowT=.4;shake=.4;sfx.hit();flash("Ouch!",true);puff(px,1.6,-.4,6,0xffffff,.6);rsay("Swipe down to roll under the high barriers!",1);hud()}
@@ -3161,7 +3369,7 @@ const Race=(()=>{
       $("#rover").classList.remove("end");$("#rover").classList.add("intro");
       introPose();
       $("#roverTitle").textContent="Escape the patrol!";
-      $("#roverText").textContent=`World ${worldOf(s.id)+1}: ${W.name}. Collect the story parts in order: Somebody, Wanted, But, So, Then. Run into the right card to boost away. A wrong card slows you down and comes back later. Use the ramps to run on the trains!`;
+      $("#roverText").textContent=`World ${worldOf(s.id)+1}: ${W.name}. Run, jump and grab coins. At each STORY STOP the race pauses, so you can read the question and tap the right story part. There is no rush. A wrong answer lets the patrol come closer, and that question comes back later.`;
       $("#roverBtn").textContent="Start running";$("#rover").hidden=false;
       rsay("The patrol is right behind you! Collect the right story parts to get away.");
       $("#roverBtn").onclick=go;
@@ -3173,8 +3381,7 @@ const Race=(()=>{
     stop(){running=false;cancelAnimationFrame(raf);cancelAnimationFrame(endRaf)}
   };
 })();
-if(location.hash==="#hq")window.SR_RACE=Race; // test hook
-if(location.hash==="#hq")window.SR_RACE=Race; // test hook
+if(location.hash==="#hq"){window.SR_RACE=Race;window.SR_FLOW={meaningChecks,pieces,pieceIs,swKeys,startLevel,startRace,startOrder,startSummary,checkSummary,finishLevel,get L(){return L}}} // test hook
 
 goLearner();
 // Offline install support when hosted on a website (not used inside the artifact viewer or from a local file).
