@@ -1,13 +1,12 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>SummaRace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#1f6fd6">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
 /* Layout: one-screen app on a bright sky "sticker" world. White sticker cards with thick ink outlines sit on a halftone sky; Teacher Mira docks at the bottom of every screen. One deliberate bright look in both themes. */
 :root{
@@ -710,7 +709,7 @@ body.titled::before{display:none}
   padding:3px 10px;border-radius:6px;background:linear-gradient(#a45cff,#6a2fd0);border:2px solid #fff;box-shadow:0 3px 0 #3e1590}
 .sflag.l{transform:translate(-50%,-50%) rotate(3deg)}
 /* level card */
-.lvcard{position:absolute;left:50%;bottom:12px;z-index:30;width:min(calc(100% - 24px),400px);box-sizing:border-box;display:grid;grid-template-columns:92px 1fr;gap:10px 14px;padding:12px;
+.lvcard{position:absolute;left:50%;bottom:max(12px,min(calc(var(--dock-h,120px) + 10px),calc(100% - 250px)));transition:bottom .25s;z-index:30;width:min(calc(100% - 24px),400px);box-sizing:border-box;display:grid;grid-template-columns:92px 1fr;gap:10px 14px;padding:12px;
   background:var(--grain),linear-gradient(var(--cream),var(--cream-2));border:4px solid #fff;border-radius:24px;box-shadow:0 6px 0 rgba(58,20,96,.3),0 18px 36px rgba(30,0,60,.35);
   transform:translateX(-50%);animation:cardUp .38s var(--ease-pop) both}
 @keyframes cardUp{from{transform:translate(-50%,40px) scale(.9);opacity:0}}
@@ -857,6 +856,7 @@ input.shake{border-color:#e8352a!important}
 .otime[hidden]{display:none}
 .otime{position:absolute;top:12px;right:14px;font-family:var(--display);font-size:1.05rem;color:#fff;background:rgba(40,16,90,.55);border:2px solid #fff;border-radius:999px;padding:6px 14px;font-variant-numeric:tabular-nums}
 .otime.low{background:#e8352a;animation:optpop .5s}
+.otime.near{position:static;background:var(--plum,#3a1460)}
 .slot.shown,.slot.right.shown{border-style:solid;border-color:#ffb000;background:#fff7dc}
 .fb{display:grid;gap:6px;margin:4px 0 0}
 .fb:empty{display:none}
@@ -1165,7 +1165,7 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
           <div class="slots" id="slots"></div>
         </div>
         <div class="pool" id="pool"></div>
-        <div class="pager"><button class="btn go" id="orderCheck" disabled>Check order</button></div>
+        <div class="pager"><span class="otime near" id="orderTime2" hidden></span><button class="btn go" id="orderCheck" disabled>Check order</button></div>
       </div>
     </section>
 
@@ -1273,7 +1273,10 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
         </div>
         <div class="tablewrap"><table id="recTable"></table></div>
         <textarea id="csvOut" readonly aria-label="CSV data" hidden></textarea>
-        <div class="row"><span class="sp"></span><button class="btn alt" id="recClear">Erase all records</button></div>
+        <div class="row"><button class="btn alt" id="recRestore" hidden>Bring back erased records</button><span class="sp"></span><button class="btn alt" id="recClear">Erase all records</button></div>
+        <div class="row" id="recConfirm" hidden><label class="meta" for="recWord" style="color:#fff">For the teacher: type ERASE to delete every learner and record on this device.</label>
+          <input id="recWord" autocomplete="off" autocapitalize="characters" maxlength="10" placeholder="ERASE" style="width:9em;font:inherit;padding:8px;border-radius:10px;border:3px solid #fff">
+          <button class="btn alt" id="recErase">Erase</button><button class="btn alt" id="recCancel">Cancel</button></div>
       </div>
     </section>
   </main>
@@ -1369,7 +1372,24 @@ function savePref(){try{localStorage.setItem(KEY+".pref",JSON.stringify(pref))}c
 const dockRO=window.ResizeObserver?new ResizeObserver(()=>{const t=document.getElementById("teacher");if(t)document.documentElement.style.setProperty("--dock-h",t.offsetHeight+"px")}):null;
 document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("teacher");if(t&&dockRO)dockRO.observe(t)});
 let miniT=0;
-function autoMini(){clearTimeout(miniT);miniT=setTimeout(()=>{const t=$("#teacher"),ta=$("#tactions");if(vBusy||(ta&&!ta.hidden)){autoMini();return}if(t)t.classList.add("mini")},7000)}
+// Mira's bubble folds away 7 s after she stops talking, or 2 s after if it is sitting on top of a button the learner needs
+function miraCovers(){const t=$("#teacher"),bb=t&&t.querySelector(".bubble"),sc=$("#"+screen);
+  if(!bb||!sc||t.classList.contains("mini")||t.classList.contains("hide"))return false;const r=bb.getBoundingClientRect();if(!r.height)return false;
+  return Array.from(document.querySelectorAll("#"+screen+" button:not([disabled]),#"+screen+" textarea,#"+screen+" input,.lvcard button")).some(e=>{
+    if(e.closest("[hidden]"))return false;const a=e.getBoundingClientRect();
+    return a.height>0&&a.bottom>r.top+4&&a.top<r.bottom&&a.right>r.left&&a.left<r.right&&a.top<innerHeight})}
+function autoMini(){clearTimeout(miniT);const t0=Date.now();
+  const tick=()=>{const t=$("#teacher"),ta=$("#tactions");if(!t)return;
+    if(vBusy||(ta&&!ta.hidden)){miniT=setTimeout(()=>autoMini(),1000);return}
+    if(Date.now()-t0>=7000||miniCovers())t.classList.add("mini");else miniT=setTimeout(tick,500)};
+  miniT=setTimeout(tick,2000)}
+const miniCovers=()=>{try{return miraCovers()}catch(e){return false}};
+// scrolling a screen, tapping Mira's words, or typing folds her bubble away so nothing stays hidden under it
+function miraFold(){const t=$("#teacher"),ta=$("#tactions");if(t&&!(ta&&!ta.hidden))t.classList.add("mini")}
+document.addEventListener("touchmove",e=>{if(e.target.closest&&e.target.closest(".screen:not(#race):not(#home)"))miraFold()},{passive:true});
+document.addEventListener("wheel",e=>{if(e.target.closest&&e.target.closest(".screen:not(#race):not(#home)"))miraFold()},{passive:true});
+document.addEventListener("focusin",e=>{if(e.target.matches&&e.target.matches("textarea,input")&&e.target.closest(".screen"))miraFold()});
+document.addEventListener("click",e=>{if(e.target.closest&&e.target.closest("#teacher .bubble")&&!e.target.closest("button"))miraFold()});
 function say(text){autoMini();
   $("#say").textContent=text;$("#teacher").classList.remove("mini");
   const t=$("#teacher");t.classList.remove("talk");void t.offsetWidth;t.classList.add("talk");
@@ -1427,7 +1447,7 @@ function stopSpeech(){
 function speak(text){
   if(!pref.voice)return;
   const c=clipFor(text);if(c){playClip(c);return}
-  if(HAS_VOICE)return; // never mix in a robot voice when the recordings are there
+  // a line with no recording falls back to the device voice, so no instruction or feedback is ever silent
   if(APP){speakRaw(text);return}
   if(!("speechSynthesis" in window))return;
   try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.92;u.pitch=1.1;speechSynthesis.speak(u)}catch(e){}
@@ -1576,20 +1596,21 @@ function show(id){
 }
 $$("[data-go]").forEach(b=>b.onclick=()=>{if(b.dataset.go==="home"){sfx.click();goHome()}});
 $("#homeBtn").onclick=()=>{sfx.click();stopSpeech();goHome()};
-function syncQuit(){const lv=LEVEL_SCREENS.includes(screen),hm=screen==="home"||screen==="records";
+function syncQuit(){const lv=LEVEL_SCREENS.includes(screen)||screen==="race",hm=screen==="home"||screen==="records";
   $("#quitStory").hidden=!(lv||hm);$("#quitStory").textContent=lv?"Quit this story":"Back to title screen";$("#exitApp").hidden=!(APP&&APP.exit);
   $("#quitRow").hidden=$("#quitStory").hidden&&$("#exitApp").hidden}
 $("#setBtn").onclick=()=>{sfx.click();syncQuit();openModal("setModal")};
 const LEVEL_SCREENS=["read","quiz","order","swbst","summary","result"];
 $("#miraHide").onclick=e=>{e.stopPropagation();sfx.click();stopSpeech();$("#teacher").classList.add("mini")};
 $("#miraImg").parentNode.addEventListener("click",()=>{const t=$("#teacher");if(!t.classList.contains("mini"))return;sfx.click();t.classList.remove("mini");speak($("#say").textContent)});
-$("#quitStory").onclick=()=>{sfx.click();stopSpeech();if(LEVEL_SCREENS.includes(screen))goHome();else goLearner()};
+$("#quitStory").onclick=()=>{sfx.click();stopSpeech();if(LEVEL_SCREENS.includes(screen)||screen==="race")goHome();else goLearner()};
 $("#rQuit").onclick=()=>{sfx.click();goHome()};
 $("#exitApp").onclick=()=>{sfx.click();try{APP.exit()}catch(e){}};
 // Android back button: close a popup, pause the race, leave a story for the map, then exit from the title screen
 window.srBack=function(){
   if($$(".modal").some(m=>!m.hidden)){closeModals();return true}
-  if(screen==="race"){const b=$("#rpause");if(b&&$("#rover").hidden){b.click();return true}stopSpeech();goHome();return true}
+  // race: first Back pauses; on any race card (intro, paused, caught, won) Back opens the Quit popup instead of dropping the level
+  if(screen==="race"){const b=$("#rpause");if(b&&$("#rover").hidden){b.click();return true}syncQuit();openModal("setModal");return true}
   if(LEVEL_SCREENS.includes(screen)){syncQuit();openModal("setModal");return true}
   if(screen==="home"||screen==="records"){goLearner();return true}
   return false};
@@ -1859,8 +1880,11 @@ $("#readDone").onclick=()=>{sfx.click();stopSpeech();askPage()};
 /* questions: after each page, its processing question; after the last page, the main idea.
    A wrong answer is never revealed: the learner reviews the story and tries again until it is right. */
 let q=null,qRight=0,mainRight=0,qMiss=0,askingMain=false;
-function askPage(){askingMain=false;q=Object.assign({kind:"detail"},L.s.quiz[page]);show("quiz");renderQ();say(line("pageQ"))}
-function askMain(){askingMain=true;q=Object.assign({kind:"main"},L.s.mainIdea);show("quiz");renderQ();
+// options are shown in a new random order every time, so the right answer is not always B or in the same spot
+function shuffledQ(src,kind){const ord=shuffle(src.options.map((_,i)=>i));
+  return Object.assign({kind},src,{options:ord.map(i=>src.options[i]),answer:ord.indexOf(src.answer)})}
+function askPage(){askingMain=false;q=shuffledQ(L.s.quiz[page],"detail");show("quiz");renderQ();say(line("pageQ"))}
+function askMain(){askingMain=true;q=shuffledQ(L.s.mainIdea,"main");show("quiz");renderQ();
   say("Now the big one: the main idea. Which answer tells what the WHOLE story is about, not just one small part?")}
 function renderQ(){
   const n=L.s.text.length;qMiss=0;tactions();
@@ -1892,13 +1916,14 @@ let placed=[],pool=[],locked=[],firstTry=null,attempts=0,orderHint=false,orderSh
    When time runs out Teacher Mira shows the right order and the level goes on (the score keeps the first try). */
 const ORDER_SECS=30;
 function orderClock(on){
-  clearInterval(orderT);orderT=0;const el=$("#orderTime");
-  if(!on){el.hidden=true;return}
-  orderLeft=ORDER_SECS;const draw=()=>{el.textContent=`⏱ ${orderLeft}s left`;el.classList.toggle("low",orderLeft<=10)};
-  draw();el.hidden=false;
+  // the clock shows in the card header and next to the Check button, so it stays in sight after the page scrolls down
+  clearInterval(orderT);orderT=0;const els=$$("#orderTime,#orderTime2");
+  if(!on){els.forEach(el=>el.hidden=true);return}
+  orderLeft=ORDER_SECS;const draw=()=>els.forEach(el=>{el.textContent=`⏱ ${orderLeft}s left`;el.classList.toggle("low",orderLeft<=10)});
+  draw();els.forEach(el=>el.hidden=false);
   orderT=setInterval(()=>{
     if(screen!=="order"){clearInterval(orderT);orderT=0;return}
-    if(!$("#storyModal").hidden)return;
+    if($$(".modal").some(m=>!m.hidden))return; // the clock waits while the story or Settings is open
     orderLeft--;draw();if(orderLeft<=0){orderClock(false);orderTimeUp()}
   },1000);
 }
@@ -2011,10 +2036,17 @@ function startSummary(){
 $("#sumText").oninput=()=>{const v=$("#sumText").value.trim(),c=v?sentenceCount(v):0;$("#sumCount").textContent=`${c} ${c===1?"sentence":"sentences"}`;$("#sumCount").classList.toggle("ok",c>=2&&c<=3)};
 function norm(t){return t.toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9ñ' ]+/g," ").replace(/\s+/g," ").trim()}
 function sentenceCount(t){return t.trim().replace(/\b(Mr|Mrs|Ms|Dr|St|Sr|Jr|Mt|Gng|Sto|Sta)\./g,"$1").replace(/[.!?]+$/,"").split(/[.!?]+\s+(?=[A-Za-z])/).length}
+// copied = 7 words in a row straight from the story (or from Mira's example once she has shown it).
+// The story-part answers the learner just put in order are allowed: a run only counts when 3+ of its words are outside them.
 function copiedRun(text){
-  const sw=norm(L.s.text.join(" ")+" "+(L.s.passage||"")).split(" "),tw=norm(text).split(" ");
-  const grams=new Set();for(let i=0;i+7<=sw.length;i++)grams.add(sw.slice(i,i+7).join(" "));
-  for(let i=0;i+7<=tw.length;i++)if(grams.has(tw.slice(i,i+7).join(" ")))return true;
+  const src=[L.s.text.join(" ")+" "+(L.s.passage||"")];if(L.modelShown&&L.s.modelSummary)src.push(L.s.modelSummary);
+  const grams=new Set();src.forEach(t=>{const sw=norm(t).split(" ");for(let i=0;i+7<=sw.length;i++)grams.add(sw.slice(i,i+7).join(" "))});
+  const tw=norm(text).split(" "),ok=new Array(tw.length).fill(false),e=L.s.swbst||{};
+  SW.forEach(([k])=>{const a=e[k]&&e[k].answer?norm(e[k].answer).split(" ").filter(Boolean):[];if(!a.length)return;
+    for(let i=0;i+a.length<=tw.length;i++)if(a.every((w,j)=>tw[i+j]===w))for(let j=0;j<a.length;j++)ok[i+j]=true});
+  for(let i=0;i+7<=tw.length;i++)if(grams.has(tw.slice(i,i+7).join(" "))){
+    let own=0;for(let j=i;j<i+7;j++)if(!ok[j])own++;
+    if(own>=3)return true}
   return false;
 }
 const STOP=new Set("the a an and but so then of to in on at for with was were is are his her their they them he she it its had has have did not from that this into out up down very".split(" "));
@@ -2181,7 +2213,7 @@ function checkSummary(){setTimeout(()=>{const c=$("#sumChips");if(c&&c.children.
   fb.innerHTML=rows.join("");
   const blockWrong=(wrongBits.length>0||mean.length>0)&&sumTries<3;
   if(hit>=need&&who&&main&&!blockWrong){
-    sfx.win();mood("happy");L.score.summary=Math.max(0,(hit-wrongBits.length*.5)/res.length);
+    sfx.win();mood("happy");L.score.summary=Math.max(0,(hit-wrongBits.length*.5)/res.length);L.sumStatus=L.modelShown?"passed after example":"passed";
     $("#sumModel").innerHTML=`<b>Teacher Mira's example:</b> ${esc(L.s.modelSummary)}`;
     say(hit===res.length&&!wrongBits.length&&!mean.length?"Excellent! Your summary has every story element, and it matches the story.":"Good summary! You told the main idea in your own words.");
     $("#sumCheck").textContent="See my results";$("#sumCheck").onclick=finishLevel;
@@ -2191,11 +2223,14 @@ function checkSummary(){setTimeout(()=>{const c=$("#sumChips");if(c&&c.children.
     else if(!who)say("Who is the story about? Name the main character in your summary.");
     else if(hit<need)say(sumTries===1?"Your summary is missing some story parts. The red lines show what to add.":"The red lines show what is still missing. Add them in your own words.");
     else say("Your summary needs the main idea. What is the whole story mostly about?");
-    tactions([["Read the story",()=>openStory(null),"alt"]]);
-    if(sumTries>=3)$("#sumModel").innerHTML=`<b>Hint, an example:</b> ${esc(L.s.modelSummary)}`;
+    // after 4 tries the learner can hand the summary to the teacher instead of being stuck (marked in the CSV)
+    tactions(sumTries>=4?[["Read the story",()=>openStory(null),"alt"],["Finish, my teacher will check",teacherCheck]]:[["Read the story",()=>openStory(null),"alt"]]);
+    if(sumTries>=3){L.modelShown=true;$("#sumModel").innerHTML=`<b>Hint, an example:</b> ${esc(L.s.modelSummary)}`}
   }
 }
 
+function teacherCheck(){tactions();sfx.click();L.summaryText=$("#sumText").value.trim();L.score.summary=0;L.sumStatus="teacher check";
+  say("Good effort! Your teacher will read your summary and help you with it.");setTimeout(finishLevel,900)}
 /* result + record */
 function finishLevel(){
   const sc=L.score,p=me();
@@ -2210,7 +2245,7 @@ function finishLevel(){
   const d=new Date();
   db.log.push({date:d.toISOString().slice(0,10),time:d.toTimeString().slice(0,5),learner:p.name,section:p.section||"",level:L.s.id,title:L.s.title,
     key_details_pct:Math.round(sc.quiz*100),main_idea:sc.main?"correct":"wrong",sequence_first_try_pct:Math.round(sc.order*100),race_pct:Math.round(sc.race*100),coins:sc.coins,
-    story_elements_first_try_pct:Math.round(sc.swbst*100),summary_pct:Math.round(sc.summary*100),summary_tries:sumTries,total_pct:pct,stars:st,minutes:+((Date.now()-L.t0)/60000).toFixed(1),summary:L.summaryText});
+    story_elements_first_try_pct:Math.round(sc.swbst*100),summary_pct:Math.round(sc.summary*100),summary_tries:sumTries,total_pct:pct,stars:st,minutes:+((Date.now()-L.t0)/60000).toFixed(1),summary:L.summaryText,summary_status:L.sumStatus||""});
   persist();
   $("#resLvl").textContent=`Level ${L.s.id} · ${L.s.title}`;
   const title=pct>=85?"AMAZING!":pct>=65?"GREAT JOB!":"GOOD TRY!";
@@ -2239,14 +2274,14 @@ function confettiRain(){
 }
 
 /* records */
-const COLS=["date","time","learner","section","level","title","key_details_pct","main_idea","sequence_first_try_pct","race_pct","coins","story_elements_first_try_pct","summary_pct","summary_tries","total_pct","stars","minutes","summary"];
+const COLS=["date","time","learner","section","level","title","key_details_pct","main_idea","sequence_first_try_pct","race_pct","coins","story_elements_first_try_pct","summary_pct","summary_tries","total_pct","stars","minutes","summary","summary_status"];
 function csv(){const q=v=>{v=v==null?"":String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};return [COLS.join(",")].concat(db.log.map(r=>COLS.map(c=>q(r[c])).join(","))).join("\n")}
 let recFrom="learner";
 function goRecords(){
   recFrom=screen;
   const rows=db.log.slice().reverse();
   $("#recTable").innerHTML=`<thead><tr>${COLS.map(c=>`<th>${c.replace(/_/g," ")}</th>`).join("")}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${COLS.map(c=>`<td class="${c==="summary"?"txt":""}">${esc(r[c]??"")}</td>`).join("")}</tr>`).join(""):`<tr><td colspan="${COLS.length}">No finished levels yet.</td></tr>`}</tbody>`;
-  $("#csvOut").hidden=true;show("records");
+  $("#csvOut").hidden=true;syncErase();show("records");
 }
 $("#openRecords").onclick=goRecords;
 $("#recBack").onclick=()=>recFrom==="home"&&me()?goHome():goLearner();
@@ -2267,11 +2302,22 @@ $("#recDl").onclick=async()=>{
   const ta=$("#csvOut");ta.value=csv();ta.hidden=false;ta.focus();ta.select();
 };
 if(APP){$("#recShare").hidden=false;$("#recShare").onclick=()=>{try{APP.shareText("SummaRace records "+new Date().toISOString().slice(0,10),csv())}catch(e){}}}
-let clearArmed=false;
-$("#recClear").onclick=()=>{
-  if(!clearArmed){clearArmed=true;$("#recClear").textContent="Tap again to erase every learner and record";setTimeout(()=>{clearArmed=false;$("#recClear").textContent="Erase all records"},4000);return}
-  db={profiles:{},current:null,log:[]};persist();clearArmed=false;$("#recClear").textContent="Erase all records";goRecords();
+// erasing needs the word ERASE typed in, and the last erase is kept so a mistake can be undone
+const ERASED=KEY+".erased";
+function hasErased(){try{return !!localStorage.getItem(ERASED)}catch(e){return false}}
+function syncErase(){$("#recRestore").hidden=!hasErased();$("#recConfirm").hidden=true;$("#recClear").hidden=false;$("#recWord").value=""}
+$("#recClear").onclick=()=>{$("#recConfirm").hidden=false;$("#recClear").hidden=true;$("#recWord").value="";$("#recWord").focus()};
+$("#recCancel").onclick=syncErase;
+$("#recErase").onclick=()=>{
+  if($("#recWord").value.trim().toUpperCase()!=="ERASE"){sfx.bad();$("#recWord").focus();return}
+  try{localStorage.setItem(ERASED,JSON.stringify(db))}catch(e){}
+  db={profiles:{},current:null,log:[]};persist();goRecords();
 };
+$("#recRestore").onclick=()=>{let d=null;try{d=JSON.parse(localStorage.getItem(ERASED))}catch(e){}
+  if(!d||!d.profiles)return;
+  // merge, so anything recorded since the erase is kept too
+  Object.entries(d.profiles).forEach(([k,v])=>{if(!db.profiles[k])db.profiles[k]=v});db.log=(d.log||[]).concat(db.log);if(!db.current)db.current=d.current;
+  persist();try{localStorage.removeItem(ERASED)}catch(e){}goRecords()};
 
 /* ======================= RACE (Three.js) ======================= */
 /* An endless-runner chase in the style of the classic subway runners.
@@ -2285,6 +2331,7 @@ const Race=(()=>{
   let coinModel=null,fancy=[],perf={n:0,t:0,low:false,done:location.hash==="#hq"};
   let ok=false,renderer,scene,camera,clock,trackTex,sideTex,sky,player,pRig=null,pProc,patrol,oRig=null,oProc,dog,deco=[],objs=[],parts=[],raf=0,running=false;
   let air=0,story,done,qIdx,correct,queue=[],tries={},solved=0,gap,speed,lane,px,py,vy,roll,coins,score,state,wait,shake,boostT,ended,curGate,fovK=0,lastPy=0;
+  let missed=new Set();
   let K={},leaves=null,lines=[],clouds=[],sway=[],endT=0,endRaf=0,asking=null;
   let runner="boy";try{runner=localStorage.getItem(KEY+".runner")||"boy"}catch(e){}
   if(!RUNNERS[runner])runner="boy";
@@ -2294,6 +2341,15 @@ const Race=(()=>{
 
   function tex(w,h,draw){const c=document.createElement("canvas");c.width=w;c.height=h;draw(c.getContext("2d"),w,h);const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t}
   function mat(c){return MC[c]||(MC[c]=new THREE.MeshToonMaterial({color:c,gradientMap:GT}))}
+  // GPU clean-up: what was built for one obstacle or effect is freed when it goes; shared models, materials and textures stay
+  function keepSet(){const k=new WeakSet(),addM=m=>{if(!m)return;k.add(m);for(const p in m){const v=m[p];if(v&&v.isTexture)k.add(v)}};
+    Object.values(MC).forEach(addM);[OUT,GT,glowT,stopTex,dotT,starT,cg,cm,trackTex,sideTex,stripeT,rollT,chevT].forEach(x=>x&&k.add(x));
+    [K.trains&&K.trains.head,K.trains&&K.trains.mid,coinModel].forEach(o=>o&&o.traverse(n=>{if(n.geometry)k.add(n.geometry);[].concat(n.material||[]).forEach(addM)}));
+    return k}
+  function drop(root){if(!root)return;if(root.parent)root.parent.remove(root);const k=keepSet(),seen=new Set();
+    root.traverse(n=>{if(n.geometry&&!k.has(n.geometry)&&!seen.has(n.geometry)){seen.add(n.geometry);n.geometry.dispose()}
+      [].concat(n.material||[]).forEach(m=>{if(!m||k.has(m)||seen.has(m))return;seen.add(m);
+        for(const p in m){const v=m[p];if(v&&v.isTexture&&!k.has(v)&&!seen.has(v)){seen.add(v);v.dispose()}}m.dispose()})})}
   // a mesh with a cartoon ink outline (a slightly bigger back-face copy)
   function part(geo,color,k=.035){
     const m=new THREE.Mesh(geo,typeof color==="number"?mat(color):color);
@@ -2915,11 +2971,11 @@ const Race=(()=>{
   function collect(o,good){
     o.items.forEach((it,i)=>{const wp=it.getWorldPosition(new THREE.Vector3());o.mesh.remove(it);it.position.copy(wp);scene.add(it);
       if(i===lane){flyers.push({m:it,v:new THREE.Vector3(0,good?7:2,good?-2:4),spin:good?9:-4,life:.8,good});if(good)sparkle(wp.x,wp.y,wp.z)}
-      else{puff(wp.x,wp.y,wp.z,7,HUEN[i],.9,.6);it.userData.gone=true;scene.remove(it)}});
+      else{puff(wp.x,wp.y,wp.z,7,HUEN[i],.9,.6);it.userData.gone=true;drop(it)}});
   }
   function stepFlyers(dt){for(let i=flyers.length-1;i>=0;i--){const f=flyers[i];f.life-=dt;f.m.position.addScaledVector(f.v,dt);f.m.rotation.y+=f.spin*dt;
     f.m.scale.multiplyScalar(f.good?1+dt*.6:1-dt*1.2);f.m.traverse(n=>{if(n.material){n.material.transparent=true;n.material.opacity=Math.max(0,f.life/.8)*(n.isSprite?.75:1)}});
-    if(f.life<=0){scene.remove(f.m);flyers.splice(i,1)}}}
+    if(f.life<=0){drop(f.m);flyers.splice(i,1)}}}
   // a "story stop" arch: the race pauses here and the question opens on screen
   let stopTex;
   function spawnStop(qq,z){
@@ -2972,13 +3028,14 @@ const Race=(()=>{
     for(let i=0;i<n;i++){const m=new THREE.Mesh(new THREE.PlaneGeometry(.16,.24),new THREE.MeshBasicMaterial({color:pick(cols),side:THREE.DoubleSide}));
       m.position.set(px+(Math.random()-.5)*8,3+Math.random()*3,-2-Math.random()*4);scene.add(m);
       parts.push({m,v:new THREE.Vector3((Math.random()-.5)*6,Math.random()*6+2,Math.random()*3),life:2.2,max:2.2,g:5,spin:true})}}
-  function stripes(){return tex(128,32,(x,w,h)=>{for(let i=0;i<9;i++){x.fillStyle=i%2?"#ffffff":"#ff4a3d";x.beginPath();x.moveTo(i*20-10,0);x.lineTo(i*20+10,0);x.lineTo(i*20,h);x.lineTo(i*20-20,h);x.fill()}})}
+  let stripeT,rollT,chevT;
+  function stripes(){return stripeT||(stripeT=tex(128,32,(x,w,h)=>{for(let i=0;i<9;i++){x.fillStyle=i%2?"#ffffff":"#ff4a3d";x.beginPath();x.moveTo(i*20-10,0);x.lineTo(i*20+10,0);x.lineTo(i*20,h);x.lineTo(i*20-20,h);x.fill()}}))}
   function spawnBarrier(l,z,high){
     const g=new THREE.Group();const st=stripes();
     const top=part(BOX(1.8,.42,.2),new THREE.MeshToonMaterial({map:st,gradientMap:GT}),.04);
     top.position.y=high?1.75:.75;g.add(top);
     const hh=high?2.0:.8;[-.8,.8].forEach(x=>{const p=box(.14,hh,.14,0xe8e8f0);p.position.set(x,hh/2,0);g.add(p)});
-    if(high){const s=tex(128,64,(x,w,h)=>{x.fillStyle="#ffd23f";x.fillRect(0,0,w,h);x.fillStyle="#1a1440";x.font='bold 34px "Lilita One",Verdana';x.textAlign="center";x.textBaseline="middle";x.fillText("ROLL ▼",w/2,h/2)});
+    if(high){const s=rollT||(rollT=tex(128,64,(x,w,h)=>{x.fillStyle="#ffd23f";x.fillRect(0,0,w,h);x.fillStyle="#1a1440";x.font='bold 34px "Lilita One",Verdana';x.textAlign="center";x.textBaseline="middle";x.fillText("ROLL ▼",w/2,h/2)}));
       const sg=new THREE.Mesh(new THREE.PlaneGeometry(.9,.42),new THREE.MeshBasicMaterial({map:s}));sg.position.set(0,2.2,.02);g.add(sg)}
     cast(g);g.position.set(LANES[l],0,z);scene.add(g);objs.push({type:high?"high":"bar",mesh:g,lane:l,hit:false});
   }
@@ -2990,7 +3047,7 @@ const Race=(()=>{
       const geo=new THREE.ExtrudeGeometry(sh,{depth:1.7,bevelEnabled:false});geo.rotateY(-Math.PI/2);geo.translate(.85,0,len/2);
       const r=part(geo,0xffc22e,.03);
       // chevrons on the slope so it reads as "run up here"
-      const ch=tex(64,256,(x,w,h)=>{x.fillStyle="#ffc22e";x.fillRect(0,0,w,h);x.fillStyle="#3a1460";for(let y=12;y<h;y+=48){x.beginPath();x.moveTo(6,y+22);x.lineTo(w/2,y);x.lineTo(w-6,y+22);x.lineTo(w-6,y+34);x.lineTo(w/2,y+12);x.lineTo(6,y+34);x.fill()}});
+      const ch=chevT||(chevT=tex(64,256,(x,w,h)=>{x.fillStyle="#ffc22e";x.fillRect(0,0,w,h);x.fillStyle="#3a1460";for(let y=12;y<h;y+=48){x.beginPath();x.moveTo(6,y+22);x.lineTo(w/2,y);x.lineTo(w-6,y+22);x.lineTo(w-6,y+34);x.lineTo(w/2,y+12);x.lineTo(6,y+34);x.fill()}}));
       const L=Math.hypot(RAMP,roof),top=new THREE.Mesh(new THREE.PlaneGeometry(1.5,L),new THREE.MeshBasicMaterial({map:ch}));
       top.rotation.x=-Math.PI/2+Math.atan2(roof,RAMP);top.position.set(0,roof/2+.03,len/2+RAMP/2+.02);
       g.add(r);g.add(top);cast(r)}
@@ -3012,8 +3069,8 @@ const Race=(()=>{
     for(let i=0;i<n;i++){const m=new THREE.Mesh(BOX(.14,.14,.14),mat(color));m.position.set(px,1.6,0);scene.add(m);
       parts.push({m,v:new THREE.Vector3((Math.random()-.5)*7,Math.random()*6+2,(Math.random()-.5)*5),life:1,max:1,g:14,spin:true})}
   }
-  function clear(){objs.forEach(o=>{scene.remove(o.mesh);o.mesh.traverse(n=>{const m=n.material&&n.material.map;if(m&&m!==trackTex&&m.image instanceof HTMLCanvasElement)m.dispose()})});objs=[];
-    parts.forEach(p=>scene.remove(p.m));parts=[]}
+  function clear(){objs.forEach(o=>drop(o.mesh));objs=[];
+    parts.forEach(p=>drop(p.m));parts=[]}
 
   /* ---------- obstacle course: one seeded layout per level ----------
      Between two answer gates (the gate spawns at z=-100) rows of obstacles fill z=-24..-76; the last
@@ -3081,7 +3138,7 @@ const Race=(()=>{
   }
 
   function reset(){
-    clear();flyers.forEach(f=>scene.remove(f.m));flyers=[];tipsSaid={};qIdx=0;correct=0;queue=story.race.map((_,i)=>i);tries={};solved=0;gap=60;LV=levelPlan(story.id);speed=LV.speed;slowT=0;lane=1;px=0;py=0;vy=0;roll=0;coins=0;score=0;state="run";wait=1.4;shake=0;boostT=0;ended=false;curGate=null;lastPy=0;air=0;
+    clear();flyers.forEach(f=>drop(f.m));flyers=[];tipsSaid={};qIdx=0;correct=0;queue=story.race.map((_,i)=>i);tries={};solved=0;gap=60;LV=levelPlan(story.id);speed=LV.speed;slowT=0;lane=1;px=0;py=0;vy=0;roll=0;coins=0;score=0;state="run";wait=1.4;shake=0;boostT=0;ended=false;curGate=null;lastPy=0;air=0;
     asking=null;$("#rask").hidden=true;$("#race").classList.remove("asking");cancelAnimationFrame(endRaf);cancelAnimationFrame(cntRaf);$("#race").classList.remove("endseq","celebrate");if(rays)rays.visible=false;frame(null);flashEl.className="flash";patrol.rotation.set(0,0,0);
     player.position.set(0,0,0);player.rotation.set(0,0,0);patrol.position.set(1.1,0,7);dog.position.set(-1,0,7.5);
     if(pRig)playA(pRig,"Run",1.25,false,0);if(oRig)playA(oRig,"Run",1.3,false,0);
@@ -3098,7 +3155,8 @@ const Race=(()=>{
   function answer(q,good){
     const qi=q.qi;
     if(good){solved++;if(!tries[qi])correct++;gap=Math.min(100,gap+24);boostT=1.2;score+=500;sfx.good();burst(0xffd23f);$("#rsay").textContent=line("raceGood");speak($("#rsay").textContent)}
-    else{tries[qi]=(tries[qi]||0)+1;queue.push(qi);gap-=22;shake=.5;sfx.bad();rsay(line("raceBad"))}
+    // a wrong answer lets the patrol come closer, but never catches the runner by itself
+    else{tries[qi]=(tries[qi]||0)+1;missed.add(qi);queue.push(qi);gap=bumpGap(14);shake=.5;sfx.bad();rsay(line("raceBad"))}
     curGate=null;state="run";wait=1.0;setQuestion(null);$("#rq").textContent=good?"Nice! Next story part coming…":"Shake it off! That one will come back…";hud();
   }
   function crossFinish(){
@@ -3122,7 +3180,7 @@ const Race=(()=>{
     const fx=land?.2:0,fy=land?.02:(kind==="win"?.26:.14);
     camera.setViewOffset(w,h,Math.round(w*fx*k),Math.round(h*fy*k),w,h)}
   function endScene(win){
-    if(win){objs.forEach(o=>scene.remove(o.mesh));objs=[];spawnFinish(-6);objs[0].hit=true;patrol.visible=dog.visible=patrol.userData.shadow.visible=false}else clear();
+    if(win){objs.forEach(o=>drop(o.mesh));objs=[];spawnFinish(-6);objs[0].hit=true;patrol.visible=dog.visible=patrol.userData.shadow.visible=false}else clear();
     endT=0;let last=performance.now(),nextC=.25;const t0=last;
     const rm=RM(),c0=camera.position.clone(),a0=Math.atan2(c0.x-px,c0.z),r0=Math.hypot(c0.x-px,c0.z),h0=c0.y,tgt=new THREE.Vector3(px,1.2,0),dir=new THREE.Vector3();
     if(win)endLook.set(px*.7,.9,-10);
@@ -3200,7 +3258,8 @@ const Race=(()=>{
     running=false;ended=true;sfx.win();
     $("#race").classList.add("endseq","celebrate");
     $("#rover").classList.remove("intro");$("#rover").classList.add("end");
-    const res=correct/story.race.length;
+    // first-try score for the whole level: a story part missed in an earlier attempt still counts as missed after "Try the race again"
+    const res=story.race.filter((_,i)=>!missed.has(i)).length/story.race.length;
     const n=story.race.length,medal=correct===n?"gold":correct>=n-2?"silver":"bronze",stars=correct===n?3:correct>=n-2?2:1,pts=Math.floor(score),rm=RM();
     $("#roverTitle").innerHTML='<span class="rib">Mission complete!</span>';
     $("#roverText").innerHTML=`<span class="vic">
@@ -3210,7 +3269,7 @@ const Race=(()=>{
       <span class="vscore"><small>Score</small><b id="vscore">${rm?pts.toLocaleString():"0"}</b></span>
       <span class="vstats">${correct} of ${n} right on the first try · <span class="coinic mini"></span> ${coins} coins</span>
     </span>`;
-    $("#rover").classList.add("win");
+    $("#rover").classList.add("win");$("#rQuit").hidden=true; // no one-tap "Quit" under a finished race
     $("#roverBtn").textContent="Continue";$("#rover").hidden=false;
     $("#roverBtn").onclick=()=>{$("#rover").hidden=true;cancelAnimationFrame(endRaf);cancelAnimationFrame(cntRaf);$("#race").classList.remove("endseq","celebrate");frame(null);done(res,coins)};
     // stars pop one by one, then the score counts up
@@ -3280,7 +3339,7 @@ const Race=(()=>{
         else if(o.type==="bar"&&o.lane===lane&&py<.85){o.hit=true;gap=bumpGap(10);slowT=.4;shake=.4;sfx.hit();flash("Ouch!",true);puff(px,.8,-.4,6,0xffffff,.6);rsay("Jump over the low barriers or switch lanes!",1);hud()}
         else if(o.type==="high"&&o.lane===lane&&roll<=0&&py<1.5){o.hit=true;gap=bumpGap(10);slowT=.4;shake=.4;sfx.hit();flash("Ouch!",true);puff(px,1.6,-.4,6,0xffffff,.6);rsay("Swipe down to roll under the high barriers!",1);hud()}
       }
-      if(z-(o.len||0)/2>14){scene.remove(o.mesh);objs.splice(i,1)}
+      if(z-(o.len||0)/2>14){drop(o.mesh);objs.splice(i,1)}
     }
     if(!perf.low&&!perf.done){perf.n++;perf.t+=dt;if(perf.t>=2.5){perf.done=true;if(perf.n/perf.t<22){perf.low=true;leaves.visible=false;sunL.castShadow=false;applyWorld();renderer.setPixelRatio(1);resize()}}}
     px+=(LANES[lane]-px)*Math.min(1,dt*12);
@@ -3322,7 +3381,7 @@ const Race=(()=>{
     for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.v.y-=(p.g||0)*dt;p.m.position.addScaledVector(p.v,dt);p.life-=dt;
       if(p.spin)p.m.rotation.x+=dt*6;
       if(p.m.isSprite){p.m.material.opacity=Math.max(0,p.life/p.max)*.85;p.m.scale.multiplyScalar(1+(p.grow||0)*dt)}
-      if(p.life<=0){scene.remove(p.m);if(p.m.isSprite)p.m.material.dispose();parts.splice(i,1)}}
+      if(p.life<=0){drop(p.m);parts.splice(i,1)}}
   }
   let lastR=0;
   function render(){const n=performance.now(),dt=lastR?Math.min(.05,(n-lastR)/1000):0;lastR=n;stepParts(dt);stepFlyers(dt);renderer.render(scene,camera)}
@@ -3361,7 +3420,7 @@ const Race=(()=>{
 
   return{
     prepare(s,cb){
-      story=s;done=cb;
+      story=s;done=cb;missed=new Set();
       if(!init()){$("#roverTitle").textContent="The 3D race could not load";$("#roverText").textContent="This device could not load the 3D engine. Your other answers still count, so continue.";
         $("#roverBtn").textContent="Keep going";$("#roverBtn").onclick=()=>{$("#rover").hidden=true;done(.5,0)};$("#rover").hidden=false;return}
       resize();reset();setWorld(s.id);$("#rover").classList.remove("win");
@@ -3385,8 +3444,5 @@ if(location.hash==="#hq"){window.SR_RACE=Race;window.SR_FLOW={meaningChecks,piec
 
 goLearner();
 // Offline install support when hosted on a website (not used inside the artifact viewer or from a local file).
-if("serviceWorker" in navigator&&!window.Capacitor&&/^https?:$/.test(location.protocol)&&!/claude/.test(location.hostname)){
-  window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})});
-}
 })();
 </script>
