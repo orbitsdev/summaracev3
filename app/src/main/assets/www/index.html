@@ -2245,7 +2245,7 @@ function finishLevel(){
   const d=new Date();
   db.log.push({date:d.toISOString().slice(0,10),time:d.toTimeString().slice(0,5),learner:p.name,section:p.section||"",level:L.s.id,title:L.s.title,
     key_details_pct:Math.round(sc.quiz*100),main_idea:sc.main?"correct":"wrong",sequence_first_try_pct:Math.round(sc.order*100),race_pct:Math.round(sc.race*100),coins:sc.coins,
-    story_elements_first_try_pct:Math.round(sc.swbst*100),summary_pct:Math.round(sc.summary*100),summary_tries:sumTries,total_pct:pct,stars:st,minutes:+((Date.now()-L.t0)/60000).toFixed(1),summary:L.summaryText,summary_status:L.sumStatus||""});
+    summary_pct:Math.round(sc.summary*100),summary_tries:sumTries,total_pct:pct,stars:st,minutes:+((Date.now()-L.t0)/60000).toFixed(1),summary:L.summaryText,summary_status:L.sumStatus||""});
   persist();
   $("#resLvl").textContent=`Level ${L.s.id} · ${L.s.title}`;
   const title=pct>=85?"AMAZING!":pct>=65?"GREAT JOB!":"GOOD TRY!";
@@ -2274,7 +2274,7 @@ function confettiRain(){
 }
 
 /* records */
-const COLS=["date","time","learner","section","level","title","key_details_pct","main_idea","sequence_first_try_pct","race_pct","coins","story_elements_first_try_pct","summary_pct","summary_tries","total_pct","stars","minutes","summary","summary_status"];
+const COLS=["date","time","learner","section","level","title","key_details_pct","main_idea","sequence_first_try_pct","race_pct","coins","summary_pct","summary_tries","total_pct","stars","minutes","summary","summary_status"];
 function csv(){const q=v=>{v=v==null?"":String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};return [COLS.join(",")].concat(db.log.map(r=>COLS.map(c=>q(r[c])).join(","))).join("\n")}
 let recFrom="learner";
 function goRecords(){
@@ -2293,10 +2293,15 @@ $("#recCopy").onclick=()=>{
 };
 let dlApi=null;
 if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{dlApi=d}).catch(()=>{});
+let dlT=0;const dlMsg=(t,ms)=>{$("#recDl").textContent=t;clearTimeout(dlT);dlT=setTimeout(()=>$("#recDl").textContent="Download CSV",ms)};
+window.srStorage=ok=>{if(ok)$("#recDl").onclick();else dlMsg("Not allowed. Use Share CSV instead",6000)};
 $("#recDl").onclick=async()=>{
   const name=`summarace-records-${new Date().toISOString().slice(0,10)}.csv`,data="\ufeff"+csv();
   if(APP){let where="";try{where=APP.saveFile(name,data)}catch(e){}
-    if(where){$("#recDl").textContent="Saved to "+where;setTimeout(()=>$("#recDl").textContent="Download CSV",4000);return}}
+    // Android 7-9: "ASK" means the storage prompt is up (srStorage retries), "HIDDEN" means it was refused
+    if(where==="ASK"){dlMsg("Tap Allow to save the file",8000);return}
+    if(where==="HIDDEN"){dlMsg("Saved inside the app only. Use Share CSV",6000);return}
+    if(where){dlMsg("Saved to "+where,4000);return}}
   if(dlApi){try{await dlApi.save({filename:name,data});return}catch(e){if(e&&e.code==="declined")return}}
   else if(!window.claude&&!APP){try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"text/csv"}));a.download=name;document.body.appendChild(a);a.click();a.remove();return}catch(e){}}
   const ta=$("#csvOut");ta.value=csv();ta.hidden=false;ta.focus();ta.select();
