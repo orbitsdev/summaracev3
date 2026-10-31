@@ -1510,16 +1510,20 @@ function syncToggles(){
 }
 /* ---------- background music (original loops in music/) ---------- */
 const Music=(()=>{
-  const el={},VOL={menu:.22,race:.42},fades={};let cur=null,ducked=false,dimmed=false;const dk=n=>(ducked?(n==="race"?.65:.3):1)*(dimmed?.35:1);
+  const el={},VOL={menu:.22,race:.42},RATE={menu:1,race:1.08},fades={};let cur=null,ducked=false,dimmed=false;const dk=n=>(ducked?(n==="race"?.65:.3):1)*(dimmed?.35:1);
   // glide a track's volume over ms, then optionally pause it
   function fade(a,to,ms,stop){clearInterval(fades[a.src]);const from=a.volume,t0=performance.now();
     fades[a.src]=setInterval(()=>{const k=Math.min(1,(performance.now()-t0)/ms);try{a.volume=Math.max(0,Math.min(1,from+(to-from)*k))}catch(e){}
       if(k>=1){clearInterval(fades[a.src]);if(stop)try{a.pause()}catch(e){}}},30)}
+  // race loop plays a bit faster and brighter (pitch rises with speed on purpose)
+  function setRate(a,r){try{a.preservesPitch=a.mozPreservesPitch=a.webkitPreservesPitch=false;a.playbackRate=r}catch(e){}}
   function get(n){if(!el[n]){const a=new Audio("music/"+n+".mp3");a.loop=true;a.preload="auto";a.volume=VOL[n];el[n]=a}return el[n]}
   return{
     play(n){if(!pref.music){this.stop();return}if(cur===n&&el[n]&&!el[n].paused)return;
       Object.entries(el).forEach(([k,a])=>{if(k!==n&&!a.paused)fade(a,0,450,true)});cur=n;const a=get(n);if(document.hidden){a.volume=VOL[n]*dk(n);return}
-      try{a.currentTime=0;a.volume=0;const p=a.play();if(p)p.catch(()=>{cur=null});fade(a,VOL[n]*dk(n),700)}catch(e){cur=null}},
+      setRate(a,RATE[n]);try{a.currentTime=0;a.volume=0;const p=a.play();if(p)p.catch(()=>{cur=null});fade(a,VOL[n]*dk(n),700)}catch(e){cur=null}},
+    // speed the race loop up as the runner collects story parts (k: 0..1)
+    push(k){const a=el.race;if(a&&cur==="race")setRate(a,RATE.race+.08*Math.max(0,Math.min(1,k)))},
     dim(on){dimmed=on;Object.entries(el).forEach(([n,a])=>fade(a,VOL[n]*dk(n),300))},
     stop(){Object.values(el).forEach(a=>{clearInterval(fades[a.src]);try{a.pause()}catch(e){}});cur=null},
     duck(on){ducked=on;Object.entries(el).forEach(([n,a])=>fade(a,VOL[n]*dk(n),250))},
@@ -3154,7 +3158,7 @@ const Race=(()=>{
   }
   function answer(q,good){
     const qi=q.qi;
-    if(good){solved++;if(!tries[qi])correct++;gap=Math.min(100,gap+24);boostT=1.2;score+=500;sfx.good();burst(0xffd23f);$("#rsay").textContent=line("raceGood");speak($("#rsay").textContent)}
+    if(good){solved++;Music.push(solved/story.race.length);if(!tries[qi])correct++;gap=Math.min(100,gap+24);boostT=1.2;score+=500;sfx.good();burst(0xffd23f);$("#rsay").textContent=line("raceGood");speak($("#rsay").textContent)}
     // a wrong answer lets the patrol come closer, but never catches the runner by itself
     else{tries[qi]=(tries[qi]||0)+1;missed.add(qi);queue.push(qi);gap=bumpGap(14);shake=.5;sfx.bad();rsay(line("raceBad"))}
     curGate=null;state="run";wait=1.0;setQuestion(null);$("#rq").textContent=good?"Nice! Next story part coming…":"Shake it off! That one will come back…";hud();
