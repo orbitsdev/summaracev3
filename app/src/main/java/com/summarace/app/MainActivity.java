@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -87,6 +91,13 @@ public class MainActivity extends Activity {
     @Override protected void onPause() { super.onPause(); web.onPause(); }
     @Override protected void onResume() { super.onResume(); web.onResume(); }
 
+    // Android 7 to 9: after the storage prompt, tell the page so it can save again.
+    @Override
+    public void onRequestPermissionsResult(int code, String[] perms, int[] res) {
+        boolean ok = res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED;
+        web.evaluateJavascript("window.srStorage && window.srStorage(" + ok + ")", null);
+    }
+
     // The game handles Back itself (close popup, pause race, leave story, exit).
     @Override
     public void onBackPressed() {
@@ -129,6 +140,8 @@ public class MainActivity extends Activity {
         }
 
         // Saves a records file to Download/SummaRace/ and returns where it went ("" on failure).
+        // On Android 7 to 9 it can also return "ASK" (permission prompt shown, tap again)
+        // or "HIDDEN" (permission refused, saved in the app folder only).
         @JavascriptInterface
         public String saveFile(String name, String data) {
             byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
@@ -143,13 +156,30 @@ public class MainActivity extends Activity {
                     if (uri == null) return "";
                     try (OutputStream o = getContentResolver().openOutputStream(uri)) { o.write(bytes); }
                     return "Download/SummaRace/" + name;
-                } else {
-                    File dir = new File(getExternalFilesDir(null), "SummaRace");
+                }
+                // Android 7 to 9: the public Download folder needs the storage permission.
+                String perm = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                if (checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED) {
+                    File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "SummaRace");
                     dir.mkdirs();
                     File f = new File(dir, name);
                     try (FileOutputStream o = new FileOutputStream(f)) { o.write(bytes); }
-                    return f.getAbsolutePath();
+                    // makes the file show up in Files apps and over USB right away
+                    MediaScannerConnection.scanFile(MainActivity.this, new String[]{f.getAbsolutePath()}, new String[]{mime}, null);
+                    return "Download/SummaRace/" + name;
                 }
+                SharedPreferences p = getSharedPreferences("sr", MODE_PRIVATE);
+                if (!p.getBoolean("askedStorage", false) || shouldShowRequestPermissionRationale(perm)) {
+                    p.edit().putBoolean("askedStorage", true).apply();
+                    runOnUiThread(() -> requestPermissions(new String[]{perm}, 1));
+                    return "ASK";
+                }
+                // Permission refused for good: keep a copy in the app's own folder; the page points to Share CSV.
+                File dir = new File(getExternalFilesDir(null), "SummaRace");
+                dir.mkdirs();
+                File f = new File(dir, name);
+                try (FileOutputStream o = new FileOutputStream(f)) { o.write(bytes); }
+                return "HIDDEN";
             } catch (Exception e) {
                 return "";
             }
