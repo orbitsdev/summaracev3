@@ -918,6 +918,41 @@ input.shake{border-color:#e8352a!important}
   #race .bar{height:17px}
 }
 @media (prefers-reduced-motion:reduce){#race .bar i::after{animation:none}}
+/* slim question panel: question + flat answer chips; "solved" lives in the top row; Mira's bubble steps aside while a question is up */
+#race .qbox{padding:9px 6px 6px;margin-top:8px;border:0;border-radius:16px;box-shadow:0 3px 0 rgba(58,20,96,.35)}
+#race .qbox::before{display:none}
+#race .qbox .q{font-size:1.05rem;line-height:1.25}
+#race .lanes{margin-top:6px;gap:5px}
+#race .lanes span{display:block;text-align:center;padding:6px 5px;font-size:.95rem;line-height:1.18;border:0;border-radius:10px;
+  background:var(--c2);box-shadow:none;text-shadow:none;transform:none}
+#race .lanes span i{position:static;display:inline-grid;vertical-align:-3px;width:18px;height:18px;margin-right:4px;font-size:.72rem;border:0;box-shadow:none}
+#race .lanes span em{display:inline}
+#race .lanes span.me{transform:none;box-shadow:0 0 0 3px #ffd23f}
+#race .lanes span.me::after{display:none}
+#race .hchip.solved .ic{background:#fff;-webkit-text-stroke:0;font-size:.85rem}
+#race.q-on .rsay{visibility:hidden}
+#race .hrow .hbtn{flex:none}
+@media (max-width:360px){#race .hchip.score .ic{display:none}}
+/* no on-screen arrow buttons: the race is played with swipes (or taps on the left/right side); the intro card teaches them */
+#race .pad{display:none}
+#race .rsay{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+.howto{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin:2px 0 4px}
+.over.intro .howto{display:grid}
+.howto div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 7px;border-radius:14px;background:#f3ecff;color:var(--plum,#3a1460);font-size:.8rem;line-height:1.15;text-align:center}
+.howto b{font-family:var(--display);font-weight:400;font-size:.95rem;white-space:nowrap}
+@media (max-width:360px){.howto b{font-size:.84rem}.howto div{font-size:.74rem}}
+.howto .g{position:relative;width:46px;height:46px;border-radius:50%;background:#fff;box-shadow:0 2px 0 rgba(58,20,96,.25);margin-bottom:3px}
+.howto .g::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#8a3fd6;animation:swLR 1.4s ease-in-out infinite}
+.howto .g.up::after{animation-name:swUp}.howto .g.dn::after{animation-name:swDn}
+@keyframes swLR{0%,100%{transform:translateX(-13px)}50%{transform:translateX(13px)}}
+@keyframes swUp{0%{transform:translateY(12px);opacity:0}25%{opacity:1}100%{transform:translateY(-13px);opacity:0}}
+@keyframes swDn{0%{transform:translateY(-12px);opacity:0}25%{opacity:1}100%{transform:translateY(13px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.howto .g::after{animation:none}}
+/* start card: a centred modal over a dark backdrop; the race HUD waits behind it */
+#race .over.intro{align-items:center;background:radial-gradient(ellipse at 50% 45%,rgba(26,20,64,.55),rgba(14,8,40,.88));padding-top:calc(16px + env(safe-area-inset-top,0px));overflow-y:auto}
+#race .over.intro .card{margin:auto 0;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+#race.intro-on .hud,#race.intro-on .rsay{visibility:hidden}
+@media (max-width:360px){#race .hrow{gap:5px}#race .hchip{font-size:1.05rem;padding:2px 9px 2px 4px}}
 /* story order: placed parts take their row's color; checked parts turn green or red */
 .slot.filled:nth-child(1){background:#fff3e6;border-color:#ffb36b}
 .slot.filled:nth-child(2){background:#ffeef6;border-color:#ff8fc0}
@@ -1167,10 +1202,11 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
         <div class="hrow">
           <button class="hbtn" id="rpause" aria-label="Pause"><svg viewBox="0 0 20 20" width="20" height="20"><rect x="4" y="3" width="4.5" height="14" rx="1.5" fill="currentColor"/><rect x="11.5" y="3" width="4.5" height="14" rx="1.5" fill="currentColor"/></svg></button>
           <span class="sp"></span>
+          <div class="hchip solved" aria-label="Story parts solved"><span class="ic">📖</span><b id="rstat">0/6</b></div>
           <div class="hchip score"><span class="ic">★</span><b id="rscore">000000</b></div>
           <div class="hchip coin"><span class="ic coinic"></span><b id="rcoins">0</b></div>
         </div>
-        <div class="qbox"><div class="qnum">Solved <span id="rstat">0/6</span></div><div class="q" id="rq">Get ready…</div><div class="lanes" id="rlanes"><span></span><span></span><span></span></div></div>
+        <div class="qbox"><div class="q" id="rq">Get ready…</div><div class="lanes" id="rlanes"><span></span><span></span><span></span></div></div>
         <div class="meter"><span class="pic">🚓</span><div class="bar"><i id="gapbar"></i></div><span>Escape</span></div>
       </div>
       <div class="flash" id="flash"></div>
@@ -1186,6 +1222,7 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
           <div class="eyebrow">Race stage</div>
           <h2 id="roverTitle">Escape the patrol!</h2>
           <p id="roverText" style="margin:0"></p>
+          <div class="howto" aria-label="How to play"><div><span class="g"></span><b>Swipe ← →</b>change lane</div><div><span class="g up"></span><b>Swipe ↑</b>jump</div><div><span class="g dn"></span><b>Swipe ↓</b>roll under</div></div>
           <div class="keys">Swipe left or right to change lanes, up to jump, down to roll. Keys: arrows or Space.</div>
           <div class="rwho" id="rwho"><b>Choose your runner</b>Max and Mia are two classmates who run this race for you. They play the same way, so pick the one you like.</div><div class="rpick" id="rpick" role="group" aria-label="Choose your runner"><button class="btn alt" data-r="boy" aria-pressed="true">Max<small>boy runner</small></button><button class="btn alt" data-r="girl" aria-pressed="false">Mia<small>girl runner</small></button></div>
           <button class="btn go" id="roverBtn">Start running</button><button class="rquit" id="rQuit" type="button" hidden>Quit this story</button>
@@ -2902,7 +2939,7 @@ const Race=(()=>{
   }
   // answer items: three glowing answer cards rise out of the track as you run; run into the right one
   // long answers (SWBST sentences up to ~90 letters) get a taller card so the text stays big enough to read
-  const cardH=text=>String(text).length>60?420:String(text).length>34?370:330;
+  const cardH=text=>String(text).length>60?440:String(text).length>34?400:380;
   function itemTex(text,letter,hue){
     return tex(512,cardH(text),(x,w,h)=>{
       const rr=(x0,y0,x1,y1,r)=>{x.beginPath();x.moveTo(x0+r,y0);x.arcTo(x1,y0,x1,y1,r);x.arcTo(x1,y1,x0,y1,r);x.arcTo(x0,y1,x0,y0,r);x.arcTo(x0,y0,x1,y0,r);x.closePath()};
@@ -2912,7 +2949,7 @@ const Race=(()=>{
       x.fillStyle="#fffaf0";rr(34,92,w-34,h-34,26);x.fill();
       x.fillStyle="#ffffff";x.beginPath();x.arc(w/2,38,36,0,7);x.fill();x.fillStyle=hue;x.beginPath();x.arc(w/2,38,28,0,7);x.fill();
       x.font='46px "SR Display","Lilita One",Verdana,sans-serif';x.textAlign="center";x.textBaseline="middle";x.fillStyle="#ffffff";x.fillText(letter,w/2,41);
-      x.fillStyle="#2c1a4a";let fs=60;const wordsArr=String(text).split(" ");let lines;
+      x.fillStyle="#2c1a4a";let fs=84;const wordsArr=String(text).split(" ");let lines;
       do{x.font=`bold ${fs}px "SR Body","Atkinson Hyperlegible",Verdana,sans-serif`;lines=[];let cur="";
         wordsArr.forEach(wd=>{const t=cur?cur+" "+wd:wd;if(x.measureText(t).width>w-96&&cur){lines.push(cur);cur=wd}else cur=t});lines.push(cur);fs-=4}
       while((lines.length*fs*1.15>h-150||lines.some(l=>x.measureText(l).width>w-90))&&fs>22);
@@ -2925,7 +2962,7 @@ const Race=(()=>{
     const g=new THREE.Group();const items=[];
     LANES.forEach((lx,i)=>{
       const it=new THREE.Group();it.position.set(lx,2.1,0);
-      const ch=cardH(qq.options[i])/330*1.29,card=new THREE.Mesh(new THREE.PlaneGeometry(2.0,ch),new THREE.MeshBasicMaterial({map:itemTex(qq.options[i],"ABC"[i],HUES[i]),transparent:true,fog:false,side:THREE.DoubleSide}));
+      const CW=2.15,ch=CW*cardH(qq.options[i])/512,card=new THREE.Mesh(new THREE.PlaneGeometry(CW,ch),new THREE.MeshBasicMaterial({map:itemTex(qq.options[i],"ABC"[i],HUES[i]),transparent:true,fog:false,side:THREE.DoubleSide}));
       card.position.y=(ch-1.29)/2;it.add(card);
       const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glowT,color:HUEN[i],transparent:true,opacity:.75,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));
       halo.scale.set(3.2,2.4,1);halo.position.z=-.05;it.add(halo);
@@ -3079,7 +3116,7 @@ const Race=(()=>{
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
   const qHTML=t=>esc(t).replace(/^([A-Za-z][A-Za-z ]{0,14}):/,'<b class="qk">$1:</b>').replace(/\b([A-Z]{3,})\b/g,'<b class="qw">$1</b>');
   function setQuestion(qq){
-    $("#rq").innerHTML=qq?qHTML(qq.q):"Keep running!";
+    $("#rq").innerHTML=qq?qHTML(qq.q):"Keep running!";$("#race").classList.toggle("q-on",!!qq);
     // chips: a letter badge plus the answer; the longest answer picks the chip text size (s/m/l)
     const L=$("#rlanes"),mx=qq?Math.max(...qq.options.map(o=>String(o).length)):0;L.dataset.len=mx>48?"l":mx>22?"m":"s";
     $$("#rlanes span").forEach((s,i)=>{s.innerHTML=qq?`<i>${"ABC"[i]}</i><em>${esc(qq.options[i])}</em>`:"";s.setAttribute("aria-label",qq?`${"ABC"[i]}: ${qq.options[i]}`:"");s.style.visibility="hidden"});L.classList.remove("in");
@@ -3371,7 +3408,7 @@ const Race=(()=>{
     step();
   }
   function go(){
-    cancelAnimationFrame(endRaf);$("#rQuit").hidden=true;
+    cancelAnimationFrame(endRaf);$("#rQuit").hidden=true;$("#race").classList.remove("intro-on");
     if(ended){reset();setWorld(story.id)}$("#rover").classList.remove("win");
     if(pRig)pRig.turn.rotation.y=Math.PI;pProc.rotation.y=0;
     $("#rover").hidden=true;$("#rover").classList.remove("intro","end");$("#roverBtn").onclick=go;setTimeout(resize,0);Music.dim(false);Music.play("race");
@@ -3385,10 +3422,10 @@ const Race=(()=>{
         $("#roverBtn").textContent="Keep going";$("#roverBtn").onclick=()=>{$("#rover").hidden=true;done(.5,0)};$("#rover").hidden=false;return}
       resize();reset();setWorld(s.id);$("#rover").classList.remove("win");
       $$("#rpick button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.r===runner));
-      $("#rover").classList.remove("end");$("#rover").classList.add("intro");
+      $("#rover").classList.remove("end");$("#rover").classList.add("intro");$("#race").classList.add("intro-on");
       introPose();
       $("#roverTitle").textContent="Escape the patrol!";
-      $("#roverText").textContent=`World ${worldOf(s.id)+1}: ${W.name}. Run, jump and grab coins. A question shows at the top with three answers, one for each lane. Read it, then move into the lane with the right answer and run through its card. A wrong lane lets the patrol come closer, and that question comes back later.`;
+      $("#roverText").textContent=`World ${worldOf(s.id)+1}: ${W.name}. Read the question at the top. Then swipe into the lane with the right answer!`;
       $("#roverBtn").textContent="Start running";$("#rover").hidden=false;
       rsay("The patrol is right behind you! Collect the right story parts to get away.");
       $("#roverBtn").onclick=go;
