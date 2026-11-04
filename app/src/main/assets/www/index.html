@@ -865,22 +865,12 @@ input.shake{border-color:#e8352a!important}
 .fbrow.hit{background:var(--go-bg);border-color:var(--go);color:#11703d}
 .fbrow.miss{background:var(--bad-bg);border-color:var(--bad);color:#8f1f16}
 .fbrow.todo{color:var(--ink-soft)}
-/* story stops: the race pauses and one question card opens; no answer text on the track or in the top bar */
-#race #rlanes{display:none!important}
-.rask{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:calc(96px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:rgba(26,20,64,.38);overflow-y:auto}
-.rask[hidden]{display:none}
-.rask .card{width:100%;max-width:620px;margin:auto;animation:popin .32s cubic-bezier(.3,1.5,.5,1)}
-.rask .opts{padding:14px}
-.rask .opt[disabled]{opacity:1}
-#race.asking .pad,#race.asking .rsay,#race.asking .qbox,#race.asking .meter{visibility:hidden}
-.rask-msg{margin:0;padding:0 16px 16px;text-align:center;font-family:var(--display);font-size:1.1rem}
-.rask-msg.good{color:#11703d}.rask-msg.bad{color:#a3241a}
 .rwho{display:none;font-size:.95rem;line-height:1.4;max-width:34ch}
 .rwho b{display:block;font-family:var(--display);font-size:1.05rem;margin-bottom:2px}
 .over.intro .rwho{display:block}
 .rpick .btn{display:flex;flex-direction:column;align-items:center;line-height:1.1}
 .rpick .btn small{font-size:.7rem;font-weight:500;opacity:.85;letter-spacing:.02em}
-/* lane chips: shown only while the answer cards are on the track, so the view stays open between questions */
+/* lane chips: the answers sit under the question from the moment it appears until the runner passes the answer gate */
 #race #rlanes:not(.in){display:none}
 #race .lanes{gap:8px;margin-top:10px;align-items:stretch}
 #race .lanes span{--c1:#6aa8ff;--c2:#2a72d6;--sh:#174a94;position:relative;display:flex;align-items:center;gap:7px;min-width:0;text-align:left;
@@ -914,12 +904,12 @@ input.shake{border-color:#e8352a!important}
   #race .lanes{gap:6px;margin-top:9px}
   /* short and medium answers: three columns, the letter badge sits on the corner so the text gets the full width */
   #race .lanes{margin-top:13px}
-  #race .lanes span{flex-direction:column;justify-content:center;text-align:center;padding:11px 5px 8px;font-size:.8rem;border-radius:13px}
+  #race .lanes span{flex-direction:column;justify-content:center;text-align:center;padding:11px 5px 8px;font-size:.98rem;line-height:1.2;border-radius:13px}
   #race .lanes span i{position:absolute;top:-14px;left:-6px;width:22px;height:22px;font-size:.85rem;border:2px solid var(--c2)}
-  #race .lanes[data-len="m"] span{font-size:.74rem}
+  #race .lanes[data-len="m"] span{font-size:.9rem}
   /* long answers: one row per lane (A = left, B = middle, C = right) */
   #race .lanes[data-len="l"]{grid-template-columns:1fr;gap:5px}
-  #race .lanes[data-len="l"] span{flex-direction:row;text-align:left;padding:4px 8px 6px 5px;font-size:.76rem;line-height:1.16}
+  #race .lanes[data-len="l"] span{flex-direction:row;text-align:left;padding:4px 8px 6px 5px;font-size:.86rem;line-height:1.16}
   #race .lanes[data-len="l"] span i{position:static;width:22px;height:22px;border:0}
   #race .lanes[data-len="l"] span em{-webkit-line-clamp:3}
   #race .lanes span.me::after{top:-10px;right:6px;font-size:.56rem}
@@ -928,6 +918,41 @@ input.shake{border-color:#e8352a!important}
   #race .bar{height:17px}
 }
 @media (prefers-reduced-motion:reduce){#race .bar i::after{animation:none}}
+/* slim question panel: question + flat answer chips; "solved" lives in the top row; Mira's bubble steps aside while a question is up */
+#race .qbox{padding:9px 6px 6px;margin-top:8px;border:0;border-radius:16px;box-shadow:0 3px 0 rgba(58,20,96,.35)}
+#race .qbox::before{display:none}
+#race .qbox .q{font-size:1.05rem;line-height:1.25}
+#race .lanes{margin-top:6px;gap:5px}
+#race .lanes span{display:block;text-align:center;padding:6px 5px;font-size:.95rem;line-height:1.18;border:0;border-radius:10px;
+  background:var(--c2);box-shadow:none;text-shadow:none;transform:none}
+#race .lanes span i{position:static;display:inline-grid;vertical-align:-3px;width:18px;height:18px;margin-right:4px;font-size:.72rem;border:0;box-shadow:none}
+#race .lanes span em{display:inline}
+#race .lanes span.me{transform:none;box-shadow:0 0 0 3px #ffd23f}
+#race .lanes span.me::after{display:none}
+#race .hchip.solved .ic{background:#fff;-webkit-text-stroke:0;font-size:.85rem}
+#race.q-on .rsay{visibility:hidden}
+#race .hrow .hbtn{flex:none}
+@media (max-width:360px){#race .hchip.score .ic{display:none}}
+/* no on-screen arrow buttons: the race is played with swipes (or taps on the left/right side); the intro card teaches them */
+#race .pad{display:none}
+#race .rsay{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+.howto{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin:2px 0 4px}
+.over.intro .howto{display:grid}
+.howto div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 7px;border-radius:14px;background:#f3ecff;color:var(--plum,#3a1460);font-size:.8rem;line-height:1.15;text-align:center}
+.howto b{font-family:var(--display);font-weight:400;font-size:.95rem;white-space:nowrap}
+@media (max-width:360px){.howto b{font-size:.84rem}.howto div{font-size:.74rem}}
+.howto .g{position:relative;width:46px;height:46px;border-radius:50%;background:#fff;box-shadow:0 2px 0 rgba(58,20,96,.25);margin-bottom:3px}
+.howto .g::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#8a3fd6;animation:swLR 1.4s ease-in-out infinite}
+.howto .g.up::after{animation-name:swUp}.howto .g.dn::after{animation-name:swDn}
+@keyframes swLR{0%,100%{transform:translateX(-13px)}50%{transform:translateX(13px)}}
+@keyframes swUp{0%{transform:translateY(12px);opacity:0}25%{opacity:1}100%{transform:translateY(-13px);opacity:0}}
+@keyframes swDn{0%{transform:translateY(-12px);opacity:0}25%{opacity:1}100%{transform:translateY(13px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.howto .g::after{animation:none}}
+/* start card: a centred modal over a dark backdrop; the race HUD waits behind it */
+#race .over.intro{align-items:center;background:radial-gradient(ellipse at 50% 45%,rgba(26,20,64,.55),rgba(14,8,40,.88));padding-top:calc(16px + env(safe-area-inset-top,0px));overflow-y:auto}
+#race .over.intro .card{margin:auto 0;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+#race.intro-on .hud,#race.intro-on .rsay{visibility:hidden}
+@media (max-width:360px){#race .hrow{gap:5px}#race .hchip{font-size:1.05rem;padding:2px 9px 2px 4px}}
 /* story order: placed parts take their row's color; checked parts turn green or red */
 .slot.filled:nth-child(1){background:#fff3e6;border-color:#ffb36b}
 .slot.filled:nth-child(2){background:#ffeef6;border-color:#ff8fc0}
@@ -1177,10 +1202,11 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
         <div class="hrow">
           <button class="hbtn" id="rpause" aria-label="Pause"><svg viewBox="0 0 20 20" width="20" height="20"><rect x="4" y="3" width="4.5" height="14" rx="1.5" fill="currentColor"/><rect x="11.5" y="3" width="4.5" height="14" rx="1.5" fill="currentColor"/></svg></button>
           <span class="sp"></span>
+          <div class="hchip solved" aria-label="Story parts solved"><span class="ic">📖</span><b id="rstat">0/6</b></div>
           <div class="hchip score"><span class="ic">★</span><b id="rscore">000000</b></div>
           <div class="hchip coin"><span class="ic coinic"></span><b id="rcoins">0</b></div>
         </div>
-        <div class="qbox"><div class="qnum">Solved <span id="rstat">0/6</span></div><div class="q" id="rq">Get ready…</div><div class="lanes" id="rlanes"><span></span><span></span><span></span></div></div>
+        <div class="qbox"><div class="q" id="rq">Get ready…</div><div class="lanes" id="rlanes"><span></span><span></span><span></span></div></div>
         <div class="meter"><span class="pic">🚓</span><div class="bar"><i id="gapbar"></i></div><span>Escape</span></div>
       </div>
       <div class="flash" id="flash"></div>
@@ -1191,18 +1217,12 @@ body:not(.racing):not(.titled) .teacher{position:fixed!important;left:0;right:0;
         <button id="bd" aria-label="Roll"><svg viewBox="0 0 24 24"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <button id="br" aria-label="Move right"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
-      <div class="rask" id="rask" hidden>
-        <div class="card qcard">
-          <div class="qhead"><span class="eyebrow" id="raskNum">Story stop</span><h2 id="raskQ"></h2><p class="qsub">Take your time. The race waits while you read.</p></div>
-          <div class="opts" id="raskOpts"></div>
-          <p class="rask-msg" id="raskMsg" hidden></p>
-        </div>
-      </div>
       <div class="over" id="rover">
         <div class="card">
           <div class="eyebrow">Race stage</div>
           <h2 id="roverTitle">Escape the patrol!</h2>
           <p id="roverText" style="margin:0"></p>
+          <div class="howto" aria-label="How to play"><div><span class="g"></span><b>Swipe ← →</b>change lane</div><div><span class="g up"></span><b>Swipe ↑</b>jump</div><div><span class="g dn"></span><b>Swipe ↓</b>roll under</div></div>
           <div class="keys">Swipe left or right to change lanes, up to jump, down to roll. Keys: arrows or Space.</div>
           <div class="rwho" id="rwho"><b>Choose your runner</b>Max and Mia are two classmates who run this race for you. They play the same way, so pick the one you like.</div><div class="rpick" id="rpick" role="group" aria-label="Choose your runner"><button class="btn alt" data-r="boy" aria-pressed="true">Max<small>boy runner</small></button><button class="btn alt" data-r="girl" aria-pressed="false">Mia<small>girl runner</small></button></div>
           <button class="btn go" id="roverBtn">Start running</button><button class="rquit" id="rQuit" type="button" hidden>Quit this story</button>
@@ -1548,7 +1568,7 @@ const MIRA={
   pageQ:["Now a question about this page.","Let's see what you remember from this page.","Question time! Think about what you just read.","Here's a question about that page."],
   start:["Let's read together. Who is this story about? What do they want?","Here's a new story! Read carefully and look for the main character.","Story time! Who is in this story, and what do they want?","Let's begin. Read slowly and picture the story in your mind."],
   middle:["What problem happens? Keep reading carefully.","Keep going! Watch for the problem in the story.","What is happening now? Read carefully.","Think about what the character does next."],
-  raceCue:["Story stop! Read the question, then tap your answer.","Take your time. Read all three answers, then choose.","Remember the story. Which one fits?","Story stop! Think about the story, then tap one."],
+  raceCue:["Read the question, then pick your lane!","Which card has the right story part?","Think about the story, then move!","Find the right card and run into it!","Look at all three cards, then choose.","Remember the story. Which one fits?"],
   raceGood:["Yes! You remembered!","Great answer, keep going!","Correct! The patrol is falling behind!","Boost! That's the right part!","Nice catch! Keep running!","You got it! Speed up!","Perfect! The patrol can't keep up!"],
   raceBad:["Not quite! That one will come back. The patrol is closing in!","Oops! Wrong card. You'll see it again soon!","Not that one! Think about the story and try again later.","Careful! That part will come back. Run faster!"],
   raceBack:["This one is back. Think about the story and try again!","Here it is again. Which card is right this time?","Second chance! Remember what happened in the story."],
@@ -2336,8 +2356,8 @@ const Race=(()=>{
   let coinModel=null,fancy=[],perf={n:0,t:0,low:false,done:location.hash==="#hq"};
   let ok=false,renderer,scene,camera,clock,trackTex,sideTex,sky,player,pRig=null,pProc,patrol,oRig=null,oProc,dog,deco=[],objs=[],parts=[],raf=0,running=false;
   let air=0,story,done,qIdx,correct,queue=[],tries={},solved=0,gap,speed,lane,px,py,vy,roll,coins,score,state,wait,shake,boostT,ended,curGate,fovK=0,lastPy=0;
-  let missed=new Set();
-  let K={},leaves=null,lines=[],clouds=[],sway=[],endT=0,endRaf=0,asking=null;
+  let missed=new Set(),asked=null;
+  let K={},leaves=null,lines=[],clouds=[],sway=[],endT=0,endRaf=0;
   let runner="boy";try{runner=localStorage.getItem(KEY+".runner")||"boy"}catch(e){}
   if(!RUNNERS[runner])runner="boy";
   const canvas=$("#rc");
@@ -2348,7 +2368,7 @@ const Race=(()=>{
   function mat(c){return MC[c]||(MC[c]=new THREE.MeshToonMaterial({color:c,gradientMap:GT}))}
   // GPU clean-up: what was built for one obstacle or effect is freed when it goes; shared models, materials and textures stay
   function keepSet(){const k=new WeakSet(),addM=m=>{if(!m)return;k.add(m);for(const p in m){const v=m[p];if(v&&v.isTexture)k.add(v)}};
-    Object.values(MC).forEach(addM);[OUT,GT,glowT,stopTex,dotT,starT,cg,cm,trackTex,sideTex,stripeT,rollT,chevT].forEach(x=>x&&k.add(x));
+    Object.values(MC).forEach(addM);[OUT,GT,glowT,dotT,starT,cg,cm,trackTex,sideTex,stripeT,rollT,chevT].forEach(x=>x&&k.add(x));
     [K.trains&&K.trains.head,K.trains&&K.trains.mid,coinModel].forEach(o=>o&&o.traverse(n=>{if(n.geometry)k.add(n.geometry);[].concat(n.material||[]).forEach(addM)}));
     return k}
   function drop(root){if(!root)return;if(root.parent)root.parent.remove(root);const k=keepSet(),seen=new Set();
@@ -2924,7 +2944,7 @@ const Race=(()=>{
   }
   // answer items: three glowing answer cards rise out of the track as you run; run into the right one
   // long answers (SWBST sentences up to ~90 letters) get a taller card so the text stays big enough to read
-  const cardH=text=>String(text).length>60?420:String(text).length>34?370:330;
+  const cardH=text=>String(text).length>60?440:String(text).length>34?400:380;
   function itemTex(text,letter,hue){
     return tex(512,cardH(text),(x,w,h)=>{
       const rr=(x0,y0,x1,y1,r)=>{x.beginPath();x.moveTo(x0+r,y0);x.arcTo(x1,y0,x1,y1,r);x.arcTo(x1,y1,x0,y1,r);x.arcTo(x0,y1,x0,y0,r);x.arcTo(x0,y0,x1,y0,r);x.closePath()};
@@ -2934,7 +2954,7 @@ const Race=(()=>{
       x.fillStyle="#fffaf0";rr(34,92,w-34,h-34,26);x.fill();
       x.fillStyle="#ffffff";x.beginPath();x.arc(w/2,38,36,0,7);x.fill();x.fillStyle=hue;x.beginPath();x.arc(w/2,38,28,0,7);x.fill();
       x.font='46px "SR Display","Lilita One",Verdana,sans-serif';x.textAlign="center";x.textBaseline="middle";x.fillStyle="#ffffff";x.fillText(letter,w/2,41);
-      x.fillStyle="#2c1a4a";let fs=60;const wordsArr=String(text).split(" ");let lines;
+      x.fillStyle="#2c1a4a";let fs=84;const wordsArr=String(text).split(" ");let lines;
       do{x.font=`bold ${fs}px "SR Body","Atkinson Hyperlegible",Verdana,sans-serif`;lines=[];let cur="";
         wordsArr.forEach(wd=>{const t=cur?cur+" "+wd:wd;if(x.measureText(t).width>w-96&&cur){lines.push(cur);cur=wd}else cur=t});lines.push(cur);fs-=4}
       while((lines.length*fs*1.15>h-150||lines.some(l=>x.measureText(l).width>w-90))&&fs>22);
@@ -2947,7 +2967,7 @@ const Race=(()=>{
     const g=new THREE.Group();const items=[];
     LANES.forEach((lx,i)=>{
       const it=new THREE.Group();it.position.set(lx,2.1,0);
-      const ch=cardH(qq.options[i])/330*1.29,card=new THREE.Mesh(new THREE.PlaneGeometry(2.0,ch),new THREE.MeshBasicMaterial({map:itemTex(qq.options[i],"ABC"[i],HUES[i]),transparent:true,fog:false,side:THREE.DoubleSide}));
+      const CW=2.15,ch=CW*cardH(qq.options[i])/512,card=new THREE.Mesh(new THREE.PlaneGeometry(CW,ch),new THREE.MeshBasicMaterial({map:itemTex(qq.options[i],"ABC"[i],HUES[i]),transparent:true,fog:false,side:THREE.DoubleSide}));
       card.position.y=(ch-1.29)/2;it.add(card);
       const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glowT,color:HUEN[i],transparent:true,opacity:.75,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));
       halo.scale.set(3.2,2.4,1);halo.position.z=-.05;it.add(halo);
@@ -2965,7 +2985,7 @@ const Race=(()=>{
   const easeBack=k=>{const c=1.7;k=Math.min(1,Math.max(0,k));return 1+(c+1)*Math.pow(k-1,3)+c*Math.pow(k-1,2)};
   function animGate(o,z){
     const k=(z+82)/16;
-    if(!o.shown&&k>0){o.shown=true;$$("#rlanes span").forEach(sp=>sp.style.visibility="visible");$("#rlanes").classList.add("in")}
+    if(!o.shown&&k>0){o.shown=true;showLanes()}
     o.items.forEach((it,i)=>{if(it.userData.gone)return;const s=Math.max(.01,easeBack(k));it.scale.setScalar(s);
       const rise=Math.min(1,Math.max(0,k));it.position.y=2.1-(1-rise)*2.2+Math.sin(t*3+it.userData.ph)*.12;
       it.userData.card.rotation.y=Math.sin(t*2+it.userData.ph)*.12;it.userData.ring.scale.setScalar(1+Math.sin(t*5+i)*.12);
@@ -2981,41 +3001,6 @@ const Race=(()=>{
   function stepFlyers(dt){for(let i=flyers.length-1;i>=0;i--){const f=flyers[i];f.life-=dt;f.m.position.addScaledVector(f.v,dt);f.m.rotation.y+=f.spin*dt;
     f.m.scale.multiplyScalar(f.good?1+dt*.6:1-dt*1.2);f.m.traverse(n=>{if(n.material){n.material.transparent=true;n.material.opacity=Math.max(0,f.life/.8)*(n.isSprite?.75:1)}});
     if(f.life<=0){drop(f.m);flyers.splice(i,1)}}}
-  // a "story stop" arch: the race pauses here and the question opens on screen
-  let stopTex;
-  function spawnStop(qq,z){
-    stopTex=stopTex||tex(1024,200,(x,w,h)=>{const gr=x.createLinearGradient(0,0,0,h);gr.addColorStop(0,"#c88bff");gr.addColorStop(1,"#6a2fc4");x.fillStyle="#ffffff";x.fillRect(0,0,w,h);x.fillStyle=gr;x.fillRect(10,10,w-20,h-20);
-      x.font='112px "SR Title","Luckiest Guy","Lilita One",Verdana';x.textAlign="center";x.textBaseline="middle";x.lineWidth=16;x.strokeStyle="#3a1460";x.strokeText("STORY STOP",w/2,h/2+8);x.fillStyle="#ffd23f";x.fillText("STORY STOP",w/2,h/2+8)});
-    const g=new THREE.Group();
-    const banner=new THREE.Mesh(new THREE.PlaneGeometry(9.4,1.85),new THREE.MeshBasicMaterial({map:stopTex,fog:false,side:THREE.DoubleSide}));banner.position.y=5.1;g.add(banner);
-    [-1,1].forEach(s=>{const p=part(CYL(.22,.26,6,12),0xffd23f,.03);p.position.set(s*4.9,3,0);g.add(p)});
-    g.position.z=z;scene.add(g);const o={type:"stop",mesh:g,q:qq,hit:false};objs.push(o);return o;
-  }
-  // at a story stop the runner stands still, the patrol waits, and one question card opens. No timer.
-  function askStop(qq){
-    running=false;asking=qq;boostT=0;slowT=0;roll=0;vy=0;py=floorAt();air=0;
-    $("#race").classList.add("asking");
-    if(pRig)playA(pRig,"Idle",1,false,.25);
-    player.position.set(px,py,0);player.rotation.set(0,0,0);
-    let last=performance.now();cancelAnimationFrame(endRaf);
-    const idle=()=>{if(running||!asking||screen!=="race")return;const n=performance.now(),dt=Math.min(.05,(n-last)/1000);last=n;
-      if(pRig)pRig.mixer.update(dt);ambient(dt);render();endRaf=requestAnimationFrame(idle)};
-    idle();
-    $("#raskNum").textContent=`Story stop ${solved+1} of ${story.race.length} · ${qq.label||""}`;
-    $("#raskQ").textContent=qq.q;$("#raskMsg").hidden=true;
-    const box=$("#raskOpts");
-    box.innerHTML=qq.options.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${"ABC"[i]}</span><span>${esc(o)}</span></button>`).join("");
-    box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(asking!==qq)return;
-      const i=+b.dataset.i,good=i===qq.answer;box.querySelectorAll(".opt").forEach(x=>x.disabled=true);
-      b.classList.add(good?"right":"wrong",good?"pop":"shake");
-      const m=$("#raskMsg");m.hidden=false;m.className="rask-msg "+(good?"good":"bad");m.textContent=good?"Correct! Boost!":"Not quite! This question will come back later.";
-      answer(qq,good);setTimeout(()=>{if(asking===qq)resume()},good?1000:1800)});
-    $("#rask").hidden=false;rsay(tries[qq.qi]?line("raceBack"):line("raceCue"));
-    const f=box.querySelector(".opt");if(f)try{f.focus({preventScroll:true})}catch(e){}
-  }
-  function resume(){asking=null;$("#rask").hidden=true;$("#race").classList.remove("asking");
-    if(!$("#rover").hidden)return; // paused on top of the card: "Keep running" resumes
-    cancelAnimationFrame(endRaf);running=true;clock.getDelta();loop()}
   // the finish line: a checkered arch with balloons and flags across all lanes
   function spawnFinish(z){
     const g=new THREE.Group();
@@ -3136,15 +3121,20 @@ const Race=(()=>{
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
   const qHTML=t=>esc(t).replace(/^([A-Za-z][A-Za-z ]{0,14}):/,'<b class="qk">$1:</b>').replace(/\b([A-Z]{3,})\b/g,'<b class="qw">$1</b>');
   function setQuestion(qq){
-    $("#rq").innerHTML=qq?qHTML(qq.q):"Keep running!";
+    $("#rq").innerHTML=qq?qHTML(qq.q):"Keep running!";$("#race").classList.toggle("q-on",!!qq);
     // chips: a letter badge plus the answer; the longest answer picks the chip text size (s/m/l)
     const L=$("#rlanes"),mx=qq?Math.max(...qq.options.map(o=>String(o).length)):0;L.dataset.len=mx>48?"l":mx>22?"m":"s";
     $$("#rlanes span").forEach((s,i)=>{s.innerHTML=qq?`<i>${"ABC"[i]}</i><em>${esc(qq.options[i])}</em>`:"";s.setAttribute("aria-label",qq?`${"ABC"[i]}: ${qq.options[i]}`:"");s.style.visibility="hidden"});L.classList.remove("in");
   }
+  function showLanes(){if($("#rlanes").classList.contains("in"))return;$$("#rlanes span").forEach(sp=>sp.style.visibility="visible");$("#rlanes").classList.add("in")}
+  // reading time before the answer gate is sent down the track: about 0.35 s a word (question + 3 answers),
+  // 4 to 9 s, a little less when the question comes back. The gate then needs about 5-7 s more to arrive.
+  function readTime(qq){const w=(qq.q+" "+qq.options.join(" ")).split(/\s+/).filter(Boolean).length;
+    return Math.max(4,Math.min(9,2+w*.35))*(tries[qq.qi]?.75:1)}
 
   function reset(){
     clear();flyers.forEach(f=>drop(f.m));flyers=[];tipsSaid={};qIdx=0;correct=0;queue=story.race.map((_,i)=>i);tries={};solved=0;gap=60;LV=levelPlan(story.id);speed=LV.speed;slowT=0;lane=1;px=0;py=0;vy=0;roll=0;coins=0;score=0;state="run";wait=1.4;shake=0;boostT=0;ended=false;curGate=null;lastPy=0;air=0;
-    asking=null;$("#rask").hidden=true;$("#race").classList.remove("asking");cancelAnimationFrame(endRaf);cancelAnimationFrame(cntRaf);$("#race").classList.remove("endseq","celebrate");if(rays)rays.visible=false;frame(null);flashEl.className="flash";patrol.rotation.set(0,0,0);
+    cancelAnimationFrame(endRaf);cancelAnimationFrame(cntRaf);$("#race").classList.remove("endseq","celebrate");if(rays)rays.visible=false;frame(null);flashEl.className="flash";patrol.rotation.set(0,0,0);
     player.position.set(0,0,0);player.rotation.set(0,0,0);patrol.position.set(1.1,0,7);dog.position.set(-1,0,7.5);
     if(pRig)playA(pRig,"Run",1.25,false,0);if(oRig)playA(oRig,"Run",1.3,false,0);
     setQuestion(null);$("#rq").textContent="Get ready…";hud();
@@ -3154,15 +3144,21 @@ const Race=(()=>{
     if(!queue.length){state="finish";setQuestion(null);$("#rq").textContent="All correct! Run through the finish line!";spawnFinish(-90);rsay(line("raceDone"));return}
     const qi=queue.shift(),raw=story.race[qi];qIdx++;
     const order=shuffle([0,1,2]);const qq={q:raw.q,label:raw.label,options:order.map(i=>raw.options[i]),answer:order.indexOf(raw.answer),qi};
-    curGate=spawnStop(qq,-100);setQuestion(null);$("#rq").textContent=tries[qi]?"A story stop you missed is coming back. Keep running!":"Run to the next STORY STOP. Jump and grab coins!";hud();
-    course();
+    // the question and its 3 answers show at the top at once; while the child reads there are only coins on the track,
+    // then the answer gate (one card per lane) is sent down with the obstacles. The question stays up until the gate is passed.
+    asked=qq;curGate=null;setQuestion(qq);showLanes();hud();
+    state="read";wait=readTime(qq);
+    const cl=Math.floor(Math.random()*3);spawnCoins(cl,-24,6);spawnCoins((cl+1+Math.floor(Math.random()*2))%3,-60,6);
+    rsay(tries[qi]?line("raceBack"):line("raceCue"));
   }
+  // the runner reaches the answer gate: the lane they are in is their answer
+  function onGate(o){const good=lane===o.q.answer;collect(o,good);flash(good?"Correct! Boost!":"Not quite!",!good);answer(o.q,good)}
   function answer(q,good){
     const qi=q.qi;
     if(good){solved++;if(!tries[qi])correct++;gap=Math.min(100,gap+24);boostT=1.2;score+=500;sfx.good();burst(0xffd23f);$("#rsay").textContent=line("raceGood");speak($("#rsay").textContent)}
     // a wrong answer lets the patrol come closer, but never catches the runner by itself
     else{tries[qi]=(tries[qi]||0)+1;missed.add(qi);queue.push(qi);gap=bumpGap(14);shake=.5;sfx.bad();rsay(line("raceBad"))}
-    curGate=null;state="run";wait=1.0;setQuestion(null);$("#rq").textContent=good?"Nice! Next story part coming…":"Shake it off! That one will come back…";hud();
+    curGate=null;asked=null;state="run";wait=1.0;setQuestion(null);$("#rq").textContent=good?"Nice! Next story part coming…":"Shake it off! That one will come back…";hud();
   }
   function crossFinish(){
     state="done";wait=1.5;gap=100;boostT=1.5;score+=1000;sfx.win();flash("FINISH!");confetti();burst(0xffd23f,30);hud();
@@ -3301,12 +3297,12 @@ const Race=(()=>{
       else if(Math.abs(dx)<10&&Math.abs(dy)<10&&e.target===canvas){const r=canvas.getBoundingClientRect();move(e.clientX<r.left+r.width/3?-1:e.clientX>r.left+r.width*2/3?1:0)}});
     const hold=(id,fn)=>{$(id).addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();fn()})};
     hold("#bl",()=>move(-1));hold("#br",()=>move(1));hold("#bj",jump);hold("#bd",doRoll);
-    $("#rpause").addEventListener("click",()=>{if(running||asking)pause()});
+    $("#rpause").addEventListener("click",()=>{if(running)pause()});
     $$("#rpick button").forEach(b=>b.addEventListener("click",()=>{sfx.click();useRunner(b.dataset.r)}));
     document.addEventListener("visibilitychange",()=>{if(document.hidden&&running)pause()});
   }
   function pause(){running=false;Music.dim(true);$("#rover").classList.remove("intro","end");$("#roverTitle").textContent="Paused";$("#roverText").textContent="Take a breath. The patrol is waiting too.";$("#rQuit").hidden=false;$("#roverBtn").textContent="Keep running";
-    $("#roverBtn").onclick=()=>{$("#rover").hidden=true;Music.dim(false);if(asking)return;running=true;clock.getDelta();loop()};$("#rover").hidden=false}
+    $("#roverBtn").onclick=()=>{$("#rover").hidden=true;Music.dim(false);running=true;clock.getDelta();loop()};$("#rover").hidden=false}
 
   // things that move even when nobody is running: clouds, swaying trees, blowing leaves, the sky following the camera
   let t=0;
@@ -3330,8 +3326,9 @@ const Race=(()=>{
     trackTex.offset.y=(trackTex.offset.y+v*dt/6.5)%1;sideTex.offset.y=(sideTex.offset.y+v*dt/4)%1;scene.userData.grassTex.offset.y=(scene.userData.grassTex.offset.y+v*dt/5)%1;
     deco.forEach(b=>{b.position.z+=v*dt;const Lp=b.userData.loop||140;if(b.position.z-(b.userData.loop===144?7:0)>(b.userData.loop===160?30:16))b.position.z-=Lp});
     if(state==="run"){wait-=dt;if(wait<=0){state="q";nextQuestion()}}
+    else if(state==="read"){wait-=dt;if(wait<=0&&asked){state="q";curGate=spawnGate(asked,-100);course()}}
     else if(state==="done"){wait-=dt;if(wait<=0)escaped()}
-    gap-=dt*.5;
+    if(state!=="read")gap-=dt*.5; // the patrol does not gain while the child is still reading
     for(let i=objs.length-1;i>=0;i--){const o=objs[i];const prevZ=o.mesh.position.z;o.mesh.position.z+=v*dt;const z=o.mesh.position.z;
       if(o.type==="coin"){if(o.mesh.userData.spinY)o.mesh.rotation.y+=dt*5;else o.mesh.rotation.z+=dt*5}
       if(o.type==="gate"&&!o.hit)animGate(o,z);
@@ -3339,7 +3336,7 @@ const Race=(()=>{
       if(o.type==="train"){
         if(!o.hit&&Math.abs(px-LANES[o.lane])<1&&z+o.len/2>-.3&&z-o.len/2<.3&&py<o.roof-.45){o.hit=true;gap=bumpGap(14);slowT=.5;sideStep(o);shake=.6;sfx.bump();flash("Bump!",true);puff(px,1,-.6,8,0xffffff,.8);rsay("Trains block the lane. Switch lanes early!",1);hud()}
       }else if(!o.hit&&prevZ<0&&z>=0){
-        if(o.type==="stop"){o.hit=true;askStop(o.q);return}
+        if(o.type==="gate"){o.hit=true;onGate(o)}
         else if(o.type==="coin"&&o.lane===lane&&Math.abs(py+.9-o.y)<1.3){o.hit=true;coins++;score+=50;sfx.coin();sparkle(o.mesh.position.x,o.mesh.position.y+.4,0);scene.remove(o.mesh);hud()}
         else if(o.type==="bar"&&o.lane===lane&&py<.85){o.hit=true;gap=bumpGap(10);slowT=.4;shake=.4;sfx.hit();flash("Ouch!",true);puff(px,.8,-.4,6,0xffffff,.6);rsay("Jump over the low barriers or switch lanes!",1);hud()}
         else if(o.type==="high"&&o.lane===lane&&roll<=0&&py<1.5){o.hit=true;gap=bumpGap(10);slowT=.4;shake=.4;sfx.hit();flash("Ouch!",true);puff(px,1.6,-.4,6,0xffffff,.6);rsay("Swipe down to roll under the high barriers!",1);hud()}
@@ -3416,7 +3413,7 @@ const Race=(()=>{
     step();
   }
   function go(){
-    cancelAnimationFrame(endRaf);$("#rQuit").hidden=true;
+    cancelAnimationFrame(endRaf);$("#rQuit").hidden=true;$("#race").classList.remove("intro-on");
     if(ended){reset();setWorld(story.id)}$("#rover").classList.remove("win");
     if(pRig)pRig.turn.rotation.y=Math.PI;pProc.rotation.y=0;
     $("#rover").hidden=true;$("#rover").classList.remove("intro","end");$("#roverBtn").onclick=go;setTimeout(resize,0);Music.dim(false);Music.play("race");
@@ -3430,10 +3427,10 @@ const Race=(()=>{
         $("#roverBtn").textContent="Keep going";$("#roverBtn").onclick=()=>{$("#rover").hidden=true;done(.5,0)};$("#rover").hidden=false;return}
       resize();reset();setWorld(s.id);$("#rover").classList.remove("win");
       $$("#rpick button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.r===runner));
-      $("#rover").classList.remove("end");$("#rover").classList.add("intro");
+      $("#rover").classList.remove("end");$("#rover").classList.add("intro");$("#race").classList.add("intro-on");
       introPose();
       $("#roverTitle").textContent="Escape the patrol!";
-      $("#roverText").textContent=`World ${worldOf(s.id)+1}: ${W.name}. Run, jump and grab coins. At each STORY STOP the race pauses, so you can read the question and tap the right story part. There is no rush. A wrong answer lets the patrol come closer, and that question comes back later.`;
+      $("#roverText").textContent=`World ${worldOf(s.id)+1}: ${W.name}. Read the question at the top. Then swipe into the lane with the right answer!`;
       $("#roverBtn").textContent="Start running";$("#rover").hidden=false;
       rsay("The patrol is right behind you! Collect the right story parts to get away.");
       $("#roverBtn").onclick=go;
