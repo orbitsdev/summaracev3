@@ -882,9 +882,9 @@ input.shake{border-color:#e8352a!important}
 #race .lanes span i{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fff;color:var(--c2);
   font-style:normal;font-family:var(--display);font-size:1.05rem;line-height:1;text-shadow:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08),0 2px 0 var(--sh)}
 #race .lanes span em{font-style:normal;min-width:0;flex:1;overflow-wrap:anywhere;hyphens:auto;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
-#race .lanes span.me{transform:translateY(-3px);outline:0;box-shadow:inset 0 3px 0 rgba(255,255,255,.4),inset 0 -4px 0 rgba(0,0,0,.18),0 0 0 3px #ffd23f,0 7px 0 var(--sh),0 10px 16px rgba(40,10,80,.3)}
-#race .lanes span.me::after{content:"YOU";position:absolute;top:-12px;right:10px;font-family:var(--display);font-size:.62rem;letter-spacing:.08em;line-height:1;
-  color:#3a1460;text-shadow:none;background:linear-gradient(#fff3a0,#ffd23f);border:2px solid #fff;border-radius:999px;padding:2px 6px;box-shadow:0 2px 0 #b26a00}
+/* the runner's lane: a thick yellow ring and a yellow letter badge (no floating tag, so the card stays calm) */
+#race .lanes span.me{transform:translateY(-2px);outline:0;box-shadow:inset 0 3px 0 rgba(255,255,255,.4),inset 0 -4px 0 rgba(0,0,0,.18),0 0 0 4px #ffd23f,0 6px 0 var(--sh),0 9px 14px rgba(40,10,80,.3)}
+#race .lanes span.me i{background:#ffd23f;color:#3a1460}
 #race .lanes[data-len="m"] span{font-size:.84rem}
 #race .lanes[data-len="l"] span{font-size:.8rem;line-height:1.15}
 /* escape meter: candy track with moving stripes */
@@ -902,18 +902,17 @@ input.shake{border-color:#e8352a!important}
   #race .qbox .q{font-size:.98rem;line-height:1.25}
   #race .qbox .qnum{font-size:.74rem;top:-15px}
   #race .lanes{gap:6px;margin-top:9px}
-  /* short and medium answers: three columns, the letter badge sits on the corner so the text gets the full width */
-  #race .lanes{margin-top:13px}
-  #race .lanes span{flex-direction:column;justify-content:center;text-align:center;padding:11px 5px 8px;font-size:.98rem;line-height:1.2;border-radius:13px}
-  #race .lanes span i{position:absolute;top:-14px;left:-6px;width:22px;height:22px;font-size:.85rem;border:2px solid var(--c2)}
+  /* short and medium answers: three columns, a small letter badge inside the chip above the answer */
+  #race .lanes{margin-top:10px}
+  #race .lanes span{flex-direction:column;justify-content:center;gap:3px;text-align:center;padding:5px 5px 7px;font-size:.98rem;line-height:1.2;border-radius:13px}
+  #race .lanes span i{width:20px;height:20px;font-size:.8rem}
   #race .lanes[data-len="m"] span{font-size:.9rem}
   /* long answers: one row per lane (A = left, B = middle, C = right) */
   #race .lanes[data-len="l"]{grid-template-columns:1fr;gap:5px}
   #race .lanes[data-len="l"] span{flex-direction:row;text-align:left;padding:4px 8px 6px 5px;font-size:.86rem;line-height:1.16}
   #race .lanes[data-len="l"] span i{position:static;width:22px;height:22px;border:0}
   #race .lanes[data-len="l"] span em{-webkit-line-clamp:3}
-  #race .lanes span.me::after{top:-10px;right:6px;font-size:.56rem}
-  #race .meter{font-size:.7rem}
+  #race .meter{font-size:.7rem;margin-top:12px}
   #race .meter .pic{width:28px;height:28px;font-size:.85rem}
   #race .bar{height:17px}
 }
