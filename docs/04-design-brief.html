@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Brief Document · SummaRace v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html" aria-current="page">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="assets.html">Assets & Credits</a></nav>
+<main class="page">
+<!--title:Design Brief Document-->
+<div class="eyebrow">Design brief</div>
+<h1>Design Brief Document</h1>
+<p class="meta">SummaRace v3 · version 1.3.6 · screenshots taken from <code>main</code> at phone size (390 × 844)</p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>This document sets the look of SummaRace: colours, fonts, components, and how each screen should look, so new screens match the ones already built.</p>
+</section>
+
+<section class="num"><h2><span class="n">2</span>Brand identity</h2>
+<p><b>Bright, friendly, readable.</b> A cartoon "sticker" world: white and cream cards with thick plum outlines on a bright sky. Big rounded buttons that look pressable. Teacher Mira is always nearby, so the learner never feels alone with a hard question.</p>
+<div class="grid">
+<div class="card"><h4>For 9–10 year olds</h4><p>Large text, large tap targets (answers are at least 58 px tall), one task per screen.</p></div>
+<div class="card"><h4>Reading first</h4><p>Story text uses Andika, a font made for early readers. Game chrome never covers the story.</p></div>
+<div class="card"><h4>Kind feedback</h4><p>Wrong answers shake and turn red, but the right answer is never given away. Mira always offers to show the story again.</p></div>
+<div class="card"><h4>Game energy</h4><p>Stars, coins, medals, confetti and a chase scene make finishing a level feel like a win.</p></div>
+</div>
+</section>
+
+<section class="num"><h2><span class="n">3</span>Colour palette</h2>
+<h3>Core</h3>
+<div class="sw">
+<div><i style="background:#3a1460"></i><b>Plum</b>#3a1460 · outlines, titles</div>
+<div><i style="background:#2c1a4a"></i><b>Ink</b>#2c1a4a · body text</div>
+<div><i style="background:#fffaf0"></i><b>Cream</b>#fffaf0 · cards</div>
+<div><i style="background:#2f8cf0"></i><b>Sky</b>#2f8cf0 · background</div>
+<div><i style="background:#ffd23f"></i><b>Sun</b>#ffd23f · stars, highlights</div>
+<div><i style="background:#22c06c"></i><b>Go</b>#22c06c · main buttons, right</div>
+<div><i style="background:#ff4a3d"></i><b>Bad</b>#ff4a3d · wrong, close</div>
+</div>
+<h3>Story parts (SWBST)</h3>
+<p>Each story part keeps one colour everywhere: the race, story order and summary feedback.</p>
+<div class="sw">
+<div><i style="background:#ff7a1a"></i><b>Somebody</b>#ff7a1a</div>
+<div><i style="background:#ff4f9a"></i><b>Wanted</b>#ff4f9a</div>
+<div><i style="background:#e8352a"></i><b>But</b>#e8352a</div>
+<div><i style="background:#1f8fe0"></i><b>So</b>#1f8fe0</div>
+<div><i style="background:#21b33c"></i><b>Then</b>#21b33c</div>
+</div>
+<h3>Difficulty</h3>
+<div class="sw">
+<div><i style="background:#1fae4b"></i><b>Easy</b>#1fae4b</div>
+<div><i style="background:#ff9300"></i><b>Average</b>#ff9300</div>
+<div><i style="background:#e8463b"></i><b>Hard</b>#e8463b</div>
+</div>
+<p>The game has one bright look. It does not switch to a dark theme.</p>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Typography</h2>
+<div class="tw"><table>
+<tr><th>Role</th><th>Font</th><th>Used for</th></tr>
+<tr><td>Title</td><td>Luckiest Guy</td><td>Logo, "AMAZING!" / "GREAT JOB!", flash words in the race, score numbers, the story's first letter.</td></tr>
+<tr><td>Interface</td><td>Fredoka (variable, 300–700)</td><td>Buttons, labels, tags, step bar, popups.</td></tr>
+<tr><td>Reading</td><td>Andika (regular, bold)</td><td>Story pages, questions, answers, the summary box.</td></tr>
+<tr><td>Back-up</td><td>Lilita One, Atkinson Hyperlegible</td><td>Listed second in the font stacks; shown only if the main font can't load.</td></tr>
+</table></div>
+<p>Headings are white with a thick plum outline on the sky, and plum on cards. Answer text is about 18 px (1.12 rem).</p>
+</section>
+
+<section class="num"><h2><span class="n">5</span>UI components</h2>
+<div class="tw"><table>
+<tr><th>Component</th><th>Look</th><th>Use</th></tr>
+<tr><td>Main button (<code>.btn.go</code>)</td><td>Green, rounded, white text, darker bottom edge that presses down 4 px on tap.</td><td>The one next step on a screen: Let's go!, Answer the question, Check order.</td></tr>
+<tr><td>Second button (<code>.btn.alt</code>)</td><td>Purple or white with plum outline.</td><td>Back, Read the story, Download CSV.</td></tr>
+<tr><td>Round icon button (<code>.cbtn</code>)</td><td>Circle with an icon; red, green, blue, yellow variants.</td><td>Home, Settings, Close (red ✕), Listen (yellow), Map / Replay / Next.</td></tr>
+<tr><td>Answer option (<code>.opt</code>)</td><td>White card with a coloured letter badge A/B/C/D. Turns green and pops when right, red and shakes when wrong.</td><td>Page questions, main idea.</td></tr>
+<tr><td>Race lane chips</td><td>Three coloured chips (blue, orange, purple) with A/B/C, one per lane, under the question.</td><td>Race questions.</td></tr>
+<tr><td>Slot (<code>.slot</code>)</td><td>Dashed box with a SWBST colour label; solid when filled, green with ✓ when right.</td><td>Story order.</td></tr>
+<tr><td>Feedback row (<code>.fbrow</code>)</td><td>Green "✓ Somebody" rows and red "Add: But" rows.</td><td>Summary check results.</td></tr>
+<tr><td>Popup (<code>.modal .panel</code>)</td><td>Cream panel with a purple ribbon title and a red close button.</td><td>Who is playing?, Settings, Credits, Read it again.</td></tr>
+<tr><td>Teacher Mira dock</td><td>Mira's picture at the bottom left with a speech bubble; folds to just her face.</td><td>Every screen except the race and records.</td></tr>
+<tr><td>Step bar (<code>.steps</code>)</td><td>4 numbered dots: Read &amp; answer, Race, Story order, Summary. Done steps show ✓.</td><td>Top of every level screen.</td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Screens</h2>
+<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
+<figure class="card" style="margin:0"><img src="img/01-title.jpg" alt="Title screen" style="width:100%;border-radius:6px"><p>Title</p></figure>
+<figure class="card" style="margin:0"><img src="img/02-who.jpg" alt="Who is playing popup" style="width:100%;border-radius:6px"><p>Who is playing?</p></figure>
+<figure class="card" style="margin:0"><img src="img/03-map.jpg" alt="World map" style="width:100%;border-radius:6px"><p>World map</p></figure>
+<figure class="card" style="margin:0"><img src="img/04-read.jpg" alt="Read a page" style="width:100%;border-radius:6px"><p>Read a page</p></figure>
+<figure class="card" style="margin:0"><img src="img/05-question.jpg" alt="Page question" style="width:100%;border-radius:6px"><p>Page question</p></figure>
+<figure class="card" style="margin:0"><img src="img/06-race-start.jpg" alt="Race start card" style="width:100%;border-radius:6px"><p>Race start card</p></figure>
+<figure class="card" style="margin:0"><img src="img/07-race-question.jpg" alt="Race with lane answers" style="width:100%;border-radius:6px"><p>Race: answers in lanes</p></figure>
+<figure class="card" style="margin:0"><img src="img/08-order.jpg" alt="Story order" style="width:100%;border-radius:6px"><p>Story order</p></figure>
+<figure class="card" style="margin:0"><img src="img/09-summary.jpg" alt="Summary feedback" style="width:100%;border-radius:6px"><p>Summary feedback</p></figure>
+<figure class="card" style="margin:0"><img src="img/10-results.jpg" alt="Results" style="width:100%;border-radius:6px"><p>Results</p></figure>
+<figure class="card" style="margin:0"><img src="img/11-records.jpg" alt="Teacher records" style="width:100%;border-radius:6px"><p>Teacher records</p></figure>
+</div>
+<p>Screenshots were taken in headless Chromium, so the 3D race uses software graphics and looks a little softer than on a phone.</p>
+</section>
+
+<section class="num"><h2><span class="n">7</span>Worlds</h2>
+<div class="tw"><table>
+<tr><th>World</th><th>Levels</th><th>Race scenery</th><th>Screen backdrop</th></tr>
+<tr><td>Sunny Meadow</td><td>1–6</td><td>Grass, flowers, houses, trees</td><td><code>ui/world-0.jpg</code></td></tr>
+<tr><td>River Bend</td><td>7–12</td><td>River, houses, pines, mist</td><td><code>ui/world-1.jpg</code></td></tr>
+<tr><td>Story Town</td><td>13–18</td><td>City buildings, trees</td><td><code>ui/world-2.jpg</code></td></tr>
+<tr><td>Palm Beach</td><td>19–24</td><td>Sand, sea, palms, umbrellas</td><td><code>ui/world-3.jpg</code></td></tr>
+<tr><td>Summit Peak</td><td>25–30</td><td>Snow, mountains, pines</td><td><code>ui/world-4.jpg</code></td></tr>
+</table></div>
+<p>The race sky cycles through 6 times of day (morning to sunset) by level, so neighbouring levels look different.</p>
+</section>
+
+<section class="num"><h2><span class="n">8</span>Motion and sound</h2>
+<ul>
+<li>Buttons press down on tap. Right answers pop, wrong answers shake. Screens slide in. Confetti on the results screen for 4.5 s.</li>
+<li>If the phone asks for reduced motion, all animations and confetti are turned off.</li>
+<li>Short sound effects for taps, coins, right, wrong, jump, bump and win. Music lowers while Mira talks.</li>
+<li>Voice, sound effects and music each have their own switch in Settings.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">9</span>Accessibility</h2>
+<ul>
+<li>Every icon button has a text label for screen readers. Mira's bubble is a live region, so her lines are read out.</li>
+<li>Focus outlines are a thick pink ring.</li>
+<li>Answer order is shuffled, so colour or position never tells the answer.</li>
+<li>Every story page can be read aloud with the Listen button.</li>
+</ul>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>
