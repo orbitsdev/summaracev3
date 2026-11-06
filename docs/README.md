@@ -5,6 +5,8 @@ The documents are HTML pages with diagrams. GitHub shows HTML as code, so open t
 - download or clone the repo and open `docs/index.html`, or
 - turn on GitHub Pages for the `docs/` folder.
 
+**All in one file:** [SummaRace-v3-Documentation.pdf](SummaRace-v3-Documentation.pdf) (GitHub shows PDFs) or `SummaRace-v3-Documentation.html` (self-contained, open in a browser). Both include every document plus the handover list of known open items.
+
 | Page | What it covers |
 |---|---|
 | [index.html](index.html) | Contents |
