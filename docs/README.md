@@ -5,7 +5,7 @@ The documents are HTML pages with diagrams. GitHub shows HTML as code, so open t
 - download or clone the repo and open `docs/index.html`, or
 - turn on GitHub Pages for the `docs/` folder.
 
-**All in one file:** [SummaRace-v3-Documentation.pdf](SummaRace-v3-Documentation.pdf) (GitHub shows PDFs) or `SummaRace-v3-Documentation.html` (self-contained, open in a browser). Both include every document plus the handover list of known open items.
+**All in one file:** [SummaRace-v3-Documentation.pdf](SummaRace-v3-Documentation.pdf) (GitHub shows PDFs) or `SummaRace-v3-Documentation.html` (self-contained, open in a browser). Both include every document plus the handover list of known open items and the answer key.
 
 | Page | What it covers |
 |---|---|
@@ -17,5 +17,6 @@ The documents are HTML pages with diagrams. GitHub shows HTML as code, so open t
 | [05-data-schema.html](05-data-schema.html) | stories.js, localStorage, CSV format |
 | [06-implementation-plan.html](06-implementation-plan.html) | What was built, by phase |
 | [assets.html](assets.html) | Every asset with source, author and license |
+| [answer-key.html](answer-key.html) | Right answers for all 30 stories |
 
 They describe version 1.3.6 (versionCode 17).
