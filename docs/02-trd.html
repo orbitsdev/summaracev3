@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technical Requirements Document · SummaRace v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html" aria-current="page">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="assets.html">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
+<main class="page">
+<!--title:Technical Requirements Document-->
+<div class="eyebrow">Technical requirements document</div>
+<h1>Technical Requirements Document</h1>
+<p class="meta">SummaRace v3 · version 1.3.6 (versionCode 17)</p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>This document lists the tools, technologies and structure used to build SummaRace v3, so anyone who picks up the code knows how it fits together and what it must keep doing.</p>
+<p>SummaRace v3 is a web game (HTML, CSS and plain JavaScript, with three.js for the 3D race) that runs inside a small Android app. The Android app is a full-screen WebView plus a JavaScript bridge for things a web page can't do on its own: the phone's voice, the clipboard, sharing, saving files and closing the app.</p>
+</section>
+
+<section class="num"><h2><span class="n">2</span>Technical goals</h2>
+<ul>
+  <li><b>Works with no internet.</b> Every file is inside the APK. Nothing is fetched from the network.</li>
+  <li><b>Runs on low-cost phones.</b> Android 7.0+ (API 24), about 2 GB RAM. The 3D models only load when the race starts, and GPU memory is freed after each obstacle.</li>
+  <li><b>Easy to change.</b> No build step for the game. Stories are one data file. Opening the folder with a local web server runs the game in a desktop browser.</li>
+  <li><b>Safe for learners.</b> No accounts, no tracking, no ads, no outside links during play.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">3</span>Technology stack</h2>
+<div class="tw"><table>
+<tr><th>Area</th><th>Tool / technology</th><th>Purpose</th></tr>
+<tr><td>Game UI</td><td>HTML5, CSS, plain JavaScript (ES2018), one <code>index.html</code></td><td>Every screen, popup, Teacher Mira, quiz, order and summary logic. No framework.</td></tr>
+<tr><td>3D race</td><td>three.js r128 (<code>three.min.js</code>) + <code>GLTFLoader.js</code></td><td>The endless-runner race: toon shading, animated characters, trains, scenery.</td></tr>
+<tr><td>3D models</td><td>GLB files stored as base64 text in <code>models/*.js</code></td><td>Loads from inside the app with no file-access problems. Compressed with glTF-Transform 4.1.1.</td></tr>
+<tr><td>Sound effects</td><td>Web Audio API, clips in <code>assets.js</code> as data URLs</td><td>Click, coin, jump, bump, good, bad, win and so on.</td></tr>
+<tr><td>Music</td><td>HTML <code>Audio</code> elements, looping MP3</td><td><code>menu.mp3</code> on all screens, <code>race.mp3</code> in the race. Ducks under Mira's voice.</td></tr>
+<tr><td>Voice</td><td>320 pre-recorded MP3 clips (Kokoro TTS) + <code>voice/voice.js</code> index</td><td>Mira's lines and all 150 story pages read aloud. Falls back to Android TextToSpeech (en-US) or the browser's speech when a line has no clip.</td></tr>
+<tr><td>Story data</td><td><code>stories.js</code> (global <code>window.STORIES</code>)</td><td>30 stories with pages, questions, SWBST parts, main idea and model summary.</td></tr>
+<tr><td>Word list</td><td><code>words.js</code> (global <code>window.SR_WORDS</code>, 24,887 words)</td><td>Checks that a summary is written in real English words.</td></tr>
+<tr><td>Storage</td><td>Browser <code>localStorage</code> (inside the WebView)</td><td>Profiles, progress, settings and the attempt log. See the Data Schema.</td></tr>
+<tr><td>Android host</td><td>Java, one <code>MainActivity</code>, Android WebView</td><td>Full-screen portrait WebView, Back button, bridge <code>window.SummaRaceApp</code>.</td></tr>
+<tr><td>Build</td><td>Gradle, Android Gradle Plugin 8.7.3, compileSdk / targetSdk 35, minSdk 24</td><td>Builds the APK. MP3 and WOFF2 files are stored uncompressed so the WebView can read them.</td></tr>
+<tr><td>Version control</td><td>Git + GitHub (<code>orbitsdev/summaracev3</code>, public)</td><td>Source, pull requests and history.</td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Architecture</h2>
+<div class="fig"><svg viewBox="0 0 800 430" role="img" aria-label="Architecture diagram">
+<defs><marker id="t1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="13">
+<rect x="10" y="10" width="780" height="410" rx="14" fill="#f7f8fc" stroke="#c9cede"/>
+<text x="26" y="34" font-weight="700" font-size="14">Android app · com.summarace.app</text>
+<rect x="26" y="50" width="200" height="150" rx="10" fill="#fff" stroke="#16133a"/>
+<text x="126" y="76" text-anchor="middle" font-weight="700">MainActivity.java</text>
+<text x="126" y="98" text-anchor="middle" fill="#55536f">Full-screen WebView</text>
+<text x="126" y="118" text-anchor="middle" fill="#55536f">Back button → srBack()</text>
+<text x="126" y="138" text-anchor="middle" fill="#55536f">TextToSpeech (en-US)</text>
+<text x="126" y="158" text-anchor="middle" fill="#55536f">Clipboard · Share</text>
+<text x="126" y="178" text-anchor="middle" fill="#55536f">Save to Download/SummaRace</text>
+<rect x="290" y="50" width="480" height="356" rx="10" fill="#fff" stroke="#2563d6"/>
+<text x="306" y="74" font-weight="700" fill="#2563d6">assets/www · the web game</text>
+<rect x="306" y="88" width="210" height="64" rx="8" fill="#e8f0ff" stroke="#2563d6"/><text x="411" y="114" text-anchor="middle" font-weight="700">index.html</text><text x="411" y="134" text-anchor="middle" fill="#55536f">screens · rules · race engine</text>
+<rect x="540" y="88" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="108" text-anchor="middle">three.min.js + GLTFLoader.js</text>
+<rect x="540" y="124" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="144" text-anchor="middle">stories.js · words.js</text>
+<rect x="540" y="160" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="180" text-anchor="middle">voice/voice.js + 320 MP3</text>
+<rect x="540" y="196" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="216" text-anchor="middle">assets.js (sounds, coin, cloud)</text>
+<rect x="540" y="232" width="214" height="30" rx="6" fill="#fff1df" stroke="#e07a10"/><text x="647" y="252" text-anchor="middle">models/*.js (loaded in race)</text>
+<rect x="540" y="268" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="288" text-anchor="middle">fonts · ui images · music</text>
+<rect x="306" y="320" width="210" height="64" rx="8" fill="#e3f6ea" stroke="#1f9d55"/><text x="411" y="346" text-anchor="middle" font-weight="700">localStorage</text><text x="411" y="366" text-anchor="middle" fill="#55536f">profiles · progress · log</text>
+<path d="M540 103 L520 112" stroke="#16133a" stroke-width="1.5" marker-end="url(#t1)"/>
+<path d="M540 139 L520 128" stroke="#16133a" stroke-width="1.5" marker-end="url(#t1)"/>
+<path d="M540 175 L520 140" stroke="#16133a" stroke-width="1.5" marker-end="url(#t1)"/>
+<path d="M540 211 L516 148" stroke="#16133a" stroke-width="1.5" marker-end="url(#t1)"/>
+<path d="M540 247 L500 154" stroke="#e07a10" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#t1)"/>
+<path d="M540 283 L470 154" stroke="#16133a" stroke-width="1.5" marker-end="url(#t1)"/>
+<path d="M400 152 L400 316" stroke="#1f9d55" stroke-width="1.6" marker-end="url(#t1)"/><path d="M424 316 L424 156" stroke="#1f9d55" stroke-width="1.6" marker-end="url(#t1)"/>
+<text x="434" y="240" fill="#1f9d55">save / load</text>
+<path d="M226 110 L302 110" stroke="#16133a" stroke-width="1.6" marker-end="url(#t1)"/>
+<text x="232" y="102" font-size="11" fill="#55536f">loads</text>
+<path d="M306 138 L230 150" stroke="#2563d6" stroke-width="1.6" marker-end="url(#t1)"/>
+<text x="232" y="160" font-size="11" fill="#2563d6">SummaRaceApp.*</text>
+<rect x="26" y="250" width="200" height="130" rx="10" fill="#fff" stroke="#c9cede"/>
+<text x="126" y="274" text-anchor="middle" font-weight="700">Bridge methods</text>
+<text x="40" y="296" fill="#55536f" font-size="12">speak(text) · stop()</text>
+<text x="40" y="316" fill="#55536f" font-size="12">copyText(text)</text>
+<text x="40" y="336" fill="#55536f" font-size="12">shareText(subject, text)</text>
+<text x="40" y="356" fill="#55536f" font-size="12">saveFile(name, data) · exit()</text>
+<path d="M126 200 L126 246" stroke="#16133a" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#t1)"/>
+</g></svg><figcaption>The dashed orange arrow is a lazy load: the 3D model files only load when the first race starts. No arrow leaves the phone: there is no server.</figcaption></div>
+
+<h3>Script load order</h3>
+<p><code>three.min.js</code> → <code>GLTFLoader.js</code> → <code>assets.js</code> → <code>stories.js</code> → <code>words.js</code> → <code>voice/voice.js</code> → the main script inside <code>index.html</code>. The main script is wrapped in one function (an IIFE), so its internals are not global. Each data file sets one global: <code>SR_ASSETS</code>, <code>STORIES</code>, <code>SR_WORDS</code>, <code>SR_VOICE</code>, <code>SR_MODELS</code>.</p>
+
+<h3>Main code modules inside index.html</h3>
+<div class="tw"><table>
+<tr><th>Module</th><th>What it does</th></tr>
+<tr><td>Storage</td><td><code>loadDb()</code>, <code>persist()</code>, preferences. One JSON object under <code>summarace.v1</code>.</td></tr>
+<tr><td>Teacher Mira</td><td><code>say()</code> shows a line and speaks it. Picks a recorded clip by normalised text (<code>vnorm</code>), maps lines with names or numbers to a recorded version, avoids repeating the same line, and folds her bubble when it covers a button.</td></tr>
+<tr><td>Audio</td><td>Sound effects on Web Audio, music on looping <code>Audio</code> elements, voice with two priorities (story reading is never cut off by a short line).</td></tr>
+<tr><td>Screens</td><td><code>show(id)</code> switches sections: learner, home, read, quiz, order, race, summary, result, records.</td></tr>
+<tr><td>Level flow</td><td><code>startLevel</code> → <code>renderPage</code>/<code>askPage</code> → <code>askMain</code> → <code>startRace</code> → <code>startOrder</code> → <code>startSummary</code> → <code>finishLevel</code>.</td></tr>
+<tr><td>Summary checker</td><td>Offline rules, see section 6.</td></tr>
+<tr><td>Race</td><td>A self-contained module (<code>Race.prepare</code>, <code>Race.stop</code>) with the three.js scene, worlds, characters, obstacles, gates, patrol and end scenes.</td></tr>
+<tr><td>Records</td><td>Table, CSV export (copy, download, share), erase with undo.</td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">5</span>Race engine</h2>
+<ul>
+  <li>Three lanes at x = −2.2, 0 and 2.2. The runner (Max or Mia, chosen on the start card) is chased by an officer and a dog.</li>
+  <li>A <b>gap</b> meter (0–100) is the distance to the patrol. It starts at 60 and shrinks slowly while running, but not while the learner is reading a question. A right answer adds 24. A wrong answer, a train bump or a barrier hit takes 10–14 away, but these never push the gap below 8: only the slow drain can end the race. At 0 the runner is caught and the race restarts.</li>
+  <li>Each of the 5 SWBST parts is asked in turn. The question and the 3 answers show at the top. The game waits a reading time of 0.35 s per word (4–9 s, 25% less when a missed question comes back), then sends an answer gate down the track. The lane the runner is in at the gate is the answer.</li>
+  <li>Each level has its own seeded course (<code>levelPlan(id)</code>): speed, obstacle rows and spacing grow with the level number, so level 30 is harder than level 1 but each level plays the same every time.</li>
+  <li>Controls: swipe left/right to change lane, up to jump, down to roll. Tapping the left or right third of the screen also changes lane. Keyboard arrows (or A and D) and Space work in a desktop browser.</li>
+  <li>Race score for the level = share of the 5 parts answered right on the first try, kept across "Try the race again".</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Summary checker (offline)</h2>
+<div class="fig"><svg viewBox="0 0 800 300" role="img" aria-label="Summary checker steps">
+<defs><marker id="t2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">
+<g fill="#fff" stroke="#16133a">
+<rect x="10" y="20" width="140" height="56" rx="8"/><rect x="170" y="20" width="140" height="56" rx="8"/><rect x="330" y="20" width="140" height="56" rx="8"/><rect x="490" y="20" width="140" height="56" rx="8"/><rect x="650" y="20" width="140" height="56" rx="8"/>
+</g>
+<text x="80" y="44" font-weight="700">At least 8 words</text><text x="80" y="62" fill="#55536f">real English words</text>
+<text x="240" y="44" font-weight="700">Not repeated</text><text x="240" y="62" fill="#55536f">and in sentences</text>
+<text x="400" y="44" font-weight="700">2 or 3 sentences</text><text x="400" y="62" fill="#55536f">counted at . ! ?</text>
+<text x="560" y="44" font-weight="700">Not copied</text><text x="560" y="62" fill="#55536f">no 7 words in a row</text>
+<text x="720" y="44" font-weight="700">About this story</text><text x="720" y="62" fill="#55536f">≥ 40% story words</text>
+<path d="M150 48 L166 48" stroke="#16133a" marker-end="url(#t2)"/><path d="M310 48 L326 48" stroke="#16133a" marker-end="url(#t2)"/><path d="M470 48 L486 48" stroke="#16133a" marker-end="url(#t2)"/><path d="M630 48 L646 48" stroke="#16133a" marker-end="url(#t2)"/>
+<path d="M720 76 L720 110 L400 110 L400 128" stroke="#16133a" fill="none" marker-end="url(#t2)"/>
+<rect x="80" y="126" width="640" height="78" rx="10" fill="#e8f0ff" stroke="#2563d6"/>
+<text x="400" y="154" font-weight="700">Score the content</text>
+<text x="400" y="172" fill="#55536f">story parts found by keywords · main character named · main idea told</text>
+<text x="400" y="190" fill="#55536f">mistakes: wrong-answer words · "not" the story lacks · wrong order · swapped character · unknown names</text>
+<path d="M330 200 L210 238" stroke="#1f9d55" marker-end="url(#t2)"/><path d="M470 200 L590 238" stroke="#d6453b" marker-end="url(#t2)"/>
+<rect x="60" y="240" width="300" height="50" rx="10" fill="#e3f6ea" stroke="#1f9d55"/><text x="210" y="262" font-weight="700">Pass</text><text x="210" y="280" fill="#55536f">≥ 4 of 5 parts + who + main idea, no mistakes</text>
+<rect x="440" y="240" width="300" height="50" rx="10" fill="#fde8e6" stroke="#d6453b"/><text x="590" y="262" font-weight="700">Try again</text><text x="590" y="280" fill="#55536f">red lines say what to add or fix</text>
+</g></svg><figcaption>A failed early check (top row) does not count as a try. From the 3rd scored try, mistakes no longer block a pass, and Mira shows her example. From the 4th, "Finish, my teacher will check" appears.</figcaption></div>
+<p>The checker is rules-based on purpose: it has to work offline on a cheap phone. It can miss things a teacher would notice, which is why the summary text and its status go into the CSV for the teacher to read.</p>
+</section>
+
+<section class="num"><h2><span class="n">7</span>Performance and device rules</h2>
+<ul>
+  <li>Start-up was measured at about 0.75 s with the CPU slowed 6× in a desktop browser. The 3D models (4.5 MB) are not part of start-up.</li>
+  <li>Obstacles and effects free their GPU geometry and materials when removed; shared models and textures are kept.</li>
+  <li>Portrait only. The layout uses safe-area insets for phones with a notch.</li>
+  <li>Hardware acceleration is on for the WebView.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">8</span>Build, run and release</h2>
+<pre>Run in a browser:
+  cd app/src/main/assets/www
+  python -m http.server 8000      # then open http://localhost:8000
+
+Build the APK:
+  open the repo in Android Studio and build, or run: gradle assembleDebug
+  the APK lands in app/build/outputs/apk/</pre>
+<ul>
+  <li>Raise <code>versionCode</code> and <code>versionName</code> in <code>app/build.gradle</code> for every release. The next free versionCode is 18.</li>
+  <li>Release APKs are signed with the project's current signing key, which is kept off GitHub on the owner's PC. The original 1.2.0 key was lost, so phones with that old test build must uninstall it once.</li>
+  <li>Never commit the keystore, <code>*.jks</code>, <code>*.keystore</code> or <code>local.properties</code>. They are in <code>.gitignore</code>.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">9</span>Testing</h2>
+<ul>
+  <li>Day-to-day testing is in a desktop browser at <code>localhost:8000</code>, with the phone size set in the browser's device mode.</li>
+  <li>Automated checks use Playwright with headless Chromium. Because the main code is private inside one function, tests reach it by injecting a small helper before the script ends.</li>
+  <li>An APK is built for a phone test only when a change is ready. Android-only features (voice fallback, Download folder on Android 7–9, Back button) must be checked on a real phone.</li>
+</ul>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>

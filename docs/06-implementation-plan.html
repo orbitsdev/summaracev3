@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Implementation Plan Document · SummaRace v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html" aria-current="page">6 · Implementation Plan</a> <a href="assets.html">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
+<main class="page">
+<!--title:Implementation Plan Document-->
+<div class="eyebrow">Implementation plan</div>
+<h1>Implementation Plan Document</h1>
+<p class="meta">SummaRace v3 · written after the build, as a record of what was built and in what order</p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>This document breaks SummaRace v3 into the phases it was actually built in, with what each phase delivered. Dates from 2026-10-27 on come from the git history. Earlier dates were not recorded and are marked "not recorded".</p>
+</section>
+
+<section class="num"><h2><span class="n">2</span>Goals</h2>
+<p>Deliver an offline Android reading game for the research team's 30 stories, with records the teacher can export, built and tested in small steps so each client revision could be checked on a phone before it was merged.</p>
+</section>
+
+<section class="num"><h2><span class="n">3</span>Timeline</h2>
+<div class="fig"><svg viewBox="0 0 820 200" role="img" aria-label="Timeline of releases">
+<defs><marker id="i1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="11.5" text-anchor="middle">
+<path d="M20 100 L805 100" stroke="#16133a" stroke-width="2.5" marker-end="url(#i1)"/>
+<g>
+<circle cx="60" cy="100" r="9" fill="#8a8fa8"/><text x="60" y="76" font-weight="700">v1 · v2</text><text x="60" y="62" fill="#55536f">Unity</text><text x="60" y="130" fill="#55536f">not recorded</text>
+<circle cx="155" cy="100" r="9" fill="#8a8fa8"/><text x="155" y="76" font-weight="700">1.2.0 test</text><text x="155" y="62" fill="#55536f">web v3</text><text x="155" y="130" fill="#55536f">not recorded</text>
+<circle cx="250" cy="100" r="9" fill="#2563d6"/><text x="250" y="76" font-weight="700">1.3.0</text><text x="250" y="62" fill="#55536f">recovered</text><text x="250" y="130" fill="#55536f">Oct 16–27</text>
+<circle cx="345" cy="100" r="9" fill="#2563d6"/><text x="345" y="76" font-weight="700">revisions</text><text x="345" y="62" fill="#55536f">still 1.3.0</text><text x="345" y="130" fill="#55536f">Oct 27 · PR #1</text>
+<circle cx="440" cy="100" r="9" fill="#2563d6"/><text x="440" y="76" font-weight="700">1.3.2</text><text x="440" y="62" fill="#55536f">bug review</text><text x="440" y="130" fill="#55536f">Oct 28 · PR #2</text>
+<circle cx="535" cy="100" r="9" fill="#2563d6"/><text x="535" y="76" font-weight="700">1.3.3</text><text x="535" y="62" fill="#55536f">CSV + Android 7–9</text><text x="535" y="130" fill="#55536f">Oct 29 · PR #3</text>
+<circle cx="630" cy="100" r="9" fill="#e07a10"/><text x="630" y="76" font-weight="700">1.3.5</text><text x="630" y="62" fill="#55536f">lane answers</text><text x="630" y="130" fill="#55536f">Nov 4 · PR #6</text>
+<circle cx="725" cy="100" r="11" fill="#1f9d55"/><text x="725" y="76" font-weight="700">1.3.6</text><text x="725" y="62" fill="#55536f">race UI polish</text><text x="725" y="130" fill="#55536f">Nov 4 · PR #7</text>
+</g>
+<text x="725" y="160" fill="#1f9d55" font-weight="700">current main</text>
+<text x="535" y="160" fill="#55536f">merged Nov 5, after #6 and #7</text>
+</g></svg><figcaption>The client revisions kept versionName 1.3.0 on main (a 1.3.1 test APK of that period is in the project files). 1.3.4 was a local test build only (PR #3 plus PR #5) and was never merged.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Implementation phases</h2>
+<div class="tw"><table>
+<tr><th>Phase</th><th>What got built</th><th>Key deliverables</th><th>When</th></tr>
+<tr><td>0. Earlier versions</td><td>SummaRace v1 and SummaRace2 in Unity.</td><td>Separate repos (<code>orbitsdev/SummaRace</code>, <code>orbitsdev/SummaRace2</code>). v3 is a rewrite, not a port.</td><td>Not recorded</td></tr>
+<tr><td>1. Web game v3</td><td>The game as an HTML/JS app with three.js: title, profiles, world map, read and quiz, story order, SWBST, summary, results, records, 3D race, Teacher Mira's recorded voice, 30 stories.</td><td>SummaRace 1.2.0 test APK.</td><td>Not recorded</td></tr>
+<tr><td>2. Recovery</td><td>The original project folder was lost. The web game was taken back out of the 1.2.0 APK and a new Android wrapper was written.</td><td>Repo created with the game in <code>app/src/main/assets/www</code>, <code>MainActivity.java</code> with the bridge, new signing key, 1.3.0. Lost for good: <code>build-voice.sh</code>, <code>CREDITS.md</code>, the old key.</td><td>2026-10-16 to 2026-10-27</td></tr>
+<tr><td>3. Client final revisions</td><td>The client's revision list.</td><td>Race questions at a "Story stop" (later replaced), runner picker explained, one story-order instruction with a 30 s limit after a wrong try, summary in 2–3 sentences, offline content checks for each story part, wrong details, unknown names, "not", order and swapped characters.</td><td>2026-10-27 · PR #1</td></tr>
+<tr><td>4. Bug review fixes</td><td>A 19-point review of the game, top items fixed.</td><td>Shuffled answers, Back button safety, Mira bubble folding, race GPU clean-up, device voice fallback, ERASE + undo, copy-check fix, "my teacher will check" + <code>summary_status</code> column, softer race penalty, order timer by Check, viewport and font fixes. 1.3.2 (versionCode 13).</td><td>2026-10-28 · PR #2</td></tr>
+<tr><td>5. Review fixes 2</td><td>Two more review items.</td><td>Dropped the duplicate CSV column, CSV saves to Download/SummaRace on Android 7–9. 1.3.3 (versionCode 14).</td><td>2026-10-29 · PR #3 (merged 2026-11-05)</td></tr>
+<tr><td>6. Lane answers</td><td>The client's last request: the race no longer stops for a question.</td><td>Question at the top, answers A/B/C in the 3 lanes, run through the right lane's gate. Reading time before each gate. 1.3.5 (versionCode 16).</td><td>2026-11-04 · PR #6</td></tr>
+<tr><td>7. Race UI polish</td><td>Make the race readable on a phone.</td><td>Slim question panel, solved count in the top bar, Mira hidden during questions, centred start card with a swipe tutorial, on-screen arrow buttons removed. 1.3.6 (versionCode 17).</td><td>2026-11-04 · PR #7</td></tr>
+<tr><td>8. Documentation</td><td>These documents and the full asset list.</td><td><code>docs/</code>: PRD, TRD, App Flow, Design Brief, Data Schema, this plan, Assets &amp; Credits.</td><td>2026-11-05</td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">5</span>How each phase was run</h2>
+<div class="fig"><svg viewBox="0 0 820 130" role="img" aria-label="Work loop">
+<defs><marker id="i2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12.5" text-anchor="middle">
+<g fill="#fff" stroke="#16133a" stroke-width="1.4"><rect x="10" y="20" width="135" height="50" rx="9"/><rect x="175" y="20" width="135" height="50" rx="9"/><rect x="340" y="20" width="135" height="50" rx="9"/><rect x="505" y="20" width="135" height="50" rx="9"/><rect x="670" y="20" width="140" height="50" rx="9" fill="#e3f6ea" stroke="#1f9d55"/></g>
+<text x="77" y="42" font-weight="700">Branch</text><text x="77" y="60" font-size="11" fill="#55536f">one goal per PR</text>
+<text x="242" y="42" font-weight="700">Build in browser</text><text x="242" y="60" font-size="11" fill="#55536f">localhost:8000</text>
+<text x="407" y="42" font-weight="700">Test</text><text x="407" y="60" font-size="11" fill="#55536f">Playwright · phone size</text>
+<text x="572" y="42" font-weight="700">APK + phone test</text><text x="572" y="60" font-size="11" fill="#55536f">when owner is ready</text>
+<text x="740" y="42" font-weight="700">Merge to main</text><text x="740" y="60" font-size="11" fill="#55536f">bump versionCode</text>
+<path d="M145 45 L171 45" stroke="#16133a" marker-end="url(#i2)"/><path d="M310 45 L336 45" stroke="#16133a" marker-end="url(#i2)"/><path d="M475 45 L501 45" stroke="#16133a" marker-end="url(#i2)"/><path d="M640 45 L666 45" stroke="#16133a" marker-end="url(#i2)"/>
+<path d="M572 70 L572 105 L242 105 L242 74" fill="none" stroke="#d6453b" stroke-dasharray="5 3" marker-end="url(#i2)"/><text x="407" y="120" font-size="11" fill="#d6453b">problem found on the phone → fix and test again</text>
+</g></svg><figcaption>PR #6 and PR #7 were merged before a full phone test, at the owner's request. A 1.3.6 test APK was built for that test.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Milestones</h2>
+<div class="tw"><table>
+<tr><th>Milestone</th><th>Description</th><th>Status</th></tr>
+<tr><td>Source recovered</td><td>Game runs from the repo in a browser and builds as an APK.</td><td><span class="tag g">Done 2026-10-27</span></td></tr>
+<tr><td>Client revisions applied</td><td>All items from the client's final revision list.</td><td><span class="tag g">Done 2026-10-27</span></td></tr>
+<tr><td>Review fixes</td><td>Top items of the 19-point review.</td><td><span class="tag g">Done 2026-10-28/29</span></td></tr>
+<tr><td>Race answers in lanes</td><td>Client's last request.</td><td><span class="tag g">Done 2026-11-04</span></td></tr>
+<tr><td>Documentation</td><td>This set of documents.</td><td><span class="tag">In review</span></td></tr>
+<tr><td>Release build 1.3.6</td><td>Signed with the project key on the owner's PC, tested on a phone, handed to the client.</td><td><span class="tag o">Owner to confirm</span></td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">7</span>What is left</h2>
+<ul>
+<li>Decide on PR #4 (race music speeds up) and close PR #5 (no longer needed).</li>
+<li>Ask the client about the two stories titled "In Grandfather's Day" (levels 15 and 18).</li>
+<li>Record voice clips for the newer Mira lines, or keep reusing recorded lines, since the clip build script was lost.</li>
+<li>Phone checks still worth doing: a phone with a notch, a 2 GB phone, the on-screen keyboard over the summary box, and a slow reader in the race.</li>
+<li>Next release must use versionCode 18 or higher.</li>
+</ul>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Requirements Document · SummaRace v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html" aria-current="page">1 · PRD</a> <a href="02-trd.html">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="assets.html">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
+<main class="page">
+<!--title:Product Requirements Document-->
+<div class="eyebrow">Product requirements document</div>
+<h1>Product Requirements Document</h1>
+<p class="meta">SummaRace v3 · version 1.3.6 · Android app <code>com.summarace.app</code></p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>This document says what SummaRace does, feature by feature, and how each feature is expected to behave. It describes the game as it is built today, not a wish list.</p>
+<p>SummaRace is a reading game for Grade 4 learners. For each story the learner <b>reads</b> it page by page, <b>races</b> through its story parts in a 3D runner, puts the parts <b>in order</b>, and then <b>sums it up</b> in 2–3 sentences. The tagline on the title screen is "Read it · Race it · Sum it up!". Teacher Mira, a cartoon teacher, guides the learner with spoken lines the whole way.</p>
+</section>
+
+<section class="num"><h2><span class="n">2</span>Product goal</h2>
+<p>Help Grade 4 learners practise reading comprehension and summarising with the <b>Somebody – Wanted – But – So – Then</b> (SWBST) method, in a game they want to keep playing, and give the teacher a record of every finished level that they can open in a spreadsheet.</p>
+<p>The game has to work on low-cost Android phones in a classroom with no internet and no accounts.</p>
+</section>
+
+<section class="num"><h2><span class="n">3</span>Users</h2>
+<div class="grid">
+  <div class="card"><h4>Learner</h4><p>A Grade 4 pupil. Types their name and section, plays the stories in order, earns stars and coins.</p></div>
+  <div class="card"><h4>Teacher</h4><p>Hands out the phones, reads the records screen, exports the CSV, can erase or bring back records.</p></div>
+  <div class="card"><h4>Research team (client)</h4><p>Wrote the 30 stories, questions and SWBST answers. Uses the CSV results for the study.</p></div>
+</div>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Content scope</h2>
+<ul>
+  <li><b>30 stories</b> in <b>10 sessions</b>. Each session has one easy, one average and one hard story (levels 1–30).</li>
+  <li>Each story has <b>5 pages</b>, <b>5 page questions</b> (one per page), <b>1 main idea question</b>, and 5 <b>SWBST story parts</b> with right and wrong answers.</li>
+  <li>The 30 levels sit in <b>5 worlds</b> of 6 levels each: Sunny Meadow, River Bend, Story Town, Palm Beach and Summit Peak.</li>
+  <li>The pages, page questions, SWBST answers and main idea come word for word from the research team. The wrong answer choices, race wording and Teacher Mira's example summaries were written for the game.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">5</span>Features</h2>
+<div class="tw"><table>
+<tr><th>Feature</th><th>Description</th><th>Expected behaviour</th></tr>
+<tr><td>Title screen</td><td>Animated title with Teacher Mira, a PLAY button and Credits.</td><td>PLAY opens "Who is playing?". Credits opens the credits popup.</td></tr>
+<tr><td>Learner profiles</td><td>Name (required, max 40 characters) and section (optional, max 30).</td><td>A new name and section makes a new profile on this device (matching ignores capital letters). Returning learners tap their name under "Or continue as". Progress is saved per profile.</td></tr>
+<tr><td>World map</td><td>A scrolling path of 30 level nodes with a session bar (sessions 1–10) and a "go to my level" button.</td><td>Levels unlock one by one. Tapping a locked level shows a card that sends the learner to their open level. Stars and best score show on finished levels.</td></tr>
+<tr><td>Read</td><td>One page at a time with a world picture, page dots and a Listen button.</td><td>Mira says a short tip and then reads the page aloud with a recorded voice. "Answer the question" goes to that page's question.</td></tr>
+<tr><td>Page questions</td><td>3 answer choices in a new random order every time.</td><td>A wrong answer is never revealed. After a wrong answer Mira offers "Read the story" or "Try again". After 2 wrong tries the story opens with the right part highlighted. Only a right first try counts for the score.</td></tr>
+<tr><td>Main idea</td><td>After the last page, 4 choices: which one tells what the whole story is about.</td><td>Same retry rules as page questions. Scored right or wrong on the first try.</td></tr>
+<tr><td>Race</td><td>A 3D endless runner: the learner's runner (Max or Mia) escapes a police officer and dog.</td><td>Each SWBST part becomes a question at the top with answers A, B and C shown in the 3 lanes. The learner swipes into the lane of the right answer and runs through its gate. Right = boost and the patrol falls back. Wrong = the patrol comes closer and the question comes back later. Trains and barriers must be dodged (swipe left/right, up to jump, down to roll). If the patrol catches the runner, the race restarts.</td></tr>
+<tr><td>Story order</td><td>Tap the 5 story parts into the Somebody, Wanted, But, So, Then slots.</td><td>Right parts turn green and stay. After the first wrong check a 30-second clock starts (it pauses while the story or Settings is open). When time runs out Mira shows the right order and the level goes on. Score = parts right on the first check.</td></tr>
+<tr><td>Summary</td><td>Write 2–3 sentences in English, in your own words.</td><td>An offline checker gives feedback lines (see TRD). It passes when the summary names the main character, has most story parts and the main idea, and has no clear mistakes. After 3 tries Mira shows an example. After 4 tries the learner can choose "Finish, my teacher will check".</td></tr>
+<tr><td>Results</td><td>Stars (1–3), a title, the score for each stage and coins earned.</td><td>Total ≥ 85% = 3 stars "AMAZING!", ≥ 65% = 2 stars "GREAT JOB!", otherwise 1 star "GOOD TRY!". Buttons: Map, Replay, Next. The next level unlocks.</td></tr>
+<tr><td>Teacher records</td><td>A table of every finished level on this device.</td><td>Copy CSV, Download CSV (saved to <code>Download/SummaRace/</code> on Android), Share CSV (Android share sheet). "Erase all records" needs the word ERASE typed in; the last erase can be undone with "Bring back erased records".</td></tr>
+<tr><td>Settings</td><td>Teacher voice, sound effects and music switches; Change player; Teacher records; Quit this story; Exit game.</td><td>Switches are saved on the device. Quit is offered during a level, Exit game only inside the Android app.</td></tr>
+<tr><td>Teacher Mira</td><td>A guide docked at the bottom of every screen except the race and records.</td><td>Speaks recorded lines and shows a speech bubble. The bubble folds away after 7 seconds, or after 2 seconds if it covers a button the learner needs. Tap her to hear the line again.</td></tr>
+<tr><td>Android Back button</td><td>Handled by the game, not the system.</td><td>Closes a popup first. In the race, the first Back pauses. During a level it opens the Quit popup instead of dropping progress. On the map it goes back to the title screen.</td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Scoring</h2>
+<p>The level total is the average of four stage scores:</p>
+<div class="fig"><svg viewBox="0 0 760 170" role="img" aria-label="Total score is the average of four parts">
+<defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#55536f"/></marker></defs>
+<g font-size="13" text-anchor="middle" font-family="system-ui,sans-serif">
+<rect x="10" y="10" width="170" height="62" rx="10" fill="#e8f0ff" stroke="#2563d6"/><text x="95" y="36" font-weight="700">Read &amp; answer</text><text x="95" y="56" fill="#55536f">(page Qs×3 + main) ÷ 4</text>
+<rect x="200" y="10" width="170" height="62" rx="10" fill="#fff1df" stroke="#e07a10"/><text x="285" y="36" font-weight="700">Race</text><text x="285" y="56" fill="#55536f">story parts right first try</text>
+<rect x="390" y="10" width="170" height="62" rx="10" fill="#e3f6ea" stroke="#1f9d55"/><text x="475" y="36" font-weight="700">Story order</text><text x="475" y="56" fill="#55536f">parts right on first check</text>
+<rect x="580" y="10" width="170" height="62" rx="10" fill="#fde8e6" stroke="#d6453b"/><text x="665" y="36" font-weight="700">Summary</text><text x="665" y="56" fill="#55536f">parts − ½ per mistake</text>
+<path d="M95 72 L360 118" stroke="#55536f" fill="none" stroke-width="1.6" marker-end="url(#a1)"/><path d="M285 72 L372 116" stroke="#55536f" fill="none" stroke-width="1.6" marker-end="url(#a1)"/>
+<path d="M475 72 L388 116" stroke="#55536f" fill="none" stroke-width="1.6" marker-end="url(#a1)"/><path d="M665 72 L400 118" stroke="#55536f" fill="none" stroke-width="1.6" marker-end="url(#a1)"/>
+<rect x="250" y="120" width="260" height="42" rx="21" fill="#16133a"/><text x="380" y="146" fill="#fff" font-weight="700">Total % = average of the four → stars</text>
+</g></svg><figcaption>Questions, race and story order count the first try only, so retries help the learner finish but do not raise the score. The summary counts the try that passed, minus half a part for each wrong detail. "Finish, my teacher will check" scores the summary as 0 and leaves it for the teacher.</figcaption></div>
+<p>Coins collected in the race are added to the learner's coin total. A replay keeps the best stars and best score for that level.</p>
+</section>
+
+<section class="num"><h2><span class="n">7</span>Constraints</h2>
+<ul>
+  <li><b>Fully offline.</b> No server, no login, no analytics, no ads. Everything ships inside the APK.</li>
+  <li>Android 7.0 or newer (minSdk 24), portrait only, phones with about 2 GB of RAM.</li>
+  <li>Records live only on the device they were made on. The teacher must collect the CSV from each phone.</li>
+  <li>The summary checker must run offline, so it uses word lists and rules, not an AI model.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">8</span>Out of scope</h2>
+<ul>
+  <li>Syncing records between devices or to the cloud.</li>
+  <li>Teacher accounts, passwords or a class dashboard.</li>
+  <li>Languages other than English (the summary must be written in English).</li>
+  <li>iOS builds (the web game would run in a browser, but no iOS app is made).</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">9</span>Open items</h2>
+<div class="tw"><table>
+<tr><th>Item</th><th>Status</th></tr>
+<tr><td>Two stories are both titled "In Grandfather's Day" (levels 15 and 18).</td><td><span class="tag o">Needs the client</span></td></tr>
+<tr><td>Profiles are matched by name and section, so two learners with the same name in the same section on one phone share a profile.</td><td><span class="tag o">Open</span></td></tr>
+<tr><td>Some newer Mira lines have no recorded clip and fall back to the phone's voice. The clip build script was lost.</td><td><span class="tag o">Open</span></td></tr>
+<tr><td>PR #4: race music plays faster as story parts are collected.</td><td><span class="tag">Waiting for a decision</span></td></tr>
+<tr><td>PR #5: Story Stop voice lines. No longer needed since the race was changed to lane answers.</td><td><span class="tag r">Can be closed</span></td></tr>
+</table></div>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>

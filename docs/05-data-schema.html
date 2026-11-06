@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Schema Document · SummaRace v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html" aria-current="page">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="assets.html">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
+<main class="page">
+<!--title:Data Schema Document-->
+<div class="eyebrow">Data schema</div>
+<h1>Data Schema Document</h1>
+<p class="meta">SummaRace v3 · version 1.3.6 · this replaces a "backend schema": the game has no backend</p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>This document says where SummaRace's data lives, how it is structured, who can see it, and how the pieces connect.</p>
+<div class="note b"><b>There is no server and no database.</b> Story content is a JavaScript file shipped in the app. Learner progress and results are saved in the phone's WebView storage (<code>localStorage</code>). The only way data leaves the phone is when the teacher copies, downloads or shares the CSV.</div>
+</section>
+
+<section class="num"><h2><span class="n">2</span>Data model</h2>
+<div class="fig"><svg viewBox="0 0 820 520" role="img" aria-label="Data model diagram">
+<defs><marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11.5">
+<!-- Story -->
+<rect x="10" y="10" width="240" height="250" rx="8" fill="#fff" stroke="#2563d6" stroke-width="1.5"/><rect x="10" y="10" width="240" height="28" rx="8" fill="#e8f0ff" stroke="#2563d6"/>
+<text x="22" y="29" font-weight="700" font-family="system-ui,sans-serif" font-size="13">Story  (stories.js ×30)</text>
+<text x="22" y="56">id            1–30  (PK)</text><text x="22" y="74">day           1–10 (session)</text><text x="22" y="92">level         easy|average|hard</text>
+<text x="22" y="110">title         text</text><text x="22" y="128">passage       full text</text><text x="22" y="146">text[5]       pages</text>
+<text x="22" y="164">quiz[5]       Question</text><text x="22" y="182">mainIdea      Question (4)</text><text x="22" y="200">mainIdeaText  text</text>
+<text x="22" y="218">swbst         5 × StoryPart</text><text x="22" y="236">events[4]     text</text><text x="22" y="254" fill="#8a8fa8">race[6]       (not used)</text>
+<!-- Question -->
+<rect x="290" y="10" width="220" height="110" rx="8" fill="#fff" stroke="#2563d6"/><rect x="290" y="10" width="220" height="28" rx="8" fill="#e8f0ff" stroke="#2563d6"/>
+<text x="302" y="29" font-weight="700" font-family="system-ui,sans-serif" font-size="13">Question</text>
+<text x="302" y="56">q        text</text><text x="302" y="74">options  text[3] or [4]</text><text x="302" y="92">answer   index (0-based)</text><text x="302" y="110">why      text from the page</text>
+<!-- StoryPart -->
+<rect x="290" y="150" width="220" height="110" rx="8" fill="#fff" stroke="#2563d6"/><rect x="290" y="150" width="220" height="28" rx="8" fill="#e8f0ff" stroke="#2563d6"/>
+<text x="302" y="169" font-weight="700" font-family="system-ui,sans-serif" font-size="13">StoryPart (SWBST)</text>
+<text x="302" y="196">answer  text (right)</text><text x="302" y="214">wrong   text[2]</text><text x="302" y="232">words   keyword[] for</text><text x="302" y="250">        the summary check</text>
+<path d="M250 165 L286 70" stroke="#16133a" fill="none" marker-end="url(#d1)"/><text x="254" y="118" font-size="10" fill="#55536f">1:N</text>
+<path d="M250 218 L286 205" stroke="#16133a" fill="none" marker-end="url(#d1)"/><text x="256" y="200" font-size="10" fill="#55536f">1:5</text>
+<!-- Profile -->
+<rect x="560" y="10" width="250" height="160" rx="8" fill="#fff" stroke="#1f9d55" stroke-width="1.5"/><rect x="560" y="10" width="250" height="28" rx="8" fill="#e3f6ea" stroke="#1f9d55"/>
+<text x="572" y="29" font-weight="700" font-family="system-ui,sans-serif" font-size="13">Profile  (db.profiles[id])</text>
+<text x="572" y="56">id        "p" + base36 time (PK)</text><text x="572" y="74">name      text ≤ 40</text><text x="572" y="92">section   text ≤ 30</text>
+<text x="572" y="110">unlocked  1–30</text><text x="572" y="128">best      {storyId: Best}</text><text x="572" y="146">coins     number</text><text x="572" y="164">created · last   ms time</text>
+<!-- Best -->
+<rect x="560" y="200" width="250" height="74" rx="8" fill="#fff" stroke="#1f9d55"/><rect x="560" y="200" width="250" height="28" rx="8" fill="#e3f6ea" stroke="#1f9d55"/>
+<text x="572" y="219" font-weight="700" font-family="system-ui,sans-serif" font-size="13">Best (per profile, per story)</text>
+<text x="572" y="246">stars  1–3 (best so far)</text><text x="572" y="264">score  0–100 (best total %)</text>
+<path d="M685 170 L685 196" stroke="#16133a" marker-end="url(#d1)"/><text x="692" y="188" font-size="10" fill="#55536f">1:N</text>
+<!-- Record -->
+<rect x="290" y="300" width="520" height="210" rx="8" fill="#fff" stroke="#e07a10" stroke-width="1.5"/><rect x="290" y="300" width="520" height="28" rx="8" fill="#fff1df" stroke="#e07a10"/>
+<text x="302" y="319" font-weight="700" font-family="system-ui,sans-serif" font-size="13">Record  (db.log[] · one per finished level · = one CSV row)</text>
+<text x="302" y="346">date · time          YYYY-MM-DD · HH:MM</text><text x="302" y="364">learner · section    copied from Profile</text>
+<text x="302" y="382">level · title        copied from Story</text><text x="302" y="400">key_details_pct      0–100</text>
+<text x="302" y="418">main_idea            correct|wrong</text><text x="302" y="436">sequence_first_try_pct · race_pct · coins</text>
+<text x="302" y="454">summary_pct · summary_tries · summary · summary_status</text><text x="302" y="472">total_pct · stars · minutes</text>
+<text x="302" y="496" fill="#55536f" font-family="system-ui,sans-serif">No foreign keys: names and titles are copied into each record.</text>
+<path d="M685 274 L685 296" stroke="#16133a" marker-end="url(#d1)"/><text x="692" y="290" font-size="10" fill="#55536f">writes</text>
+<path d="M130 260 L130 400 L286 400" stroke="#16133a" fill="none" marker-end="url(#d1)"/><text x="140" y="390" font-size="10" fill="#55536f">id, title copied</text>
+<!-- other stores -->
+<rect x="10" y="430" width="240" height="80" rx="8" fill="#fff" stroke="#8a8fa8" stroke-dasharray="5 3"/>
+<text x="22" y="452" font-weight="700" font-family="system-ui,sans-serif" font-size="13">Small settings</text>
+<text x="22" y="472">.pref    {voice, sound, music}</text><text x="22" y="490">.runner  "boy" | "girl"</text><text x="22" y="506">.erased  last erased db</text>
+</g></svg><figcaption>Blue = shipped content (read-only). Green and orange = learner data saved on the phone. Monospace lines are field name and type.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">3</span>Story content: stories.js</h2>
+<p><code>window.STORIES</code> is an array of 30 objects, sorted by <code>id</code> when the game starts. Every story has 5 pages, 5 page questions with 3 options, a main idea question with 4 options, and 5 SWBST parts with 1 right and 2 wrong answers.</p>
+<div class="tw"><table>
+<tr><th>Field</th><th>Type</th><th>Used for</th></tr>
+<tr><td><code>id</code></td><td>number 1–30</td><td>Level number and unlock order.</td></tr>
+<tr><td><code>day</code></td><td>number 1–10</td><td>Session number shown on screens ("Session 1 · Easy").</td></tr>
+<tr><td><code>level</code></td><td><code>"easy" | "average" | "hard"</code></td><td>Difficulty tag and colour. Each session has one of each.</td></tr>
+<tr><td><code>title</code></td><td>string</td><td>Shown everywhere and copied into each record.</td></tr>
+<tr><td><code>passage</code></td><td>string</td><td>The whole story in one piece. Used by the summary checker (copy check, names, vocabulary).</td></tr>
+<tr><td><code>text</code></td><td>string[5]</td><td>The 5 pages the learner reads.</td></tr>
+<tr><td><code>quiz</code></td><td>Question[5]</td><td>One question after each page. <code>why</code> is the page text that holds the answer; it is used to highlight the right part when the story is shown again.</td></tr>
+<tr><td><code>mainIdea</code></td><td>Question (4 options)</td><td>The main idea question after page 5, and the main idea check in the summary.</td></tr>
+<tr><td><code>mainIdeaText</code></td><td>string</td><td>The main idea in words; allowed vocabulary for the summary.</td></tr>
+<tr><td><code>swbst</code></td><td>{somebody, wanted, but, so, then}: StoryPart</td><td>Race questions, story order items and summary scoring. <code>words</code> are the keywords that prove a summary told that part.</td></tr>
+<tr><td><code>events</code></td><td>string[4]</td><td>Allowed vocabulary for the summary checker.</td></tr>
+<tr><td><code>modelSummary</code></td><td>string</td><td>Teacher Mira's example, shown after the 3rd summary try and after a pass.</td></tr>
+<tr><td><code>race</code></td><td>Question[6]</td><td><b>Not used since 1.3.5.</b> The old trivia race questions. The race now asks the 5 SWBST parts instead.</td></tr>
+</table></div>
+<pre>{
+  "id": 1, "day": 1, "level": "easy", "title": "The Playground",
+  "text": ["Molly and her friend Bella were playing at the playground. …", "…"],
+  "quiz": [{ "q": "Who is the main character in the story?",
+             "options": ["Bella", "Molly", "The teacher"], "answer": 1, "why": "…" }, …],
+  "swbst": { "somebody": { "answer": "Molly", "wrong": ["Bella", "The teacher"],
+                           "words": ["molly", "girl", "kid"] }, … },
+  "modelSummary": "Molly wanted her turn on the swing, but Bella would not get off. …"
+}</pre>
+<h3>Other shipped data files</h3>
+<div class="tw"><table>
+<tr><th>File</th><th>Global</th><th>Shape</th></tr>
+<tr><td><code>words.js</code></td><td><code>SR_WORDS</code></td><td>One string of 24,887 common English words separated by spaces.</td></tr>
+<tr><td><code>voice/voice.js</code></td><td><code>SR_VOICE</code></td><td>Map from normalised line text (lower case, letters and digits only) to a clip path, e.g. <code>"please type your name first" → "voice/m-001.mp3"</code>. Story pages use the key <code>"page &lt;storyId&gt; &lt;page&gt;"</code>. 170 Mira lines + 150 pages = 320 clips.</td></tr>
+<tr><td><code>assets.js</code></td><td><code>SR_ASSETS</code></td><td><code>{textures:{platformer}, models:{coin, cloud}, sounds:{bad, bump, click, coin, good, hit, jump, land, swish, tap, win}}</code> as data URLs / base64.</td></tr>
+<tr><td><code>models/*.js</code></td><td><code>SR_MODELS</code></td><td><code>SR_MODELS[name] = "&lt;base64 GLB&gt;"</code> for boy, girl, officer, city, suburb, trains, nature.</td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Saved data: localStorage</h2>
+<div class="tw"><table>
+<tr><th>Key</th><th>Value</th><th>Written when</th></tr>
+<tr><td><code>summarace.v1</code></td><td><code>{profiles: {id: Profile}, current: id | null, log: Record[]}</code></td><td>A learner signs in, finishes a level, or the teacher erases or restores.</td></tr>
+<tr><td><code>summarace.v1.pref</code></td><td><code>{voice: bool, sound: bool, music: bool}</code> (all true by default)</td><td>A switch in Settings changes.</td></tr>
+<tr><td><code>summarace.v1.runner</code></td><td><code>"boy"</code> (Max) or <code>"girl"</code> (Mia)</td><td>The runner is picked on the race start card.</td></tr>
+<tr><td><code>summarace.v1.erased</code></td><td>A full copy of <code>summarace.v1</code> from just before the last erase</td><td>The teacher types ERASE. Removed again by "Bring back erased records", which merges it with anything recorded since.</td></tr>
+</table></div>
+<p>An unfinished level is never saved: quitting mid-level leaves no record. If storage is blocked or full, the game keeps working for the session but nothing is kept.</p>
+</section>
+
+<section class="num"><h2><span class="n">5</span>CSV export format</h2>
+<p>File name <code>summarace-records-YYYY-MM-DD.csv</code>, UTF-8 with a byte-order mark (so Excel opens it correctly), comma separated, one header row, then one row per finished level, oldest first. Values with a comma, quote or line break are wrapped in double quotes. The column order is fixed:</p>
+<div class="tw"><table>
+<tr><th>#</th><th>Column</th><th>Type</th><th>Meaning</th></tr>
+<tr><td>1</td><td><code>date</code></td><td>YYYY-MM-DD</td><td>Date the level was finished (UTC date).</td></tr>
+<tr><td>2</td><td><code>time</code></td><td>HH:MM</td><td>Local time on the phone.</td></tr>
+<tr><td>3</td><td><code>learner</code></td><td>text</td><td>Name as typed.</td></tr>
+<tr><td>4</td><td><code>section</code></td><td>text</td><td>Section or group as typed (may be empty).</td></tr>
+<tr><td>5</td><td><code>level</code></td><td>1–30</td><td>Story id.</td></tr>
+<tr><td>6</td><td><code>title</code></td><td>text</td><td>Story title.</td></tr>
+<tr><td>7</td><td><code>key_details_pct</code></td><td>0–100</td><td>Page questions right on the first try.</td></tr>
+<tr><td>8</td><td><code>main_idea</code></td><td>correct | wrong</td><td>Main idea right on the first try.</td></tr>
+<tr><td>9</td><td><code>sequence_first_try_pct</code></td><td>0–100</td><td>Story parts in the right slot on the first "Check order".</td></tr>
+<tr><td>10</td><td><code>race_pct</code></td><td>0–100</td><td>Story parts answered right on the first try in the race.</td></tr>
+<tr><td>11</td><td><code>coins</code></td><td>number</td><td>Coins picked up in the race.</td></tr>
+<tr><td>12</td><td><code>summary_pct</code></td><td>0–100</td><td>Story parts found in the passing summary, out of 5, minus half a part (10 points) for each wrong detail. 0 if handed to the teacher.</td></tr>
+<tr><td>13</td><td><code>summary_tries</code></td><td>number</td><td>Scored summary checks (early checks like "too short" don't count).</td></tr>
+<tr><td>14</td><td><code>total_pct</code></td><td>0–100</td><td>Average of read &amp; answer, race, order and summary.</td></tr>
+<tr><td>15</td><td><code>stars</code></td><td>1–3</td><td>Stars for this attempt (≥85 → 3, ≥65 → 2, else 1).</td></tr>
+<tr><td>16</td><td><code>minutes</code></td><td>number, 1 decimal</td><td>Time from opening the level to the result.</td></tr>
+<tr><td>17</td><td><code>summary</code></td><td>text</td><td>The learner's summary, word for word.</td></tr>
+<tr><td>18</td><td><code>summary_status</code></td><td>passed | passed after example | teacher check</td><td>How the summary step ended. Added in 1.3.2, kept as the last column so old sheets still line up.</td></tr>
+</table></div>
+<pre>date,time,learner,section,level,title,key_details_pct,main_idea,sequence_first_try_pct,race_pct,coins,summary_pct,summary_tries,total_pct,stars,minutes,summary,summary_status
+2026-11-05,08:06,Juan Dela Cruz,Grade 4 - Sampaguita,1,The Playground,100,correct,80,100,24,100,1,95,3,6.4,"Molly wanted a turn on the swing, but Bella would not get off. …",passed</pre>
+<p class="note">Column <code>story_elements_first_try_pct</code> existed before 1.3.3 and was a copy of <code>race_pct</code>. It was removed, so sheets from older builds have one more column.</p>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Access control</h2>
+<div class="tw"><table>
+<tr><th>Who</th><th>Story content</th><th>Own progress</th><th>Other learners</th><th>Records / CSV</th></tr>
+<tr><td>Learner</td><td>Read</td><td>Read, add by playing</td><td>Sees names in "Or continue as"</td><td>Can open Teacher records (no password)</td></tr>
+<tr><td>Teacher</td><td>Read</td><td>—</td><td>Sees all on the phone</td><td>Copy, download, share, erase (type ERASE), restore</td></tr>
+<tr><td>Anyone with the APK</td><td>Read (the files are inside the app; the repo is public)</td><td colspan="3">Nothing: data stays on each phone</td></tr>
+</table></div>
+<p>There is no password on Teacher records. This was a choice for a classroom tool; the ERASE word and the undo protect against accidents, not against a learner who wants to look.</p>
+</section>
+
+<section class="num"><h2><span class="n">7</span>Data storage</h2>
+<div class="grid">
+<div class="card"><h4>Where</h4><p>WebView localStorage inside the app's private folder. Clearing the app's data or uninstalling deletes it.</p></div>
+<div class="card"><h4>Export</h4><p>Android 10+: Download/SummaRace via MediaStore. Android 7–9: Download/SummaRace with storage permission. Or Share / Copy.</p></div>
+<div class="card"><h4>Backups</h4><p>None automatic. The teacher should export the CSV after each session.</p></div>
+<div class="card"><h4>Personal data</h4><p>Only the name and section typed in, and the summaries. Nothing is sent anywhere.</p></div>
+</div>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>
