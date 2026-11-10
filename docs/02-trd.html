@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html" aria-current="page">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="assets.html">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html" aria-current="page">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="07-system-design.html">7 · System Design</a> <a href="assets.html">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
 <main class="page">
 <!--title:Technical Requirements Document-->
 <div class="eyebrow">Technical requirements document</div>
@@ -22,7 +22,7 @@
 <section class="num"><h2><span class="n">2</span>Technical goals</h2>
 <ul>
   <li><b>Works with no internet.</b> Every file is inside the APK. Nothing is fetched from the network.</li>
-  <li><b>Runs on low-cost phones.</b> Android 7.0+ (API 24), about 2 GB RAM. The 3D models only load when the race starts, and GPU memory is freed after each obstacle.</li>
+  <li><b>Runs on low-cost phones.</b> Android 7.0+ (API 24), about 2 GB RAM. The 3D models are not loaded at start-up (they preload in the background after the first tap), and GPU memory is freed after each obstacle.</li>
   <li><b>Easy to change.</b> No build step for the game. Stories are one data file. Opening the folder with a local web server runs the game in a desktop browser.</li>
   <li><b>Safe for learners.</b> No accounts, no tracking, no ads, no outside links during play.</li>
 </ul>
@@ -66,7 +66,7 @@
 <rect x="540" y="124" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="144" text-anchor="middle">stories.js · words.js</text>
 <rect x="540" y="160" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="180" text-anchor="middle">voice/voice.js + 320 MP3</text>
 <rect x="540" y="196" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="216" text-anchor="middle">assets.js (sounds, coin, cloud)</text>
-<rect x="540" y="232" width="214" height="30" rx="6" fill="#fff1df" stroke="#e07a10"/><text x="647" y="252" text-anchor="middle">models/*.js (loaded in race)</text>
+<rect x="540" y="232" width="214" height="30" rx="6" fill="#fff1df" stroke="#e07a10"/><text x="647" y="252" text-anchor="middle">models/*.js (loaded later)</text>
 <rect x="540" y="268" width="214" height="30" rx="6" fill="#fff" stroke="#c9cede"/><text x="647" y="288" text-anchor="middle">fonts · ui images · music</text>
 <rect x="306" y="320" width="210" height="64" rx="8" fill="#e3f6ea" stroke="#1f9d55"/><text x="411" y="346" text-anchor="middle" font-weight="700">localStorage</text><text x="411" y="366" text-anchor="middle" fill="#55536f">profiles · progress · log</text>
 <path d="M540 103 L520 112" stroke="#16133a" stroke-width="1.5" marker-end="url(#t1)"/>
@@ -88,7 +88,7 @@
 <text x="40" y="336" fill="#55536f" font-size="12">shareText(subject, text)</text>
 <text x="40" y="356" fill="#55536f" font-size="12">saveFile(name, data) · exit()</text>
 <path d="M126 200 L126 246" stroke="#16133a" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#t1)"/>
-</g></svg><figcaption>The dashed orange arrow is a lazy load: the 3D model files only load when the first race starts. No arrow leaves the phone: there is no server.</figcaption></div>
+</g></svg><figcaption>The dashed orange arrow is a lazy load: the 3D model files are not loaded at start-up; they preload in the background 1.5 s after the first tap. No arrow leaves the phone: there is no server.</figcaption></div>
 
 <h3>Script load order</h3>
 <p><code>three.min.js</code> → <code>GLTFLoader.js</code> → <code>assets.js</code> → <code>stories.js</code> → <code>words.js</code> → <code>voice/voice.js</code> → the main script inside <code>index.html</code>. The main script is wrapped in one function (an IIFE), so its internals are not global. Each data file sets one global: <code>SR_ASSETS</code>, <code>STORIES</code>, <code>SR_WORDS</code>, <code>SR_VOICE</code>, <code>SR_MODELS</code>.</p>

@@ -16,6 +16,7 @@ The documents are HTML pages with diagrams. GitHub shows HTML as code, so open t
 | [04-design-brief.html](04-design-brief.html) | Colours, fonts, components, screenshots |
 | [05-data-schema.html](05-data-schema.html) | stories.js, localStorage, CSV format |
 | [06-implementation-plan.html](06-implementation-plan.html) | What was built, by phase |
+| [07-system-design.html](07-system-design.html) | System context, components, data flow, voice pipeline, race state machine, failure handling |
 | [assets.html](assets.html) | Every asset with source, author and license |
 | [answer-key.html](answer-key.html) | Right answers for all 30 stories |
 
