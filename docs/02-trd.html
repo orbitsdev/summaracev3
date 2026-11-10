@@ -16,7 +16,7 @@
 
 <section class="num"><h2><span class="n">1</span>Overview</h2>
 <p>This document lists the tools, technologies and structure used to build SummaRace v3, so anyone who picks up the code knows how it fits together and what it must keep doing.</p>
-<p>SummaRace v3 is a web game (HTML, CSS and plain JavaScript, with three.js for the 3D race) that runs inside a small Android app. The Android app is a full-screen WebView plus a JavaScript bridge for things a web page can't do on its own: the phone's voice, the clipboard, sharing, saving files and closing the app.</p>
+<p>SummaRace v3 is a web game (HTML, CSS and plain JavaScript, with three.js for the 3D race) that runs inside a small Android app. The Android app is a full-screen WebView plus a JavaScript bridge for things a web page cannot do on its own: the phone's voice, the clipboard, sharing, saving files and closing the app.</p>
 </section>
 
 <section class="num"><h2><span class="n">2</span>Technical goals</h2>
@@ -140,7 +140,7 @@
 <rect x="60" y="240" width="300" height="50" rx="10" fill="#e3f6ea" stroke="#1f9d55"/><text x="210" y="262" font-weight="700">Pass</text><text x="210" y="280" fill="#55536f">≥ 4 of 5 parts + who + main idea, no mistakes</text>
 <rect x="440" y="240" width="300" height="50" rx="10" fill="#fde8e6" stroke="#d6453b"/><text x="590" y="262" font-weight="700">Try again</text><text x="590" y="280" fill="#55536f">red lines say what to add or fix</text>
 </g></svg><figcaption>A failed early check (top row) does not count as a try. From the 3rd scored try, mistakes no longer block a pass, and Mira shows her example. From the 4th, "Finish, my teacher will check" appears.</figcaption></div>
-<p>The checker is rules-based on purpose: it has to work offline on a cheap phone. It can miss things a teacher would notice, which is why the summary text and its status go into the CSV for the teacher to read.</p>
+<p>The checker is rules-based by design, because it has to work offline on low-cost phones. It can miss things a teacher would notice, which is why the summary text and its status go into the CSV for the teacher to read.</p>
 </section>
 
 <section class="num"><h2><span class="n">7</span>Performance and device rules</h2>
@@ -159,7 +159,7 @@
 
 Build the APK:
   open the repo in Android Studio and build, or run: gradle assembleDebug
-  the APK lands in app/build/outputs/apk/</pre>
+  the APK is written to app/build/outputs/apk/</pre>
 <ul>
   <li>Raise <code>versionCode</code> and <code>versionName</code> in <code>app/build.gradle</code> for every release. The next free versionCode is 18.</li>
   <li>Release APKs are signed with the project's current signing key, which is kept off GitHub on the owner's PC. The original 1.2.0 key was lost, so phones with that old test build must uninstall it once.</li>

@@ -16,7 +16,7 @@
 
 <section class="num"><h2><span class="n">1</span>Overview</h2>
 <p>This document describes the system as a whole: who uses it, its components, how data moves between them, the main runtime sequences, and the design choices behind them. The TRD lists the tools; this document shows how they work together.</p>
-<p>In one line: <b>SummaRace is a single-device, offline system.</b> One Android app holds the game, the content and the saved data. The only thing that leaves the phone is a CSV file the teacher exports.</p>
+<p>In short, <b>SummaRace is a single-device, offline system.</b> One Android app holds the game, the content and the saved data. The only data that leaves the phone is a CSV file the teacher exports.</p>
 </section>
 
 <section class="num"><h2><span class="n">2</span>System context</h2>
@@ -183,10 +183,10 @@
 <section class="num"><h2><span class="n">8</span>Failure handling</h2>
 <div class="tw"><table>
 <tr><th>If this fails…</th><th>…the game does this</th></tr>
-<tr><td>The race can't start (no WebGL)</td><td>Mira says the race could not start and the level continues to Story order with a race score of 50% and 0 coins.</td></tr>
-<tr><td>A 3D model doesn't load</td><td>Simple shapes made in code stand in for the runner, patrol or trains.</td></tr>
+<tr><td>The race cannot start (no WebGL)</td><td>Mira says the race could not start and the level continues to Story order with a race score of 50% and 0 coins.</td></tr>
+<tr><td>A 3D model does not load</td><td>Simple shapes made in code stand in for the runner, patrol or trains.</td></tr>
 <tr><td>A voice clip is missing</td><td>The phone's voice reads the line instead.</td></tr>
-<tr><td>localStorage is blocked or full</td><td>Every read and write is wrapped, so the game keeps running; progress just isn't kept.</td></tr>
+<tr><td>localStorage is blocked or full</td><td>Every read and write is wrapped, so the game keeps running; progress is not kept.</td></tr>
 <tr><td>Saving the CSV is not allowed (Android 7–9, permission refused)</td><td>A copy is kept in the app's own folder and the button tells the teacher to use Share CSV.</td></tr>
 <tr><td>Teacher erases by mistake</td><td>The last erase is kept and can be brought back, merged with anything recorded since.</td></tr>
 </table></div>
@@ -196,7 +196,7 @@
 <ul>
 <li>No network code, no analytics, no ads, no accounts. The app asks only for vibration and, on Android 7–9, storage (to save the CSV).</li>
 <li>Learner data is a name, a section, scores and summaries, kept only on the phone in the app's private storage.</li>
-<li>Teacher records have no password; ERASE needs a typed word, which guards against accidents, not curious learners.</li>
+<li>Teacher records have no password; ERASE needs a typed word, which guards against accidents, not against learners who deliberately look.</li>
 <li>The repo is public, so the answer key and all content can be read by anyone. The signing key is kept off GitHub.</li>
 </ul>
 </section>
@@ -212,7 +212,7 @@
 <text x="575" y="53" font-weight="700">Gradle build</text><text x="575" y="71" font-size="10.5" fill="#55536f">sign with project key</text>
 <text x="740" y="53" font-weight="700">APK to phones</text><text x="740" y="71" font-size="10.5" fill="#55536f">sideload, no store</text>
 <path d="M150 58 L171 58" stroke="#16133a" marker-end="url(#s6)"/><path d="M315 58 L336 58" stroke="#16133a" marker-end="url(#s6)"/><path d="M480 58 L501 58" stroke="#16133a" marker-end="url(#s6)"/><path d="M645 58 L666 58" stroke="#16133a" marker-end="url(#s6)"/>
-</g></svg><figcaption>There is no CI. Release APKs must be built on the PC that holds the signing key; a build signed with any other key can't update the installed app.</figcaption></div>
+</g></svg><figcaption>There is no CI. Release APKs must be built on the PC that holds the signing key; a build signed with any other key cannot update the installed app.</figcaption></div>
 </section>
 
 <section class="num"><h2><span class="n">11</span>Design decisions</h2>

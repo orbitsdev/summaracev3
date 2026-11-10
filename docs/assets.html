@@ -29,9 +29,9 @@
 <section class="num"><h2><span class="n">2</span>Gaps to fix before a public release</h2>
 <div class="note"><b>These are not guesses; each one is visible in the files.</b>
 <ul style="margin-bottom:0">
-<li><b>Music and all UI images have no recorded source.</b> The credits screen calls the music "original loops, made for this game" but nobody has a record of who made it or with what tool. The files carry a C2PA tag saying they passed through Claude's file handling, which only shows how they were copied, not who made them. The owner should confirm where Mira, the world pictures, the backdrop, stars, icons and both music loops came from.</li>
-<li><b>wordfreq (CC BY-SA 4.0) is not credited on the credits screen.</b> That license requires credit. Add "Word list: wordfreq by Robyn Speer (CC BY-SA 4.0)".</li>
-<li><b>The credits screen says "Full list in CREDITS.md"</b>, but that file was lost and is not in the app. Point it to this page or ship a new CREDITS file.</li>
+<li><b>Music and all UI images have no recorded source.</b> The credits screen calls the music "original loops, made for this game" but there is no record of who made it or with what tool. The files carry a C2PA provenance tag from a file-handling tool, which only shows how they were copied, not who made them. The owner should confirm where Mira, the world pictures, the backdrop, stars, icons and both music loops came from.</li>
+<li><b>wordfreq (CC BY-SA 4.0) is not credited on the credits screen.</b> That license requires credit. Suggested credit: "Word list: wordfreq by Robyn Speer (CC BY-SA 4.0)".</li>
+<li><b>The credits screen says "Full list in CREDITS.md"</b>, but that file was lost and is not in the app. It should point to this document, or a new credits file should be shipped.</li>
 <li><b>The font license texts are not shipped.</b> The SIL OFL and Apache 2.0 both ask for the license text to travel with the font files. Add <code>OFL.txt</code> and the Apache license next to <code>fonts/</code>.</li>
 <li><b>Stories have no author credit.</b> Several are published children's stories (for example "The Day the Crayons Quit" and "Owen and Mzee"). The research team should confirm they may be used and how to credit them.</li>
 <li><b>Teacher Mira has no credit line</b> on the credits screen, and no repo LICENSE says who owns the game code.</li>
@@ -49,7 +49,7 @@
 
 <section class="num"><h2><span class="n">5</span>Music</h2>
 <h3>Music</h3><div class='tw'><table><tr><th>File</th><th>Size</th><th>Used in the game</th><th>Source</th><th>Author</th><th>License</th></tr><tr><td><code>music/menu.mp3</code></td><td>1.0 MB</td><td>Background music on every screen except the race (about 90 s loop)</td><td><span class='tag r'>unknown</span> The credits screen says “Original loops, made for this game”, but who made them and how is not recorded</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>music/race.mp3</code></td><td>1.1 MB</td><td>Race music (about 72 s loop, A minor, ~161 bpm)</td><td><span class='tag r'>unknown</span> Same as above</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr></table></div>
-<p class="note b">Not in the game: three Kevin MacLeod tracks (Pixel Peeker Polka – faster, Monkeys Spinning Monkeys, Run Amok, from <a href="https://incompetech.com">incompetech.com</a>, CC BY 4.0) were downloaded as previews only. If one is ever used, it needs the credit line "Music by Kevin MacLeod (incompetech.com), licensed under Creative Commons: By Attribution 4.0".</p>
+<p class="note b">Not in the game: three Kevin MacLeod tracks (Pixel Peeker Polka – faster, Monkeys Spinning Monkeys, Run Amok, from <a href="https://incompetech.com">incompetech.com</a>, CC BY 4.0) were downloaded as previews only. If one is used, it needs the credit line "Music by Kevin MacLeod (incompetech.com), licensed under Creative Commons: By Attribution 4.0".</p>
 </section>
 
 <section class="num"><h2><span class="n">6</span>Voice: Teacher Mira</h2>
@@ -58,7 +58,7 @@
 <tr><td>Made with</td><td>Kokoro TTS, recorded offline (credits screen and <code>voice.js</code> header). Model: <a href="https://huggingface.co/hexgrad/Kokoro-82M">hexgrad/Kokoro-82M</a>.</td></tr>
 <tr><td>Author</td><td>Model by hexgrad. Which Kokoro voice was used: <span class='tag r'>unknown</span></td></tr>
 <tr><td>License</td><td>Apache License 2.0 (the model). The clips were generated for this game.</td></tr>
-<tr><td>Build script</td><td><code>build-voice.sh</code> made the clips and <code>voice.js</code>. It was lost, so new lines can't be recorded in the same voice yet.</td></tr>
+<tr><td>Build script</td><td><code>build-voice.sh</code> made the clips and <code>voice.js</code>. It was lost, so new lines cannot be recorded in the same voice yet.</td></tr>
 <tr><td>Fallback</td><td>A line with no clip is spoken by the phone's own voice (Android TextToSpeech, en-US) or the browser's voice.</td></tr>
 </table></div>
 <h3>Lines that have no clip</h3>
