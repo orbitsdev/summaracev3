@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assets and Credits · SummaRace v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="07-system-design.html">7 · System Design</a> <a href="08-requirements.html">8 · Requirements</a> <a href="assets.html" aria-current="page">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
+<main class="page">
+<!--title:Assets and Credits-->
+<div class="eyebrow">Assets &amp; credits</div>
+<h1>Assets and Credits</h1>
+<p class="meta">Every file the game ships, where it came from, who made it, and its license. Checked against <code>main</code> (1.3.6) on 2026-11-05.</p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>This page lists every asset inside <code>app/src/main/assets/www</code> and the Android launcher icons. Where the source or license is not recorded anywhere (the original <code>CREDITS.md</code> was lost with the original project folder), it says <span class="tag r">unknown</span> instead of guessing. One item is marked <span class="tag o">likely</span> where the file itself points to a source but nothing records it.</p>
+<div class="grid">
+<div class="card"><h4>3D models</h4><p>7 files · 4.5 MB · Quaternius and Kenney, CC0</p></div>
+<div class="card"><h4>Voice clips</h4><p>320 MP3 · 8.0 MB · made with Kokoro TTS</p></div>
+<div class="card"><h4>Music</h4><p>2 MP3 · 2.2 MB · source unknown</p></div>
+<div class="card"><h4>Images</h4><p>18 files · 0.9 MB · source unknown</p></div>
+<div class="card"><h4>Fonts</h4><p>7 files · 160 KB · Google Fonts, OFL / Apache</p></div>
+<div class="card"><h4>Sounds</h4><p>11 clips inside assets.js · Kenney, CC0</p></div>
+</div>
+</section>
+
+<section class="num"><h2><span class="n">2</span>Gaps to fix before a public release</h2>
+<div class="note"><b>These are not guesses; each one is visible in the files.</b>
+<ul style="margin-bottom:0">
+<li><b>Music and all UI images have no recorded source.</b> The credits screen calls the music "original loops, made for this game" but there is no record of who made it or with what tool. The files carry a C2PA provenance tag from a file-handling tool, which only shows how they were copied, not who made them. The owner should confirm where Mira, the world pictures, the backdrop, stars, icons and both music loops came from.</li>
+<li><b>wordfreq (CC BY-SA 4.0) is not credited on the credits screen.</b> That license requires credit. Suggested credit: "Word list: wordfreq by Robyn Speer (CC BY-SA 4.0)".</li>
+<li><b>The credits screen says "Full list in CREDITS.md"</b>, but that file was lost and is not in the app. It should point to this document, or a new credits file should be shipped.</li>
+<li><b>The font license texts are not shipped.</b> The SIL OFL and Apache 2.0 both ask for the license text to travel with the font files. Add <code>OFL.txt</code> and the Apache license next to <code>fonts/</code>.</li>
+<li><b>Stories have no author credit.</b> Several are published children's stories (for example "The Day the Crayons Quit" and "Owen and Mzee"). The research team should confirm they may be used and how to credit them.</li>
+<li><b>Teacher Mira has no credit line</b> on the credits screen, and no repo LICENSE says who owns the game code.</li>
+</ul></div>
+</section>
+
+<section class="num"><h2><span class="n">3</span>3D models</h2>
+<h3>Models</h3><div class='tw'><table><tr><th>File</th><th>Size</th><th>Used in the game</th><th>Source</th><th>Author</th><th>License</th></tr><tr><td><code>models/boy.js</code></td><td>906 KB</td><td>Max, the boy runner (animations: Run, Jump, Roll, Idle, Victory, Defeat)</td><td><a href='https://quaternius.com'>quaternius.com</a> · Ultimate Animated Character Pack</td><td>Quaternius</td><td>CC0 1.0 (public domain) (as stated on the credits screen)</td></tr><tr><td><code>models/girl.js</code></td><td>911 KB</td><td>Mia, the girl runner (same animations)</td><td>Same pack</td><td>Quaternius</td><td>CC0 1.0 (public domain)</td></tr><tr><td><code>models/officer.js</code></td><td>951 KB</td><td>The patrol officer who chases the runner (Run, Idle, Victory)</td><td>Same pack</td><td>Quaternius</td><td>CC0 1.0 (public domain)</td></tr><tr><td><code>models/trains.js</code></td><td>155 KB</td><td>Subway trains on the track (train-electric-subway-a/b/c, wheels, connector)</td><td><a href='https://kenney.nl/assets/train-kit'>Kenney Train Kit</a></td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain)</td></tr><tr><td><code>models/city.js</code></td><td>1001 KB</td><td>Buildings and skyscrapers beside the track (Story Town)</td><td><a href='https://kenney.nl/assets/city-kit-commercial'>Kenney City Kit (Commercial)</a></td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain)</td></tr><tr><td><code>models/suburb.js</code></td><td>467 KB</td><td>Houses, trees, fences and planters (meadow and river worlds)</td><td><a href='https://kenney.nl/assets/city-kit-suburban'>Kenney City Kit (Suburban)</a></td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain)</td></tr><tr><td><code>models/nature.js</code></td><td>182 KB</td><td>Trees, palms, pines, rocks, bushes, flowers, mushrooms, logs</td><td><a href='https://kenney.nl/assets/nature-kit'>Kenney Nature Kit</a></td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain)</td></tr><tr><td><code>assets.js</code> → coin, cloud</td><td>45 KB</td><td>Coins on the track, clouds in the sky</td><td>Kenney, exact kit not recorded. <span class='tag o'>likely</span> <a href='https://kenney.nl/assets/platformer-kit'>Platformer Kit</a>: the shared texture is named “platformer”</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → platformer texture</td><td>10 KB</td><td>Colour map for the coin and cloud models</td><td>Same as above</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain)</td></tr></table></div>
+<p>Characters are recoloured and given cartoon shading in code. Mesh names in the files match the Kenney kits listed (for example <code>train-electric-subway-a</code>, <code>building-skyscraper-a</code>, <code>building-type-a</code>, <code>tree_palmTall</code>). All model files were compressed with glTF-Transform 4.1.1 and stored as base64.</p>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Sound effects</h2>
+<h3>Sounds inside assets.js</h3><div class='tw'><table><tr><th>File</th><th>Size</th><th>Used in the game</th><th>Source</th><th>Author</th><th>License</th></tr><tr><td><code>assets.js</code> → click</td><td>1 KB</td><td>Most button taps</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → tap</td><td>1 KB</td><td>Small taps</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → good</td><td>5 KB</td><td>Right answer</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → bad</td><td>5 KB</td><td>Wrong answer</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → win</td><td>2 KB</td><td>Level, race or summary passed</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → coin</td><td>3 KB</td><td>Coin picked up</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → jump</td><td>2 KB</td><td>Runner jumps</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → land</td><td>1 KB</td><td>Runner lands</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → swish</td><td>1 KB</td><td>Page turn, roll</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → bump</td><td>3 KB</td><td>Hit a train, caught</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td><code>assets.js</code> → hit</td><td>7 KB</td><td>Hit a barrier</td><td>Kenney, exact pack not recorded</td><td>Kenney (kenney.nl)</td><td>CC0 1.0 (public domain) (file header says Kenney CC0)</td></tr><tr><td>beep, pop</td><td>—</td><td>Countdown and small pops</td><td>Made in code with Web Audio (no file)</td><td>SummaRace code</td><td>—</td></tr></table></div>
+</section>
+
+<section class="num"><h2><span class="n">5</span>Music</h2>
+<h3>Music</h3><div class='tw'><table><tr><th>File</th><th>Size</th><th>Used in the game</th><th>Source</th><th>Author</th><th>License</th></tr><tr><td><code>music/menu.mp3</code></td><td>1.0 MB</td><td>Background music on every screen except the race (about 90 s loop)</td><td><span class='tag r'>unknown</span> The credits screen says “Original loops, made for this game”, but who made them and how is not recorded</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>music/race.mp3</code></td><td>1.1 MB</td><td>Race music (about 72 s loop, A minor, ~161 bpm)</td><td><span class='tag r'>unknown</span> Same as above</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr></table></div>
+<p class="note b">Not in the game: three Kevin MacLeod tracks (Pixel Peeker Polka – faster, Monkeys Spinning Monkeys, Run Amok, from <a href="https://incompetech.com">incompetech.com</a>, CC BY 4.0) were downloaded as previews only. If one is used, it needs the credit line "Music by Kevin MacLeod (incompetech.com), licensed under Creative Commons: By Attribution 4.0".</p>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Voice: Teacher Mira</h2>
+<div class="tw"><table><tr><th>Item</th><th>Detail</th></tr>
+<tr><td>Files</td><td><code>voice/m-000.mp3</code> to <code>voice/m-319.mp3</code>: 320 clips, 8.0 MB. 170 are Mira's lines, 150 are the 30 stories × 5 pages read aloud.</td></tr>
+<tr><td>Made with</td><td>Kokoro TTS, recorded offline (credits screen and <code>voice.js</code> header). Model: <a href="https://huggingface.co/hexgrad/Kokoro-82M">hexgrad/Kokoro-82M</a>.</td></tr>
+<tr><td>Author</td><td>Model by hexgrad. Which Kokoro voice was used: <span class='tag r'>unknown</span></td></tr>
+<tr><td>License</td><td>Apache License 2.0 (the model). The clips were generated for this game.</td></tr>
+<tr><td>Build script</td><td><code>build-voice.sh</code> made the clips and <code>voice.js</code>. It was lost, so new lines cannot be recorded in the same voice yet.</td></tr>
+<tr><td>Fallback</td><td>A line with no clip is spoken by the phone's own voice (Android TextToSpeech, en-US) or the browser's voice.</td></tr>
+</table></div>
+<h3>Lines that have no clip</h3>
+<p>All 80 lines in Mira's main line lists have clips. These fixed lines in the code do not, so they use the phone voice:</p>
+<ul>
+<li>Time's up! Here is the right order. Read it once, then let's write your summary.</li>
+<li>Last stage! Write 2 or 3 sentences that tell the story in your own words. Before you check, ask yourself: …</li>
+<li>Tell me more! Write 2 or 3 sentences: who the story is about, what happened, and how it ended.</li>
+<li>Some words are repeated too many times. Tell the story in sentences that make sense.</li>
+<li>Write it in sentences, not a list of words. Use words like wanted, but, so, and then.</li>
+<li>I see only one sentence. Please write 2 or 3 sentences, with a period at the end of each one.</li>
+<li>Some details don't match the story. Look at the red lines and fix them.</li>
+<li>Who is the story about? Name the main character in your summary.</li>
+<li>Your summary needs the main idea. What is the whole story mostly about?</li>
+<li>Good effort! Your teacher will read your summary and help you with it.</li>
+</ul>
+<p>Lines built from a template (with a name, number or story title) were not checked one by one and may also fall back.</p>
+<details><summary><b>Full list of all 320 voice clips</b> (line text is stored in lower case without punctuation)</summary>
+<div class="tw"><table><tr><th>File</th><th>Kind</th><th>Line / page</th><th>Size</th></tr>
+<tr><td><code>m-000.mp3</code></td><td>Mira line</td><td>hi i m teacher mira type your name so i can save your progress then we ll start reading together</td><td>28.8 KB</td></tr>
+<tr><td><code>m-001.mp3</code></td><td>Mira line</td><td>please type your name first</td><td>12.3 KB</td></tr>
+<tr><td><code>m-002.mp3</code></td><td>Mira line</td><td>that level is still locked finish the open level first and it will unlock</td><td>23.1 KB</td></tr>
+<tr><td><code>m-003.mp3</code></td><td>Mira line</td><td>welcome start with level 1 you will read answer put events in order race the patrol and then summarize</td><td>32.1 KB</td></tr>
+<tr><td><code>m-004.mp3</code></td><td>Mira line</td><td>you finished all 30 stories replay any level to earn more stars</td><td>22.1 KB</td></tr>
+<tr><td><code>m-005.mp3</code></td><td>Mira line</td><td>welcome back your next level is ready for you</td><td>16.4 KB</td></tr>
+<tr><td><code>m-006.mp3</code></td><td>Mira line</td><td>read carefully look for somebody what they wanted the problem what they did and how it ended</td><td>28.1 KB</td></tr>
+<tr><td><code>m-007.mp3</code></td><td>Mira line</td><td>take your time think who is the story about and what is the big idea</td><td>23.1 KB</td></tr>
+<tr><td><code>m-008.mp3</code></td><td>Mira line</td><td>picture the story in your head it helps you remember what happened first next then and last</td><td>27.1 KB</td></tr>
+<tr><td><code>m-009.mp3</code></td><td>Mira line</td><td>let s check the key details choose the best answer</td><td>17.7 KB</td></tr>
+<tr><td><code>m-010.mp3</code></td><td>Mira line</td><td>now the big one the main idea which answer tells what the whole story is about not just one small part</td><td>32.2 KB</td></tr>
+<tr><td><code>m-011.mp3</code></td><td>Mira line</td><td>correct great memory</td><td>12.0 KB</td></tr>
+<tr><td><code>m-012.mp3</code></td><td>Mira line</td><td>yes that s right</td><td>10.6 KB</td></tr>
+<tr><td><code>m-013.mp3</code></td><td>Mira line</td><td>exactly you read closely</td><td>13.2 KB</td></tr>
+<tr><td><code>m-014.mp3</code></td><td>Mira line</td><td>not quite the main idea covers the whole story look at the green answer</td><td>23.5 KB</td></tr>
+<tr><td><code>m-015.mp3</code></td><td>Mira line</td><td>not quite look at the green answer and the reason below</td><td>19.4 KB</td></tr>
+<tr><td><code>m-016.mp3</code></td><td>Mira line</td><td>put the story in order tap the event that happened first then next then then and last tap a placed event to take it back</td><td>35.6 KB</td></tr>
+<tr><td><code>m-017.mp3</code></td><td>Mira line</td><td>perfect order on the first try now the race pick the lanes with the right answers to escape the patrol</td><td>31.7 KB</td></tr>
+<tr><td><code>m-018.mp3</code></td><td>Mira line</td><td>all in order now time for the race pick the right answer lanes to escape</td><td>23.7 KB</td></tr>
+<tr><td><code>m-019.mp3</code></td><td>Mira line</td><td>you escaped now find the story elements choose the best answer for somebody wanted but so and then</td><td>31.3 KB</td></tr>
+<tr><td><code>m-020.mp3</code></td><td>Mira line</td><td>all five story elements are correct now use them to write your summary</td><td>22.8 KB</td></tr>
+<tr><td><code>m-021.mp3</code></td><td>Mira line</td><td>now all five are correct let s use them to write your summary</td><td>20.3 KB</td></tr>
+<tr><td><code>m-022.mp3</code></td><td>Mira line</td><td>last stage join the story elements into one sentence using your own words use words like wanted but so and then</td><td>36.0 KB</td></tr>
+<tr><td><code>m-023.mp3</code></td><td>Mira line</td><td>i see more than one sentence join your ideas into one sentence with words like but so and then</td><td>30.4 KB</td></tr>
+<tr><td><code>m-024.mp3</code></td><td>Mira line</td><td>that sentence is very long a summary keeps only the main idea try to use fewer words</td><td>28.7 KB</td></tr>
+<tr><td><code>m-025.mp3</code></td><td>Mira line</td><td>part of this is copied straight from the story try saying it in your own words</td><td>23.4 KB</td></tr>
+<tr><td><code>m-026.mp3</code></td><td>Mira line</td><td>excellent your sentence has every story element</td><td>17.1 KB</td></tr>
+<tr><td><code>m-027.mp3</code></td><td>Mira line</td><td>the red chips show what is still missing add them in your own words</td><td>20.3 KB</td></tr>
+<tr><td><code>m-028.mp3</code></td><td>Mira line</td><td>you completed the final story i m so proud of you</td><td>17.8 KB</td></tr>
+<tr><td><code>m-029.mp3</code></td><td>Mira line</td><td>replay this level anytime to earn more stars</td><td>17.8 KB</td></tr>
+<tr><td><code>m-030.mp3</code></td><td>Mira line</td><td>three stars you re a true summaracer</td><td>14.4 KB</td></tr>
+<tr><td><code>m-031.mp3</code></td><td>Mira line</td><td>the next level is now unlocked replay this level anytime to earn more stars</td><td>25.2 KB</td></tr>
+<tr><td><code>m-032.mp3</code></td><td>Mira line</td><td>the next level is now unlocked three stars you re a true summaracer</td><td>23.2 KB</td></tr>
+<tr><td><code>m-033.mp3</code></td><td>Mira line</td><td>read the question then pick your lane</td><td>14.4 KB</td></tr>
+<tr><td><code>m-034.mp3</code></td><td>Mira line</td><td>which lane has the right answer</td><td>12.8 KB</td></tr>
+<tr><td><code>m-035.mp3</code></td><td>Mira line</td><td>think about the story then move</td><td>13.5 KB</td></tr>
+<tr><td><code>m-036.mp3</code></td><td>Mira line</td><td>watch out for trains</td><td>11.2 KB</td></tr>
+<tr><td><code>m-037.mp3</code></td><td>Mira line</td><td>yes you remembered</td><td>11.2 KB</td></tr>
+<tr><td><code>m-038.mp3</code></td><td>Mira line</td><td>great answer keep going</td><td>12.3 KB</td></tr>
+<tr><td><code>m-039.mp3</code></td><td>Mira line</td><td>correct the patrol is falling behind</td><td>15.2 KB</td></tr>
+<tr><td><code>m-040.mp3</code></td><td>Mira line</td><td>oops that was not the right answer the patrol is closing in</td><td>20.0 KB</td></tr>
+<tr><td><code>m-041.mp3</code></td><td>Mira line</td><td>trains block the lane switch lanes early</td><td>16.5 KB</td></tr>
+<tr><td><code>m-042.mp3</code></td><td>Mira line</td><td>jump over the low barriers or switch lanes</td><td>15.4 KB</td></tr>
+<tr><td><code>m-043.mp3</code></td><td>Mira line</td><td>swipe down to roll under the high barriers</td><td>15.3 KB</td></tr>
+<tr><td><code>m-044.mp3</code></td><td>Mira line</td><td>the patrol is right behind you pick the correct answer lanes to get away</td><td>22.8 KB</td></tr>
+<tr><td><code>m-045.mp3</code></td><td>Mira line</td><td>your device can t read aloud but you can read it yourself</td><td>19.1 KB</td></tr>
+<tr><td><code>m-046.mp3</code></td><td>Mira line</td><td>0 of 4 are in the right place the green ones stay ask yourself what had to happen first try the red ones again</td><td>35.2 KB</td></tr>
+<tr><td><code>m-047.mp3</code></td><td>Mira line</td><td>1 of 4 are in the right place the green ones stay ask yourself what had to happen first try the red ones again</td><td>34.3 KB</td></tr>
+<tr><td><code>m-048.mp3</code></td><td>Mira line</td><td>2 of 4 are in the right place the green ones stay ask yourself what had to happen first try the red ones again</td><td>34.5 KB</td></tr>
+<tr><td><code>m-049.mp3</code></td><td>Mira line</td><td>3 of 4 are in the right place the green ones stay ask yourself what had to happen first try the red ones again</td><td>34.4 KB</td></tr>
+<tr><td><code>m-050.mp3</code></td><td>Mira line</td><td>0 of 5 are correct change the red ones and check again</td><td>20.9 KB</td></tr>
+<tr><td><code>m-051.mp3</code></td><td>Mira line</td><td>1 of 5 are correct change the red ones and check again</td><td>19.9 KB</td></tr>
+<tr><td><code>m-052.mp3</code></td><td>Mira line</td><td>2 of 5 are correct change the red ones and check again</td><td>19.9 KB</td></tr>
+<tr><td><code>m-053.mp3</code></td><td>Mira line</td><td>3 of 5 are correct change the red ones and check again</td><td>19.8 KB</td></tr>
+<tr><td><code>m-054.mp3</code></td><td>Mira line</td><td>4 of 5 are correct change the red ones and check again</td><td>20.1 KB</td></tr>
+<tr><td><code>m-055.mp3</code></td><td>Mira line</td><td>that s only 1 word a good one sentence summary has about 15 to 30 words</td><td>26.1 KB</td></tr>
+<tr><td><code>m-056.mp3</code></td><td>Mira line</td><td>that s only 2 words a good one sentence summary has about 15 to 30 words</td><td>26.2 KB</td></tr>
+<tr><td><code>m-057.mp3</code></td><td>Mira line</td><td>that s only 3 words a good one sentence summary has about 15 to 30 words</td><td>26.8 KB</td></tr>
+<tr><td><code>m-058.mp3</code></td><td>Mira line</td><td>that s only 4 words a good one sentence summary has about 15 to 30 words</td><td>26.6 KB</td></tr>
+<tr><td><code>m-059.mp3</code></td><td>Mira line</td><td>that s only 5 words a good one sentence summary has about 15 to 30 words</td><td>27.0 KB</td></tr>
+<tr><td><code>m-060.mp3</code></td><td>Mira line</td><td>that s only 6 words a good one sentence summary has about 15 to 30 words</td><td>26.5 KB</td></tr>
+<tr><td><code>m-061.mp3</code></td><td>Mira line</td><td>that s only 7 words a good one sentence summary has about 15 to 30 words</td><td>27.1 KB</td></tr>
+<tr><td><code>m-062.mp3</code></td><td>Mira line</td><td>that s only 8 words a good one sentence summary has about 15 to 30 words</td><td>26.2 KB</td></tr>
+<tr><td><code>m-063.mp3</code></td><td>Mira line</td><td>that s only 9 words a good one sentence summary has about 15 to 30 words</td><td>26.9 KB</td></tr>
+<tr><td><code>m-064.mp3</code></td><td>Mira line</td><td>good summary you included 3 of 5 story elements</td><td>18.6 KB</td></tr>
+<tr><td><code>m-065.mp3</code></td><td>Mira line</td><td>good summary you included 4 of 5 story elements</td><td>18.7 KB</td></tr>
+<tr><td><code>m-066.mp3</code></td><td>Mira line</td><td>you included 0 of 5 story elements look at the story elements above and add the missing parts</td><td>30.6 KB</td></tr>
+<tr><td><code>m-067.mp3</code></td><td>Mira line</td><td>you included 1 of 5 story elements look at the story elements above and add the missing parts</td><td>29.3 KB</td></tr>
+<tr><td><code>m-068.mp3</code></td><td>Mira line</td><td>you included 2 of 5 story elements look at the story elements above and add the missing parts</td><td>29.8 KB</td></tr>
+<tr><td><code>m-069.mp3</code></td><td>Mira line</td><td>you included 3 of 5 story elements look at the story elements above and add the missing parts</td><td>29.4 KB</td></tr>
+<tr><td><code>m-070.mp3</code></td><td>Mira line</td><td>you included 4 of 5 story elements look at the story elements above and add the missing parts</td><td>29.9 KB</td></tr>
+<tr><td><code>m-071.mp3</code></td><td>Mira line</td><td>hi i m teacher mira tap play then type your name so i can save your progress</td><td>25.8 KB</td></tr>
+<tr><td><code>m-072.mp3</code></td><td>Mira line</td><td>type your name or tap your name if you played before</td><td>17.4 KB</td></tr>
+<tr><td><code>m-073.mp3</code></td><td>Mira line</td><td>let s read together who is this story about what do they want</td><td>19.9 KB</td></tr>
+<tr><td><code>m-074.mp3</code></td><td>Mira line</td><td>what problem happens keep reading carefully</td><td>16.5 KB</td></tr>
+<tr><td><code>m-075.mp3</code></td><td>Mira line</td><td>how does the story end remember what happened first next then and last</td><td>22.9 KB</td></tr>
+<tr><td><code>m-076.mp3</code></td><td>Mira line</td><td>here is the story again read the yellow part carefully then try again</td><td>23.1 KB</td></tr>
+<tr><td><code>m-077.mp3</code></td><td>Mira line</td><td>here is the story again read carefully then try again</td><td>20.0 KB</td></tr>
+<tr><td><code>m-078.mp3</code></td><td>Mira line</td><td>not quite do you want to read the story again</td><td>15.8 KB</td></tr>
+<tr><td><code>m-079.mp3</code></td><td>Mira line</td><td>choose another answer you can do it</td><td>14.3 KB</td></tr>
+<tr><td><code>m-080.mp3</code></td><td>Mira line</td><td>some events are not in the right place yet the green ones stay do you want to read the story again</td><td>27.9 KB</td></tr>
+<tr><td><code>m-081.mp3</code></td><td>Mira line</td><td>ask yourself what had to happen first</td><td>15.2 KB</td></tr>
+<tr><td><code>m-082.mp3</code></td><td>Mira line</td><td>you escaped now find the story elements one at a time</td><td>19.6 KB</td></tr>
+<tr><td><code>m-083.mp3</code></td><td>Mira line</td><td>i can t read some of these words please write your summary in english using real words</td><td>26.3 KB</td></tr>
+<tr><td><code>m-084.mp3</code></td><td>Mira line</td><td>some words are repeated too many times tell the story in a sentence that makes sense</td><td>25.3 KB</td></tr>
+<tr><td><code>m-085.mp3</code></td><td>Mira line</td><td>good summary you told the main idea in your own words</td><td>18.1 KB</td></tr>
+<tr><td><code>m-086.mp3</code></td><td>Mira line</td><td>who is the story about name the main character in your sentence</td><td>20.5 KB</td></tr>
+<tr><td><code>m-087.mp3</code></td><td>Mira line</td><td>your sentence is missing some story elements look at the story elements above and add the missing parts</td><td>30.7 KB</td></tr>
+<tr><td><code>m-088.mp3</code></td><td>Mira line</td><td>your sentence needs the main idea what is the whole story mostly about</td><td>24.1 KB</td></tr>
+<tr><td><code>m-089.mp3</code></td><td>Mira line</td><td>which card has the right answer</td><td>12.7 KB</td></tr>
+<tr><td><code>m-090.mp3</code></td><td>Mira line</td><td>this question is back think about the story and try again</td><td>19.3 KB</td></tr>
+<tr><td><code>m-091.mp3</code></td><td>Mira line</td><td>not quite that question will come back the patrol is closing in</td><td>20.9 KB</td></tr>
+<tr><td><code>m-092.mp3</code></td><td>Mira line</td><td>you got them all run to the finish line</td><td>15.2 KB</td></tr>
+<tr><td><code>m-093.mp3</code></td><td>Mira line</td><td>you made it mission complete</td><td>13.1 KB</td></tr>
+<tr><td><code>m-094.mp3</code></td><td>Mira line</td><td>write it as a sentence not a list of words use words like wanted but so and then</td><td>26.7 KB</td></tr>
+<tr><td><code>m-095.mp3</code></td><td>Mira line</td><td>you got it</td><td>9.4 KB</td></tr>
+<tr><td><code>m-096.mp3</code></td><td>Mira line</td><td>that s it well done</td><td>11.1 KB</td></tr>
+<tr><td><code>m-097.mp3</code></td><td>Mira line</td><td>nice work that s correct</td><td>12.1 KB</td></tr>
+<tr><td><code>m-098.mp3</code></td><td>Mira line</td><td>super you remembered</td><td>11.6 KB</td></tr>
+<tr><td><code>m-099.mp3</code></td><td>Mira line</td><td>right answer keep it up</td><td>12.3 KB</td></tr>
+<tr><td><code>m-100.mp3</code></td><td>Mira line</td><td>wonderful you were paying attention</td><td>14.3 KB</td></tr>
+<tr><td><code>m-101.mp3</code></td><td>Mira line</td><td>yes you found it in the story</td><td>12.9 KB</td></tr>
+<tr><td><code>m-102.mp3</code></td><td>Mira line</td><td>great thinking</td><td>10.1 KB</td></tr>
+<tr><td><code>m-103.mp3</code></td><td>Mira line</td><td>perfect on to the next one</td><td>12.5 KB</td></tr>
+<tr><td><code>m-104.mp3</code></td><td>Mira line</td><td>awesome that s the one</td><td>11.9 KB</td></tr>
+<tr><td><code>m-105.mp3</code></td><td>Mira line</td><td>way to go</td><td>9.5 KB</td></tr>
+<tr><td><code>m-106.mp3</code></td><td>Mira line</td><td>you re a careful reader</td><td>11.0 KB</td></tr>
+<tr><td><code>m-107.mp3</code></td><td>Mira line</td><td>good job that s correct</td><td>12.0 KB</td></tr>
+<tr><td><code>m-108.mp3</code></td><td>Mira line</td><td>brilliant you know this story</td><td>12.4 KB</td></tr>
+<tr><td><code>m-109.mp3</code></td><td>Mira line</td><td>yes indeed nicely done</td><td>12.9 KB</td></tr>
+<tr><td><code>m-110.mp3</code></td><td>Mira line</td><td>hmm not that one want to look at the story again</td><td>17.3 KB</td></tr>
+<tr><td><code>m-111.mp3</code></td><td>Mira line</td><td>almost let s check the story together</td><td>14.8 KB</td></tr>
+<tr><td><code>m-112.mp3</code></td><td>Mira line</td><td>not yet the story can help you want to read it again</td><td>18.5 KB</td></tr>
+<tr><td><code>m-113.mp3</code></td><td>Mira line</td><td>good try let s look back at the story</td><td>15.4 KB</td></tr>
+<tr><td><code>m-114.mp3</code></td><td>Mira line</td><td>oops not that one shall we read that part again</td><td>17.0 KB</td></tr>
+<tr><td><code>m-115.mp3</code></td><td>Mira line</td><td>that s not it yet take another look at the story</td><td>16.9 KB</td></tr>
+<tr><td><code>m-116.mp3</code></td><td>Mira line</td><td>close but not quite want to peek at the story</td><td>16.9 KB</td></tr>
+<tr><td><code>m-117.mp3</code></td><td>Mira line</td><td>try again think about what you read</td><td>14.5 KB</td></tr>
+<tr><td><code>m-118.mp3</code></td><td>Mira line</td><td>take your time and try another one</td><td>14.1 KB</td></tr>
+<tr><td><code>m-119.mp3</code></td><td>Mira line</td><td>you can do this pick again</td><td>12.7 KB</td></tr>
+<tr><td><code>m-120.mp3</code></td><td>Mira line</td><td>read the question once more then choose</td><td>15.2 KB</td></tr>
+<tr><td><code>m-121.mp3</code></td><td>Mira line</td><td>think about the story then try again</td><td>14.6 KB</td></tr>
+<tr><td><code>m-122.mp3</code></td><td>Mira line</td><td>don t give up try a different answer</td><td>14.2 KB</td></tr>
+<tr><td><code>m-123.mp3</code></td><td>Mira line</td><td>let s turn the page</td><td>11.0 KB</td></tr>
+<tr><td><code>m-124.mp3</code></td><td>Mira line</td><td>here s the next page</td><td>11.1 KB</td></tr>
+<tr><td><code>m-125.mp3</code></td><td>Mira line</td><td>on to the next page</td><td>11.1 KB</td></tr>
+<tr><td><code>m-126.mp3</code></td><td>Mira line</td><td>let s keep reading</td><td>10.8 KB</td></tr>
+<tr><td><code>m-127.mp3</code></td><td>Mira line</td><td>ready for more here s the next page</td><td>15.0 KB</td></tr>
+<tr><td><code>m-128.mp3</code></td><td>Mira line</td><td>now a question about this page</td><td>13.2 KB</td></tr>
+<tr><td><code>m-129.mp3</code></td><td>Mira line</td><td>let s see what you remember from this page</td><td>14.2 KB</td></tr>
+<tr><td><code>m-130.mp3</code></td><td>Mira line</td><td>question time think about what you just read</td><td>16.4 KB</td></tr>
+<tr><td><code>m-131.mp3</code></td><td>Mira line</td><td>here s a question about that page</td><td>13.5 KB</td></tr>
+<tr><td><code>m-132.mp3</code></td><td>Mira line</td><td>here s a new story read carefully and look for the main character</td><td>20.6 KB</td></tr>
+<tr><td><code>m-133.mp3</code></td><td>Mira line</td><td>story time who is in this story and what do they want</td><td>18.6 KB</td></tr>
+<tr><td><code>m-134.mp3</code></td><td>Mira line</td><td>let s begin read slowly and picture the story in your mind</td><td>20.2 KB</td></tr>
+<tr><td><code>m-135.mp3</code></td><td>Mira line</td><td>keep going watch for the problem in the story</td><td>16.4 KB</td></tr>
+<tr><td><code>m-136.mp3</code></td><td>Mira line</td><td>what is happening now read carefully</td><td>14.7 KB</td></tr>
+<tr><td><code>m-137.mp3</code></td><td>Mira line</td><td>think about what the character does next</td><td>14.1 KB</td></tr>
+<tr><td><code>m-138.mp3</code></td><td>Mira line</td><td>which card has the right story part</td><td>14.0 KB</td></tr>
+<tr><td><code>m-139.mp3</code></td><td>Mira line</td><td>find the right card and run into it</td><td>14.4 KB</td></tr>
+<tr><td><code>m-140.mp3</code></td><td>Mira line</td><td>look at all three cards then choose</td><td>14.5 KB</td></tr>
+<tr><td><code>m-141.mp3</code></td><td>Mira line</td><td>remember the story which one fits</td><td>14.5 KB</td></tr>
+<tr><td><code>m-142.mp3</code></td><td>Mira line</td><td>boost that s the right part</td><td>12.6 KB</td></tr>
+<tr><td><code>m-143.mp3</code></td><td>Mira line</td><td>nice catch keep running</td><td>12.1 KB</td></tr>
+<tr><td><code>m-144.mp3</code></td><td>Mira line</td><td>you got it speed up</td><td>11.3 KB</td></tr>
+<tr><td><code>m-145.mp3</code></td><td>Mira line</td><td>perfect the patrol can t keep up</td><td>14.4 KB</td></tr>
+<tr><td><code>m-146.mp3</code></td><td>Mira line</td><td>not quite that one will come back the patrol is closing in</td><td>19.3 KB</td></tr>
+<tr><td><code>m-147.mp3</code></td><td>Mira line</td><td>oops wrong card you ll see it again soon</td><td>15.9 KB</td></tr>
+<tr><td><code>m-148.mp3</code></td><td>Mira line</td><td>not that one think about the story and try again later</td><td>19.0 KB</td></tr>
+<tr><td><code>m-149.mp3</code></td><td>Mira line</td><td>careful that part will come back run faster</td><td>17.1 KB</td></tr>
+<tr><td><code>m-150.mp3</code></td><td>Mira line</td><td>this one is back think about the story and try again</td><td>18.4 KB</td></tr>
+<tr><td><code>m-151.mp3</code></td><td>Mira line</td><td>here it is again which card is right this time</td><td>16.8 KB</td></tr>
+<tr><td><code>m-152.mp3</code></td><td>Mira line</td><td>second chance remember what happened in the story</td><td>17.0 KB</td></tr>
+<tr><td><code>m-153.mp3</code></td><td>Mira line</td><td>all the story parts are yours race to the finish</td><td>17.2 KB</td></tr>
+<tr><td><code>m-154.mp3</code></td><td>Mira line</td><td>that s all five now run to the finish line</td><td>16.2 KB</td></tr>
+<tr><td><code>m-155.mp3</code></td><td>Mira line</td><td>finish line you escaped the patrol</td><td>14.2 KB</td></tr>
+<tr><td><code>m-156.mp3</code></td><td>Mira line</td><td>hooray mission complete</td><td>12.2 KB</td></tr>
+<tr><td><code>m-157.mp3</code></td><td>Mira line</td><td>this is the last page how does it all end</td><td>15.7 KB</td></tr>
+<tr><td><code>m-158.mp3</code></td><td>Mira line</td><td>last page think about how the problem was solved</td><td>17.1 KB</td></tr>
+<tr><td><code>m-159.mp3</code></td><td>Mira line</td><td>almost done read how the story ends</td><td>15.3 KB</td></tr>
+<tr><td><code>m-160.mp3</code></td><td>Mira line</td><td>great running now put the story parts in order tap the somebody part first then wanted but so and then tap a placed part to take it back</td><td>41.4 KB</td></tr>
+<tr><td><code>m-161.mp3</code></td><td>Mira line</td><td>perfect order on the first try now use these parts to write your summary</td><td>23.1 KB</td></tr>
+<tr><td><code>m-162.mp3</code></td><td>Mira line</td><td>all in order now now use these parts to write your summary</td><td>20.0 KB</td></tr>
+<tr><td><code>m-163.mp3</code></td><td>Mira line</td><td>some parts are not in the right place yet the green ones stay do you want to read the story again</td><td>27.6 KB</td></tr>
+<tr><td><code>m-164.mp3</code></td><td>Mira line</td><td>ask yourself who is it about what did they want and what went wrong</td><td>20.6 KB</td></tr>
+<tr><td><code>m-165.mp3</code></td><td>Mira line</td><td>the race could not start on this device so let s keep going</td><td>18.9 KB</td></tr>
+<tr><td><code>m-166.mp3</code></td><td>Mira line</td><td>last stage write one sentence that tells the main idea of the story in your own words before you check ask yourself did i tell who what they wanted the problem what they did and how it ended</td><td>55.2 KB</td></tr>
+<tr><td><code>m-167.mp3</code></td><td>Mira line</td><td>your sentence is missing some story parts did you tell who what they wanted the problem what they did and how it ended</td><td>34.6 KB</td></tr>
+<tr><td><code>m-168.mp3</code></td><td>Mira line</td><td>the patrol is right behind you collect the right story parts to get away</td><td>23.1 KB</td></tr>
+<tr><td><code>m-169.mp3</code></td><td>Mira line</td><td>welcome start with session 1 you will read and answer race the patrol to collect the story parts put them in order and then write a summary</td><td>39.8 KB</td></tr>
+<tr><td><code>page-01-1.mp3</code></td><td>Story page</td><td>Level 1 “The Playground”, page 1</td><td>47.8 KB</td></tr>
+<tr><td><code>page-01-2.mp3</code></td><td>Story page</td><td>Level 1 “The Playground”, page 2</td><td>44.1 KB</td></tr>
+<tr><td><code>page-01-3.mp3</code></td><td>Story page</td><td>Level 1 “The Playground”, page 3</td><td>57.2 KB</td></tr>
+<tr><td><code>page-01-4.mp3</code></td><td>Story page</td><td>Level 1 “The Playground”, page 4</td><td>73.2 KB</td></tr>
+<tr><td><code>page-01-5.mp3</code></td><td>Story page</td><td>Level 1 “The Playground”, page 5</td><td>29.6 KB</td></tr>
+<tr><td><code>page-02-1.mp3</code></td><td>Story page</td><td>Level 2 “The Day the Crayons Quit”, page 1</td><td>35.3 KB</td></tr>
+<tr><td><code>page-02-2.mp3</code></td><td>Story page</td><td>Level 2 “The Day the Crayons Quit”, page 2</td><td>18.0 KB</td></tr>
+<tr><td><code>page-02-3.mp3</code></td><td>Story page</td><td>Level 2 “The Day the Crayons Quit”, page 3</td><td>23.8 KB</td></tr>
+<tr><td><code>page-02-4.mp3</code></td><td>Story page</td><td>Level 2 “The Day the Crayons Quit”, page 4</td><td>30.4 KB</td></tr>
+<tr><td><code>page-02-5.mp3</code></td><td>Story page</td><td>Level 2 “The Day the Crayons Quit”, page 5</td><td>24.3 KB</td></tr>
+<tr><td><code>page-03-1.mp3</code></td><td>Story page</td><td>Level 3 “The Animal Assignment”, page 1</td><td>29.9 KB</td></tr>
+<tr><td><code>page-03-2.mp3</code></td><td>Story page</td><td>Level 3 “The Animal Assignment”, page 2</td><td>29.5 KB</td></tr>
+<tr><td><code>page-03-3.mp3</code></td><td>Story page</td><td>Level 3 “The Animal Assignment”, page 3</td><td>24.6 KB</td></tr>
+<tr><td><code>page-03-4.mp3</code></td><td>Story page</td><td>Level 3 “The Animal Assignment”, page 4</td><td>29.5 KB</td></tr>
+<tr><td><code>page-03-5.mp3</code></td><td>Story page</td><td>Level 3 “The Animal Assignment”, page 5</td><td>34.3 KB</td></tr>
+<tr><td><code>page-04-1.mp3</code></td><td>Story page</td><td>Level 4 “Escaping the Room”, page 1</td><td>24.8 KB</td></tr>
+<tr><td><code>page-04-2.mp3</code></td><td>Story page</td><td>Level 4 “Escaping the Room”, page 2</td><td>22.0 KB</td></tr>
+<tr><td><code>page-04-3.mp3</code></td><td>Story page</td><td>Level 4 “Escaping the Room”, page 3</td><td>19.4 KB</td></tr>
+<tr><td><code>page-04-4.mp3</code></td><td>Story page</td><td>Level 4 “Escaping the Room”, page 4</td><td>27.1 KB</td></tr>
+<tr><td><code>page-04-5.mp3</code></td><td>Story page</td><td>Level 4 “Escaping the Room”, page 5</td><td>24.5 KB</td></tr>
+<tr><td><code>page-05-1.mp3</code></td><td>Story page</td><td>Level 5 “Seeking a Friend”, page 1</td><td>31.4 KB</td></tr>
+<tr><td><code>page-05-2.mp3</code></td><td>Story page</td><td>Level 5 “Seeking a Friend”, page 2</td><td>19.7 KB</td></tr>
+<tr><td><code>page-05-3.mp3</code></td><td>Story page</td><td>Level 5 “Seeking a Friend”, page 3</td><td>16.3 KB</td></tr>
+<tr><td><code>page-05-4.mp3</code></td><td>Story page</td><td>Level 5 “Seeking a Friend”, page 4</td><td>22.0 KB</td></tr>
+<tr><td><code>page-05-5.mp3</code></td><td>Story page</td><td>Level 5 “Seeking a Friend”, page 5</td><td>25.9 KB</td></tr>
+<tr><td><code>page-06-1.mp3</code></td><td>Story page</td><td>Level 6 “Shawn the Speedy Snail”, page 1</td><td>36.2 KB</td></tr>
+<tr><td><code>page-06-2.mp3</code></td><td>Story page</td><td>Level 6 “Shawn the Speedy Snail”, page 2</td><td>22.8 KB</td></tr>
+<tr><td><code>page-06-3.mp3</code></td><td>Story page</td><td>Level 6 “Shawn the Speedy Snail”, page 3</td><td>30.2 KB</td></tr>
+<tr><td><code>page-06-4.mp3</code></td><td>Story page</td><td>Level 6 “Shawn the Speedy Snail”, page 4</td><td>31.0 KB</td></tr>
+<tr><td><code>page-06-5.mp3</code></td><td>Story page</td><td>Level 6 “Shawn the Speedy Snail”, page 5</td><td>30.9 KB</td></tr>
+<tr><td><code>page-07-1.mp3</code></td><td>Story page</td><td>Level 7 “Emma's Favorite Restaurant”, page 1</td><td>32.6 KB</td></tr>
+<tr><td><code>page-07-2.mp3</code></td><td>Story page</td><td>Level 7 “Emma's Favorite Restaurant”, page 2</td><td>22.0 KB</td></tr>
+<tr><td><code>page-07-3.mp3</code></td><td>Story page</td><td>Level 7 “Emma's Favorite Restaurant”, page 3</td><td>21.5 KB</td></tr>
+<tr><td><code>page-07-4.mp3</code></td><td>Story page</td><td>Level 7 “Emma's Favorite Restaurant”, page 4</td><td>21.8 KB</td></tr>
+<tr><td><code>page-07-5.mp3</code></td><td>Story page</td><td>Level 7 “Emma's Favorite Restaurant”, page 5</td><td>25.9 KB</td></tr>
+<tr><td><code>page-08-1.mp3</code></td><td>Story page</td><td>Level 8 “The Case of the Missing Lunch”, page 1</td><td>27.4 KB</td></tr>
+<tr><td><code>page-08-2.mp3</code></td><td>Story page</td><td>Level 8 “The Case of the Missing Lunch”, page 2</td><td>19.9 KB</td></tr>
+<tr><td><code>page-08-3.mp3</code></td><td>Story page</td><td>Level 8 “The Case of the Missing Lunch”, page 3</td><td>20.8 KB</td></tr>
+<tr><td><code>page-08-4.mp3</code></td><td>Story page</td><td>Level 8 “The Case of the Missing Lunch”, page 4</td><td>26.4 KB</td></tr>
+<tr><td><code>page-08-5.mp3</code></td><td>Story page</td><td>Level 8 “The Case of the Missing Lunch”, page 5</td><td>24.8 KB</td></tr>
+<tr><td><code>page-09-1.mp3</code></td><td>Story page</td><td>Level 9 “The Selfish Giant”, page 1</td><td>27.6 KB</td></tr>
+<tr><td><code>page-09-2.mp3</code></td><td>Story page</td><td>Level 9 “The Selfish Giant”, page 2</td><td>22.3 KB</td></tr>
+<tr><td><code>page-09-3.mp3</code></td><td>Story page</td><td>Level 9 “The Selfish Giant”, page 3</td><td>20.1 KB</td></tr>
+<tr><td><code>page-09-4.mp3</code></td><td>Story page</td><td>Level 9 “The Selfish Giant”, page 4</td><td>23.5 KB</td></tr>
+<tr><td><code>page-09-5.mp3</code></td><td>Story page</td><td>Level 9 “The Selfish Giant”, page 5</td><td>17.8 KB</td></tr>
+<tr><td><code>page-10-1.mp3</code></td><td>Story page</td><td>Level 10 “A Visit to the Zoo”, page 1</td><td>27.6 KB</td></tr>
+<tr><td><code>page-10-2.mp3</code></td><td>Story page</td><td>Level 10 “A Visit to the Zoo”, page 2</td><td>14.5 KB</td></tr>
+<tr><td><code>page-10-3.mp3</code></td><td>Story page</td><td>Level 10 “A Visit to the Zoo”, page 3</td><td>22.1 KB</td></tr>
+<tr><td><code>page-10-4.mp3</code></td><td>Story page</td><td>Level 10 “A Visit to the Zoo”, page 4</td><td>17.2 KB</td></tr>
+<tr><td><code>page-10-5.mp3</code></td><td>Story page</td><td>Level 10 “A Visit to the Zoo”, page 5</td><td>32.5 KB</td></tr>
+<tr><td><code>page-11-1.mp3</code></td><td>Story page</td><td>Level 11 “Be Careful What You Wish For”, page 1</td><td>35.4 KB</td></tr>
+<tr><td><code>page-11-2.mp3</code></td><td>Story page</td><td>Level 11 “Be Careful What You Wish For”, page 2</td><td>29.6 KB</td></tr>
+<tr><td><code>page-11-3.mp3</code></td><td>Story page</td><td>Level 11 “Be Careful What You Wish For”, page 3</td><td>36.1 KB</td></tr>
+<tr><td><code>page-11-4.mp3</code></td><td>Story page</td><td>Level 11 “Be Careful What You Wish For”, page 4</td><td>26.3 KB</td></tr>
+<tr><td><code>page-11-5.mp3</code></td><td>Story page</td><td>Level 11 “Be Careful What You Wish For”, page 5</td><td>33.7 KB</td></tr>
+<tr><td><code>page-12-1.mp3</code></td><td>Story page</td><td>Level 12 “AgitAgueda”, page 1</td><td>35.8 KB</td></tr>
+<tr><td><code>page-12-2.mp3</code></td><td>Story page</td><td>Level 12 “AgitAgueda”, page 2</td><td>26.5 KB</td></tr>
+<tr><td><code>page-12-3.mp3</code></td><td>Story page</td><td>Level 12 “AgitAgueda”, page 3</td><td>29.5 KB</td></tr>
+<tr><td><code>page-12-4.mp3</code></td><td>Story page</td><td>Level 12 “AgitAgueda”, page 4</td><td>36.6 KB</td></tr>
+<tr><td><code>page-12-5.mp3</code></td><td>Story page</td><td>Level 12 “AgitAgueda”, page 5</td><td>28.6 KB</td></tr>
+<tr><td><code>page-13-1.mp3</code></td><td>Story page</td><td>Level 13 “The Crowded House: A Folktale”, page 1</td><td>38.1 KB</td></tr>
+<tr><td><code>page-13-2.mp3</code></td><td>Story page</td><td>Level 13 “The Crowded House: A Folktale”, page 2</td><td>23.8 KB</td></tr>
+<tr><td><code>page-13-3.mp3</code></td><td>Story page</td><td>Level 13 “The Crowded House: A Folktale”, page 3</td><td>34.7 KB</td></tr>
+<tr><td><code>page-13-4.mp3</code></td><td>Story page</td><td>Level 13 “The Crowded House: A Folktale”, page 4</td><td>35.5 KB</td></tr>
+<tr><td><code>page-13-5.mp3</code></td><td>Story page</td><td>Level 13 “The Crowded House: A Folktale”, page 5</td><td>32.4 KB</td></tr>
+<tr><td><code>page-14-1.mp3</code></td><td>Story page</td><td>Level 14 “Owen and Mzee”, page 1</td><td>32.9 KB</td></tr>
+<tr><td><code>page-14-2.mp3</code></td><td>Story page</td><td>Level 14 “Owen and Mzee”, page 2</td><td>20.6 KB</td></tr>
+<tr><td><code>page-14-3.mp3</code></td><td>Story page</td><td>Level 14 “Owen and Mzee”, page 3</td><td>27.6 KB</td></tr>
+<tr><td><code>page-14-4.mp3</code></td><td>Story page</td><td>Level 14 “Owen and Mzee”, page 4</td><td>20.7 KB</td></tr>
+<tr><td><code>page-14-5.mp3</code></td><td>Story page</td><td>Level 14 “Owen and Mzee”, page 5</td><td>23.4 KB</td></tr>
+<tr><td><code>page-15-1.mp3</code></td><td>Story page</td><td>Level 15 “In Grandfather's Day”, page 1</td><td>29.1 KB</td></tr>
+<tr><td><code>page-15-2.mp3</code></td><td>Story page</td><td>Level 15 “In Grandfather's Day”, page 2</td><td>23.8 KB</td></tr>
+<tr><td><code>page-15-3.mp3</code></td><td>Story page</td><td>Level 15 “In Grandfather's Day”, page 3</td><td>26.1 KB</td></tr>
+<tr><td><code>page-15-4.mp3</code></td><td>Story page</td><td>Level 15 “In Grandfather's Day”, page 4</td><td>27.0 KB</td></tr>
+<tr><td><code>page-15-5.mp3</code></td><td>Story page</td><td>Level 15 “In Grandfather's Day”, page 5</td><td>30.5 KB</td></tr>
+<tr><td><code>page-16-1.mp3</code></td><td>Story page</td><td>Level 16 “You Can't Always Tell”, page 1</td><td>35.3 KB</td></tr>
+<tr><td><code>page-16-2.mp3</code></td><td>Story page</td><td>Level 16 “You Can't Always Tell”, page 2</td><td>31.8 KB</td></tr>
+<tr><td><code>page-16-3.mp3</code></td><td>Story page</td><td>Level 16 “You Can't Always Tell”, page 3</td><td>29.7 KB</td></tr>
+<tr><td><code>page-16-4.mp3</code></td><td>Story page</td><td>Level 16 “You Can't Always Tell”, page 4</td><td>30.7 KB</td></tr>
+<tr><td><code>page-16-5.mp3</code></td><td>Story page</td><td>Level 16 “You Can't Always Tell”, page 5</td><td>37.2 KB</td></tr>
+<tr><td><code>page-17-1.mp3</code></td><td>Story page</td><td>Level 17 “Shuffle to Buffalo”, page 1</td><td>26.1 KB</td></tr>
+<tr><td><code>page-17-2.mp3</code></td><td>Story page</td><td>Level 17 “Shuffle to Buffalo”, page 2</td><td>20.8 KB</td></tr>
+<tr><td><code>page-17-3.mp3</code></td><td>Story page</td><td>Level 17 “Shuffle to Buffalo”, page 3</td><td>24.6 KB</td></tr>
+<tr><td><code>page-17-4.mp3</code></td><td>Story page</td><td>Level 17 “Shuffle to Buffalo”, page 4</td><td>26.8 KB</td></tr>
+<tr><td><code>page-17-5.mp3</code></td><td>Story page</td><td>Level 17 “Shuffle to Buffalo”, page 5</td><td>25.3 KB</td></tr>
+<tr><td><code>page-18-1.mp3</code></td><td>Story page</td><td>Level 18 “In Grandfather's Day”, page 1</td><td>27.0 KB</td></tr>
+<tr><td><code>page-18-2.mp3</code></td><td>Story page</td><td>Level 18 “In Grandfather's Day”, page 2</td><td>27.1 KB</td></tr>
+<tr><td><code>page-18-3.mp3</code></td><td>Story page</td><td>Level 18 “In Grandfather's Day”, page 3</td><td>32.3 KB</td></tr>
+<tr><td><code>page-18-4.mp3</code></td><td>Story page</td><td>Level 18 “In Grandfather's Day”, page 4</td><td>22.1 KB</td></tr>
+<tr><td><code>page-18-5.mp3</code></td><td>Story page</td><td>Level 18 “In Grandfather's Day”, page 5</td><td>32.9 KB</td></tr>
+<tr><td><code>page-19-1.mp3</code></td><td>Story page</td><td>Level 19 “The Boy With the Ball”, page 1</td><td>28.9 KB</td></tr>
+<tr><td><code>page-19-2.mp3</code></td><td>Story page</td><td>Level 19 “The Boy With the Ball”, page 2</td><td>15.6 KB</td></tr>
+<tr><td><code>page-19-3.mp3</code></td><td>Story page</td><td>Level 19 “The Boy With the Ball”, page 3</td><td>23.7 KB</td></tr>
+<tr><td><code>page-19-4.mp3</code></td><td>Story page</td><td>Level 19 “The Boy With the Ball”, page 4</td><td>23.5 KB</td></tr>
+<tr><td><code>page-19-5.mp3</code></td><td>Story page</td><td>Level 19 “The Boy With the Ball”, page 5</td><td>21.8 KB</td></tr>
+<tr><td><code>page-20-1.mp3</code></td><td>Story page</td><td>Level 20 “Sploosh!”, page 1</td><td>27.9 KB</td></tr>
+<tr><td><code>page-20-2.mp3</code></td><td>Story page</td><td>Level 20 “Sploosh!”, page 2</td><td>21.6 KB</td></tr>
+<tr><td><code>page-20-3.mp3</code></td><td>Story page</td><td>Level 20 “Sploosh!”, page 3</td><td>27.5 KB</td></tr>
+<tr><td><code>page-20-4.mp3</code></td><td>Story page</td><td>Level 20 “Sploosh!”, page 4</td><td>26.1 KB</td></tr>
+<tr><td><code>page-20-5.mp3</code></td><td>Story page</td><td>Level 20 “Sploosh!”, page 5</td><td>34.9 KB</td></tr>
+<tr><td><code>page-21-1.mp3</code></td><td>Story page</td><td>Level 21 “First Day at the Factory”, page 1</td><td>26.7 KB</td></tr>
+<tr><td><code>page-21-2.mp3</code></td><td>Story page</td><td>Level 21 “First Day at the Factory”, page 2</td><td>22.7 KB</td></tr>
+<tr><td><code>page-21-3.mp3</code></td><td>Story page</td><td>Level 21 “First Day at the Factory”, page 3</td><td>25.2 KB</td></tr>
+<tr><td><code>page-21-4.mp3</code></td><td>Story page</td><td>Level 21 “First Day at the Factory”, page 4</td><td>25.5 KB</td></tr>
+<tr><td><code>page-21-5.mp3</code></td><td>Story page</td><td>Level 21 “First Day at the Factory”, page 5</td><td>29.0 KB</td></tr>
+<tr><td><code>page-22-1.mp3</code></td><td>Story page</td><td>Level 22 “An Ice Idea”, page 1</td><td>30.0 KB</td></tr>
+<tr><td><code>page-22-2.mp3</code></td><td>Story page</td><td>Level 22 “An Ice Idea”, page 2</td><td>23.4 KB</td></tr>
+<tr><td><code>page-22-3.mp3</code></td><td>Story page</td><td>Level 22 “An Ice Idea”, page 3</td><td>19.6 KB</td></tr>
+<tr><td><code>page-22-4.mp3</code></td><td>Story page</td><td>Level 22 “An Ice Idea”, page 4</td><td>29.5 KB</td></tr>
+<tr><td><code>page-22-5.mp3</code></td><td>Story page</td><td>Level 22 “An Ice Idea”, page 5</td><td>32.0 KB</td></tr>
+<tr><td><code>page-23-1.mp3</code></td><td>Story page</td><td>Level 23 “How to Skateboard”, page 1</td><td>25.0 KB</td></tr>
+<tr><td><code>page-23-2.mp3</code></td><td>Story page</td><td>Level 23 “How to Skateboard”, page 2</td><td>23.8 KB</td></tr>
+<tr><td><code>page-23-3.mp3</code></td><td>Story page</td><td>Level 23 “How to Skateboard”, page 3</td><td>22.5 KB</td></tr>
+<tr><td><code>page-23-4.mp3</code></td><td>Story page</td><td>Level 23 “How to Skateboard”, page 4</td><td>26.2 KB</td></tr>
+<tr><td><code>page-23-5.mp3</code></td><td>Story page</td><td>Level 23 “How to Skateboard”, page 5</td><td>27.1 KB</td></tr>
+<tr><td><code>page-24-1.mp3</code></td><td>Story page</td><td>Level 24 “Anansi and the Cook Pots”, page 1</td><td>28.8 KB</td></tr>
+<tr><td><code>page-24-2.mp3</code></td><td>Story page</td><td>Level 24 “Anansi and the Cook Pots”, page 2</td><td>20.3 KB</td></tr>
+<tr><td><code>page-24-3.mp3</code></td><td>Story page</td><td>Level 24 “Anansi and the Cook Pots”, page 3</td><td>31.4 KB</td></tr>
+<tr><td><code>page-24-4.mp3</code></td><td>Story page</td><td>Level 24 “Anansi and the Cook Pots”, page 4</td><td>25.1 KB</td></tr>
+<tr><td><code>page-24-5.mp3</code></td><td>Story page</td><td>Level 24 “Anansi and the Cook Pots”, page 5</td><td>29.1 KB</td></tr>
+<tr><td><code>page-25-1.mp3</code></td><td>Story page</td><td>Level 25 “A Pool Fit for a Hedgehog”, page 1</td><td>32.2 KB</td></tr>
+<tr><td><code>page-25-2.mp3</code></td><td>Story page</td><td>Level 25 “A Pool Fit for a Hedgehog”, page 2</td><td>21.4 KB</td></tr>
+<tr><td><code>page-25-3.mp3</code></td><td>Story page</td><td>Level 25 “A Pool Fit for a Hedgehog”, page 3</td><td>20.0 KB</td></tr>
+<tr><td><code>page-25-4.mp3</code></td><td>Story page</td><td>Level 25 “A Pool Fit for a Hedgehog”, page 4</td><td>25.8 KB</td></tr>
+<tr><td><code>page-25-5.mp3</code></td><td>Story page</td><td>Level 25 “A Pool Fit for a Hedgehog”, page 5</td><td>23.7 KB</td></tr>
+<tr><td><code>page-26-1.mp3</code></td><td>Story page</td><td>Level 26 “First Fast”, page 1</td><td>24.1 KB</td></tr>
+<tr><td><code>page-26-2.mp3</code></td><td>Story page</td><td>Level 26 “First Fast”, page 2</td><td>21.4 KB</td></tr>
+<tr><td><code>page-26-3.mp3</code></td><td>Story page</td><td>Level 26 “First Fast”, page 3</td><td>25.6 KB</td></tr>
+<tr><td><code>page-26-4.mp3</code></td><td>Story page</td><td>Level 26 “First Fast”, page 4</td><td>27.2 KB</td></tr>
+<tr><td><code>page-26-5.mp3</code></td><td>Story page</td><td>Level 26 “First Fast”, page 5</td><td>34.7 KB</td></tr>
+<tr><td><code>page-27-1.mp3</code></td><td>Story page</td><td>Level 27 “Baba Yaga, the Girl, and the Hedgehog”, page 1</td><td>33.9 KB</td></tr>
+<tr><td><code>page-27-2.mp3</code></td><td>Story page</td><td>Level 27 “Baba Yaga, the Girl, and the Hedgehog”, page 2</td><td>21.3 KB</td></tr>
+<tr><td><code>page-27-3.mp3</code></td><td>Story page</td><td>Level 27 “Baba Yaga, the Girl, and the Hedgehog”, page 3</td><td>23.0 KB</td></tr>
+<tr><td><code>page-27-4.mp3</code></td><td>Story page</td><td>Level 27 “Baba Yaga, the Girl, and the Hedgehog”, page 4</td><td>28.6 KB</td></tr>
+<tr><td><code>page-27-5.mp3</code></td><td>Story page</td><td>Level 27 “Baba Yaga, the Girl, and the Hedgehog”, page 5</td><td>28.3 KB</td></tr>
+<tr><td><code>page-28-1.mp3</code></td><td>Story page</td><td>Level 28 “Why Does the Ocean Have Waves?”, page 1</td><td>31.1 KB</td></tr>
+<tr><td><code>page-28-2.mp3</code></td><td>Story page</td><td>Level 28 “Why Does the Ocean Have Waves?”, page 2</td><td>23.9 KB</td></tr>
+<tr><td><code>page-28-3.mp3</code></td><td>Story page</td><td>Level 28 “Why Does the Ocean Have Waves?”, page 3</td><td>36.5 KB</td></tr>
+<tr><td><code>page-28-4.mp3</code></td><td>Story page</td><td>Level 28 “Why Does the Ocean Have Waves?”, page 4</td><td>33.9 KB</td></tr>
+<tr><td><code>page-28-5.mp3</code></td><td>Story page</td><td>Level 28 “Why Does the Ocean Have Waves?”, page 5</td><td>32.6 KB</td></tr>
+<tr><td><code>page-29-1.mp3</code></td><td>Story page</td><td>Level 29 “Clara Barton: Civil War Hero”, page 1</td><td>31.1 KB</td></tr>
+<tr><td><code>page-29-2.mp3</code></td><td>Story page</td><td>Level 29 “Clara Barton: Civil War Hero”, page 2</td><td>24.8 KB</td></tr>
+<tr><td><code>page-29-3.mp3</code></td><td>Story page</td><td>Level 29 “Clara Barton: Civil War Hero”, page 3</td><td>24.6 KB</td></tr>
+<tr><td><code>page-29-4.mp3</code></td><td>Story page</td><td>Level 29 “Clara Barton: Civil War Hero”, page 4</td><td>28.4 KB</td></tr>
+<tr><td><code>page-29-5.mp3</code></td><td>Story page</td><td>Level 29 “Clara Barton: Civil War Hero”, page 5</td><td>36.6 KB</td></tr>
+<tr><td><code>page-30-1.mp3</code></td><td>Story page</td><td>Level 30 “We Also Serve”, page 1</td><td>33.9 KB</td></tr>
+<tr><td><code>page-30-2.mp3</code></td><td>Story page</td><td>Level 30 “We Also Serve”, page 2</td><td>25.2 KB</td></tr>
+<tr><td><code>page-30-3.mp3</code></td><td>Story page</td><td>Level 30 “We Also Serve”, page 3</td><td>34.9 KB</td></tr>
+<tr><td><code>page-30-4.mp3</code></td><td>Story page</td><td>Level 30 “We Also Serve”, page 4</td><td>32.0 KB</td></tr>
+<tr><td><code>page-30-5.mp3</code></td><td>Story page</td><td>Level 30 “We Also Serve”, page 5</td><td>31.9 KB</td></tr>
+</table></div></details>
+</section>
+
+<section class="num"><h2><span class="n">7</span>Fonts</h2>
+<h3>Fonts</h3><div class='tw'><table><tr><th>File</th><th>Size</th><th>Used in the game</th><th>Source</th><th>Author</th><th>License</th></tr><tr><td><code>fonts/LuckiestGuy-Regular.woff2</code></td><td>26 KB</td><td>Logo, big titles, scores</td><td><a href='https://fonts.google.com/specimen/Luckiest+Guy'>Google Fonts: Luckiest Guy</a></td><td>Astigmatic</td><td>Apache License 2.0</td></tr><tr><td><code>fonts/Fredoka-Variable.woff2</code></td><td>28 KB</td><td>Buttons and interface text</td><td><a href='https://fonts.google.com/specimen/Fredoka'>Google Fonts: Fredoka</a></td><td>Milena Brandão, Hafontia</td><td>SIL Open Font License 1.1</td></tr><tr><td><code>fonts/Andika-Regular.woff2</code></td><td>19 KB</td><td>Story text, questions, answers</td><td><a href='https://fonts.google.com/specimen/Andika'>Google Fonts: Andika</a></td><td>SIL International</td><td>SIL Open Font License 1.1</td></tr><tr><td><code>fonts/Andika-Bold.woff2</code></td><td>19 KB</td><td>Bold story text</td><td>Same</td><td>SIL International</td><td>SIL Open Font License 1.1</td></tr><tr><td><code>fonts/LilitaOne-Regular.woff2</code></td><td>12 KB</td><td>Back-up interface font</td><td><a href='https://fonts.google.com/specimen/Lilita+One'>Google Fonts: Lilita One</a></td><td>Juan Montoreano</td><td>SIL Open Font License 1.1</td></tr><tr><td><code>fonts/AtkinsonHyperlegible-Regular.woff2</code></td><td>23 KB</td><td>Back-up reading font</td><td><a href='https://fonts.google.com/specimen/Atkinson+Hyperlegible'>Google Fonts: Atkinson Hyperlegible</a></td><td>Braille Institute of America</td><td>SIL Open Font License 1.1</td></tr><tr><td><code>fonts/AtkinsonHyperlegible-Bold.woff2</code></td><td>23 KB</td><td>Back-up reading font, bold</td><td>Same</td><td>Braille Institute of America</td><td>SIL Open Font License 1.1</td></tr></table></div>
+<p>All fonts are bundled in the app; nothing is loaded from Google at run time.</p>
+</section>
+
+<section class="num"><h2><span class="n">8</span>Images</h2>
+<h3>Images</h3><div class='tw'><table><tr><th>File</th><th>Size</th><th>Used in the game</th><th>Source</th><th>Author</th><th>License</th></tr><tr><td><code>ui/mira-hello.png</code></td><td>29 KB</td><td>Teacher Mira waving on the title screen</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/mira-talk.png</code></td><td>16 KB</td><td>Mira talking (default mood in the dock)</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/mira-happy.png</code></td><td>20 KB</td><td>Mira after a right answer</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/mira-think.png</code></td><td>17 KB</td><td>Mira after a wrong answer</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/mira-wave.png</code></td><td>17 KB</td><td>Mira greeting</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/mira-cheer.png</code></td><td>14 KB</td><td>Mira on the results screen</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/mira.png</code></td><td>15 KB</td><td>Mira's small face in the race speech bubble</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/mira-full.png</code></td><td>23 KB</td><td><b>Not used</b> by the current code</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/backdrop.jpg</code></td><td>164 KB</td><td>Title screen and general background</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/world-0.jpg</code></td><td>111 KB</td><td>Sunny Meadow page art and backdrop</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/world-1.jpg</code></td><td>114 KB</td><td>River Bend</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/world-2.jpg</code></td><td>137 KB</td><td>Story Town</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/world-3.jpg</code></td><td>113 KB</td><td>Palm Beach</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/world-4.jpg</code></td><td>106 KB</td><td>Summit Peak</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/star.png</code></td><td>7 KB</td><td>Earned star</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>ui/star-off.png</code></td><td>7 KB</td><td>Empty star</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>icons/icon-192.png</code></td><td>16 KB</td><td>Browser tab icon</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>icons/icon-512.png</code></td><td>37 KB</td><td>Large app icon</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td><code>res/mipmap-*/ic_launcher*.png</code></td><td>—</td><td>Android launcher icon (all sizes)</td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td><td><span class='tag r'>unknown</span></td></tr><tr><td>Mira's small SVG face, map, coins, buttons, sky, scenery made in code</td><td>—</td><td>Drawn in HTML, CSS, SVG and three.js code</td><td>SummaRace code</td><td>SummaRace developer(s)</td><td>Part of the game</td></tr></table></div>
+</section>
+
+<section class="num"><h2><span class="n">9</span>Code libraries and data</h2>
+<h3>Code and data</h3><div class='tw'><table><tr><th>File</th><th>Size</th><th>Used in the game</th><th>Source</th><th>Author</th><th>License</th></tr><tr><td><code>three.min.js</code></td><td>589 KB</td><td>3D engine for the race</td><td><a href='https://github.com/mrdoob/three.js'>github.com/mrdoob/three.js</a> (release r128)</td><td>three.js authors</td><td>MIT</td></tr><tr><td><code>GLTFLoader.js</code></td><td>94 KB</td><td>Loads the GLB models</td><td>three.js examples (<code>examples/js/loaders/GLTFLoader.js</code>), exact release not recorded</td><td>three.js authors</td><td>MIT</td></tr><tr><td><code>words.js</code></td><td>195 KB</td><td>24,887 common English words for the summary spelling check</td><td><a href='https://github.com/rspeer/wordfreq'>wordfreq</a> word list</td><td>Robyn Speer</td><td>CC BY-SA 4.0 (data); the file is shared under the same license</td></tr><tr><td><code>stories.js</code></td><td>174 KB</td><td>The 30 stories, questions and story parts</td><td>Research team's study materials. Wrong choices, race wording and model summaries were written for the game</td><td>Research team (client); game additions by the developer(s)</td><td>Not stated. Original story authors are not listed in the file</td></tr><tr><td><code>voice/voice.js</code></td><td>18 KB</td><td>Index from Mira's lines to voice clips</td><td>Generated by <code>build-voice.sh</code> (lost)</td><td>SummaRace developer(s)</td><td>Part of the game</td></tr><tr><td><code>index.html</code></td><td>288 KB</td><td>The whole game: screens, rules, race</td><td>Written for SummaRace</td><td>SummaRace developer(s)</td><td>Not stated (no LICENSE file in the repo)</td></tr></table></div>
+<p>The Android app (<code>MainActivity.java</code>) uses only the Android SDK. There are no third-party Android libraries.</p>
+</section>
+
+<section class="num"><h2><span class="n">10</span>Tools used to make assets</h2>
+<div class="tw"><table><tr><th>Tool</th><th>Used for</th><th>Link</th></tr>
+<tr><td>glTF-Transform 4.1.1</td><td>Compressing the GLB models (stamped in each file)</td><td><a href="https://gltf-transform.dev">gltf-transform.dev</a></td></tr>
+<tr><td>UnityGLTF</td><td>Exporter stamped inside the coin and cloud files</td><td><a href="https://github.com/KhronosGroup/UnityGLTF">github.com/KhronosGroup/UnityGLTF</a></td></tr>
+<tr><td>Kokoro TTS</td><td>Mira's voice clips</td><td><a href="https://huggingface.co/hexgrad/Kokoro-82M">huggingface.co/hexgrad/Kokoro-82M</a></td></tr>
+<tr><td>FFmpeg (Lavf 60.16)</td><td>Stamped as the encoder in the music files</td><td><a href="https://ffmpeg.org">ffmpeg.org</a></td></tr>
+</table></div>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>

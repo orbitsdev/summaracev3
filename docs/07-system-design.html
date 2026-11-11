@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System Design Document · SummaRace v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="07-system-design.html" aria-current="page">7 · System Design</a> <a href="08-requirements.html">8 · Requirements</a> <a href="assets.html">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
+<main class="page">
+<!--title:System Design Document-->
+<div class="eyebrow">System design</div>
+<h1>System Design Document</h1>
+<p class="meta">SummaRace v3 · version 1.3.6 (versionCode 17) · how the parts of the app fit together and why</p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>This document describes the system as a whole: who uses it, its components, how data moves between them, the main runtime sequences, and the design choices behind them. The TRD lists the tools; this document shows how they work together.</p>
+<p>In short, <b>SummaRace is a single-device, offline system.</b> One Android app holds the game, the content and the saved data. The only data that leaves the phone is a CSV file the teacher exports.</p>
+</section>
+
+<section class="num"><h2><span class="n">2</span>System context</h2>
+<div class="fig"><svg viewBox="0 0 820 300" role="img" aria-label="System context diagram">
+<defs><marker id="s1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12.5" text-anchor="middle">
+<rect x="20" y="40" width="150" height="60" rx="30" fill="#e3f6ea" stroke="#1f9d55"/><text x="95" y="66" font-weight="700">Learner</text><text x="95" y="84" font-size="11" fill="#55536f">Grade 4 pupil</text>
+<rect x="20" y="190" width="150" height="60" rx="30" fill="#fff1df" stroke="#e07a10"/><text x="95" y="216" font-weight="700">Teacher</text><text x="95" y="234" font-size="11" fill="#55536f">hands out phones</text>
+<rect x="290" y="70" width="240" height="150" rx="14" fill="#e8f0ff" stroke="#2563d6" stroke-width="2"/>
+<text x="410" y="104" font-weight="700" font-size="15">SummaRace app</text><text x="410" y="126" fill="#55536f">Android phone, offline</text>
+<text x="410" y="152" font-size="11.5">game · 30 stories · voice</text><text x="410" y="170" font-size="11.5">profiles · progress · records</text><text x="410" y="196" font-size="11" fill="#55536f">no server · no account · no network</text>
+<rect x="650" y="40" width="150" height="60" rx="10" fill="#fff" stroke="#16133a"/><text x="725" y="66" font-weight="700">Spreadsheet</text><text x="725" y="84" font-size="11" fill="#55536f">Excel / Google Sheets</text>
+<rect x="650" y="190" width="150" height="60" rx="10" fill="#fff" stroke="#16133a"/><text x="725" y="216" font-weight="700">Research team</text><text x="725" y="234" font-size="11" fill="#55536f">study results</text>
+<path d="M170 70 L286 110" stroke="#16133a" fill="none" stroke-width="1.5" marker-end="url(#s1)"/><text x="222" y="78" font-size="11" fill="#55536f">plays</text>
+<path d="M170 220 L286 180" stroke="#16133a" fill="none" stroke-width="1.5" marker-end="url(#s1)"/><text x="222" y="222" font-size="11" fill="#55536f">reads records</text>
+<path d="M530 110 L646 72" stroke="#e07a10" fill="none" stroke-width="2" marker-end="url(#s1)"/><text x="575" y="122" font-size="11" fill="#e07a10">CSV (copy / save / share)</text>
+<path d="M725 100 L725 186" stroke="#16133a" fill="none" stroke-width="1.5" marker-end="url(#s1)"/><text x="760" y="148" font-size="11" fill="#55536f">collected</text>
+<path d="M650 220 C560 280 450 280 420 224" stroke="#8a8fa8" fill="none" stroke-dasharray="5 4" stroke-width="1.4" marker-end="url(#s1)"/><text x="560" y="276" font-size="11" fill="#55536f">stories and questions (built into the app)</text>
+</g></svg><figcaption>The orange arrow is the only data that leaves a phone, and only when the teacher chooses to export it.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">3</span>Components</h2>
+<div class="fig"><svg viewBox="0 0 820 470" role="img" aria-label="Component diagram in layers">
+<defs><marker id="s2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">
+<text x="14" y="26" text-anchor="start" font-weight="700" fill="#2563d6">Game modules (index.html)</text>
+<g fill="#e8f0ff" stroke="#2563d6">
+<rect x="14" y="36" width="150" height="54" rx="8"/><rect x="176" y="36" width="150" height="54" rx="8"/><rect x="338" y="36" width="150" height="54" rx="8"/><rect x="500" y="36" width="150" height="54" rx="8"/><rect x="662" y="36" width="146" height="54" rx="8"/>
+<rect x="14" y="102" width="150" height="54" rx="8"/><rect x="176" y="102" width="150" height="54" rx="8"/><rect x="338" y="102" width="150" height="54" rx="8"/><rect x="500" y="102" width="150" height="54" rx="8"/><rect x="662" y="102" width="146" height="54" rx="8"/>
+</g>
+<text x="89" y="59" font-weight="700">Screens</text><text x="89" y="77" font-size="10.5" fill="#55536f">show(id), popups, Back</text>
+<text x="251" y="59" font-weight="700">Level flow</text><text x="251" y="77" font-size="10.5" fill="#55536f">read → race → order → sum</text>
+<text x="413" y="59" font-weight="700">Race engine</text><text x="413" y="77" font-size="10.5" fill="#55536f">three.js scene + loop</text>
+<text x="575" y="59" font-weight="700">Summary checker</text><text x="575" y="77" font-size="10.5" fill="#55536f">offline rules</text>
+<text x="735" y="59" font-weight="700">Records</text><text x="735" y="77" font-size="10.5" fill="#55536f">table · CSV · erase</text>
+<text x="89" y="125" font-weight="700">Teacher Mira</text><text x="89" y="143" font-size="10.5" fill="#55536f">say(), bubble, moods</text>
+<text x="251" y="125" font-weight="700">Voice</text><text x="251" y="143" font-size="10.5" fill="#55536f">clip lookup, priority</text>
+<text x="413" y="125" font-weight="700">Music + SFX</text><text x="413" y="143" font-size="10.5" fill="#55536f">Audio / Web Audio</text>
+<text x="575" y="125" font-weight="700">Map + profiles</text><text x="575" y="143" font-size="10.5" fill="#55536f">unlocks, stars, coins</text>
+<text x="735" y="125" font-weight="700">Storage</text><text x="735" y="143" font-size="10.5" fill="#55536f">loadDb / persist</text>
+<text x="14" y="190" text-anchor="start" font-weight="700" fill="#1f9d55">Data (shipped, read-only)</text>
+<g fill="#e3f6ea" stroke="#1f9d55">
+<rect x="14" y="200" width="150" height="46" rx="8"/><rect x="176" y="200" width="150" height="46" rx="8"/><rect x="338" y="200" width="150" height="46" rx="8"/><rect x="500" y="200" width="150" height="46" rx="8"/><rect x="662" y="200" width="146" height="46" rx="8"/>
+</g>
+<text x="89" y="228">stories.js</text><text x="251" y="228">words.js</text><text x="413" y="228">voice.js + 320 MP3</text><text x="575" y="228">models/*.js · assets.js</text><text x="735" y="228">fonts · ui · music</text>
+<text x="14" y="282" text-anchor="start" font-weight="700" fill="#e07a10">Web runtime (Android System WebView)</text>
+<g fill="#fff1df" stroke="#e07a10">
+<rect x="14" y="292" width="190" height="46" rx="8"/><rect x="216" y="292" width="190" height="46" rx="8"/><rect x="418" y="292" width="190" height="46" rx="8"/><rect x="620" y="292" width="188" height="46" rx="8"/>
+</g>
+<text x="109" y="320">WebGL (three.js r128)</text><text x="311" y="320">Web Audio + HTML Audio</text><text x="513" y="320">localStorage</text><text x="714" y="320">Touch, keyboard, vibrate</text>
+<text x="14" y="374" text-anchor="start" font-weight="700" fill="#16133a">Android shell (MainActivity.java)</text>
+<g fill="#fff" stroke="#16133a">
+<rect x="14" y="384" width="150" height="54" rx="8"/><rect x="176" y="384" width="150" height="54" rx="8"/><rect x="338" y="384" width="150" height="54" rx="8"/><rect x="500" y="384" width="150" height="54" rx="8"/><rect x="662" y="384" width="146" height="54" rx="8"/>
+</g>
+<text x="89" y="407" font-weight="700">WebView host</text><text x="89" y="425" font-size="10.5" fill="#55536f">full screen, portrait</text>
+<text x="251" y="407" font-weight="700">TextToSpeech</text><text x="251" y="425" font-size="10.5" fill="#55536f">speak · stop</text>
+<text x="413" y="407" font-weight="700">Clipboard · Share</text><text x="413" y="425" font-size="10.5" fill="#55536f">copyText · shareText</text>
+<text x="575" y="407" font-weight="700">File save</text><text x="575" y="425" font-size="10.5" fill="#55536f">saveFile → Download</text>
+<text x="735" y="407" font-weight="700">Back · Exit</text><text x="735" y="425" font-size="10.5" fill="#55536f">srBack() · exit()</text>
+<path d="M410 160 L410 196" stroke="#16133a" stroke-width="1.4" marker-end="url(#s2)"/><text x="440" y="182" font-size="10.5" fill="#55536f">reads</text>
+<path d="M410 250 L410 288" stroke="#16133a" stroke-width="1.4" marker-end="url(#s2)"/><text x="440" y="274" font-size="10.5" fill="#55536f">runs on</text>
+<path d="M410 342 L410 380" stroke="#16133a" stroke-width="1.4" marker-end="url(#s2)"/><text x="470" y="366" font-size="10.5" fill="#55536f">window.SummaRaceApp</text>
+<text x="410" y="462" font-size="11" fill="#55536f">Each layer only talks to the one below it. If the Android bridge is missing (desktop browser), the game uses web fallbacks.</text>
+</g></svg><figcaption>Four layers, top to bottom: game logic, shipped data, the browser engine inside Android, and the thin Java shell.</figcaption></div>
+<div class="tw"><table>
+<tr><th>Component</th><th>Responsibility</th><th>Key functions</th></tr>
+<tr><td>Screens</td><td>Shows one screen at a time, step bar, top bar, popups, Android Back handling.</td><td><code>show</code>, <code>openModal</code>, <code>srBack</code></td></tr>
+<tr><td>Level flow</td><td>Runs one level from first page to result and records it.</td><td><code>startLevel</code>, <code>askPage</code>, <code>askMain</code>, <code>startRace</code>, <code>startOrder</code>, <code>startSummary</code>, <code>finishLevel</code></td></tr>
+<tr><td>Race engine</td><td>3D scene, course, patrol, answer gates, end scenes. Self-contained module with its own state.</td><td><code>Race.prepare</code>, <code>Race.stop</code>, <code>Race.warm</code></td></tr>
+<tr><td>Summary checker</td><td>Offline checks and feedback for the 2–3 sentence summary.</td><td><code>checkSummary</code>, <code>scoreSummary</code>, <code>meaningChecks</code></td></tr>
+<tr><td>Teacher Mira + Voice</td><td>Shows and speaks lines, picks a recorded clip, never cuts off story reading.</td><td><code>say</code>, <code>line</code>, <code>clipFor</code>, <code>playClip</code>, <code>speakRaw</code></td></tr>
+<tr><td>Music + SFX</td><td>Looping music with fades and ducking; sound effects from decoded clips or synthesised tones.</td><td><code>Music.play/duck</code>, <code>sfx.*</code></td></tr>
+<tr><td>Map + profiles</td><td>World map, level cards, sign-in, unlocks, stars and coins.</td><td><code>goHome</code>, <code>levelCard</code>, learner form</td></tr>
+<tr><td>Records</td><td>Teacher table, CSV export, erase with undo.</td><td><code>goRecords</code>, <code>csv</code>, ERASE / restore</td></tr>
+<tr><td>Storage</td><td>One JSON object in localStorage, read once, written after every change.</td><td><code>loadDb</code>, <code>persist</code>, <code>savePref</code></td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Data flow through one level</h2>
+<div class="fig"><svg viewBox="0 0 820 400" role="img" aria-label="Sequence diagram for one level">
+<defs><marker id="s3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="11.5" text-anchor="middle">
+<g font-weight="700" font-size="12.5">
+<rect x="20" y="10" width="110" height="32" rx="6" fill="#e3f6ea" stroke="#1f9d55"/><text x="75" y="31">Learner</text>
+<rect x="185" y="10" width="120" height="32" rx="6" fill="#e8f0ff" stroke="#2563d6"/><text x="245" y="31">Level flow</text>
+<rect x="360" y="10" width="120" height="32" rx="6" fill="#e3f6ea" stroke="#1f9d55"/><text x="420" y="31">stories.js</text>
+<rect x="535" y="10" width="120" height="32" rx="6" fill="#fff1df" stroke="#e07a10"/><text x="595" y="31">Race engine</text>
+<rect x="690" y="10" width="120" height="32" rx="6" fill="#fff" stroke="#16133a"/><text x="750" y="31">localStorage</text>
+</g>
+<g stroke="#c9cede" stroke-dasharray="4 4"><path d="M75 42 V390"/><path d="M245 42 V390"/><path d="M420 42 V390"/><path d="M595 42 V390"/><path d="M750 42 V390"/></g>
+<g stroke="#16133a" stroke-width="1.4" fill="none">
+<path d="M75 66 H241" marker-end="url(#s3)"/><path d="M245 92 H416" marker-end="url(#s3)"/><path d="M420 112 H249" marker-end="url(#s3)" stroke-dasharray="5 3"/>
+<path d="M245 140 H79" marker-end="url(#s3)"/><path d="M75 164 H241" marker-end="url(#s3)"/>
+<path d="M245 196 H591" marker-end="url(#s3)"/><path d="M595 222 H79" marker-end="url(#s3)"/><path d="M75 244 H591" marker-end="url(#s3)"/><path d="M595 268 H249" marker-end="url(#s3)" stroke-dasharray="5 3"/>
+<path d="M245 300 H79" marker-end="url(#s3)"/><path d="M75 324 H241" marker-end="url(#s3)"/>
+<path d="M245 356 H746" marker-end="url(#s3)"/>
+</g>
+<text x="158" y="60">tap Play on level n</text>
+<text x="330" y="86">find story n</text><text x="330" y="106" fill="#55536f">pages, questions, SWBST</text>
+<text x="160" y="134">5 pages + questions, main idea</text><text x="160" y="158">answers (first try counted)</text>
+<text x="420" y="190">Race.prepare(5 SWBST questions)</text><text x="335" y="216">questions in lanes</text><text x="335" y="238">swipes, runs through gates</text>
+<text x="420" y="262" fill="#55536f">done(race score, coins)</text>
+<text x="160" y="294">story order, summary checks</text><text x="160" y="318">summary text</text>
+<text x="495" y="350">finishLevel: update profile best + unlock n+1, push record, persist()</text>
+<text x="410" y="384" fill="#55536f">Nothing is written until the result screen, so quitting mid-level leaves no partial record.</text>
+</g></svg><figcaption>Solid arrows are calls or actions; dashed arrows are data coming back.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">5</span>Teacher Mira's voice pipeline</h2>
+<div class="fig"><svg viewBox="0 0 820 220" role="img" aria-label="Voice pipeline">
+<defs><marker id="s4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">
+<g fill="#fff" stroke="#16133a" stroke-width="1.3">
+<rect x="10" y="20" width="130" height="54" rx="8"/><rect x="165" y="20" width="150" height="54" rx="8"/><rect x="340" y="20" width="150" height="54" rx="8"/>
+</g>
+<text x="75" y="43" font-weight="700">say(text)</text><text x="75" y="61" font-size="10.5" fill="#55536f">bubble shows text</text>
+<text x="240" y="43" font-weight="700">Normalise text</text><text x="240" y="61" font-size="10.5" fill="#55536f">swap names/numbers</text>
+<text x="415" y="43" font-weight="700">Look up voice.js</text><text x="415" y="61" font-size="10.5" fill="#55536f">clip for this line?</text>
+<path d="M140 47 L161 47" stroke="#16133a" marker-end="url(#s4)"/><path d="M315 47 L336 47" stroke="#16133a" marker-end="url(#s4)"/>
+<rect x="540" y="10" width="270" height="54" rx="8" fill="#e3f6ea" stroke="#1f9d55"/><text x="675" y="33" font-weight="700">Play recorded clip</text><text x="675" y="51" font-size="10.5" fill="#55536f">Web Audio (cached) or Audio tag · music ducks</text>
+<rect x="540" y="90" width="270" height="54" rx="8" fill="#fff1df" stroke="#e07a10"/><text x="675" y="113" font-weight="700">Phone voice</text><text x="675" y="131" font-size="10.5" fill="#55536f">Android TextToSpeech (en-US) or browser speech</text>
+<path d="M490 40 L536 37" stroke="#1f9d55" stroke-width="1.5" marker-end="url(#s4)"/><text x="512" y="30" fill="#1f9d55" font-size="11">yes</text>
+<path d="M490 60 L536 112" stroke="#e07a10" stroke-width="1.5" marker-end="url(#s4)"/><text x="503" y="100" fill="#e07a10" font-size="11">no</text>
+<rect x="10" y="150" width="800" height="58" rx="8" fill="#f7f8fc" stroke="#c9cede"/>
+<text x="410" y="173" font-weight="700">Priority rule</text><text x="410" y="193" font-size="11" fill="#55536f">Story reading = priority 2, every other line = 1. A short line never cuts off a page being read aloud.</text>
+</g></svg><figcaption>Voice can be switched off in Settings. Lines without a clip sound robotic because they use the phone's own voice.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Race engine state machine</h2>
+<div class="fig"><svg viewBox="0 0 820 260" role="img" aria-label="Race state machine">
+<defs><marker id="s5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="13" text-anchor="middle" font-weight="700">
+<g fill="#fff" stroke="#16133a" stroke-width="1.5">
+<circle cx="80" cy="90" r="40"/><circle cx="250" cy="90" r="40"/><circle cx="420" cy="90" r="40"/><circle cx="590" cy="90" r="40"/><circle cx="745" cy="90" r="40" fill="#e3f6ea" stroke="#1f9d55"/>
+<circle cx="250" cy="215" r="34" fill="#fde8e6" stroke="#d6453b"/>
+</g>
+<text x="80" y="95">run</text><text x="250" y="95">read</text><text x="420" y="95">gate</text><text x="590" y="95">finish</text><text x="745" y="95">done</text><text x="250" y="220">caught</text>
+</g>
+<g font-family="system-ui,sans-serif" font-size="11" fill="#55536f" text-anchor="middle">
+<path d="M120 90 L206 90" stroke="#16133a" marker-end="url(#s5)"/><text x="163" y="80">next question</text>
+<path d="M290 90 L376 90" stroke="#16133a" marker-end="url(#s5)"/><text x="333" y="80">time up</text>
+<path d="M420 50 C420 10 80 10 80 46" stroke="#16133a" fill="none" marker-end="url(#s5)"/><text x="250" y="36">passed gate (right or wrong)</text>
+<path d="M460 90 L546 90" stroke="#16133a" marker-end="url(#s5)"/><text x="503" y="80">all 5 right</text>
+<path d="M630 90 L701 90" stroke="#16133a" marker-end="url(#s5)"/><text x="666" y="80">finish line</text>
+<path d="M95 128 L222 196" stroke="#d6453b" marker-end="url(#s5)"/><path d="M420 130 L282 200" stroke="#d6453b" marker-end="url(#s5)"/>
+<text x="140" y="190" fill="#d6453b">gap reaches 0</text>
+<text x="440" y="235" fill="#d6453b">"Try the race again" → back to run</text>
+<text x="745" y="150">"Mission complete"</text><text x="745" y="166">→ done(score, coins)</text>
+<text x="250" y="140" fill="#1f9d55">gap does not drain here</text>
+</g></svg><figcaption>Each frame: move the world toward the camera at the current speed, update the state, check obstacle and gate collisions, move the patrol by the gap, render.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">7</span>Performance design</h2>
+<div class="tw"><table>
+<tr><th>Problem</th><th>Design choice</th></tr>
+<tr><td>Slow start-up on cheap phones</td><td>Nothing 3D loads at start-up. The 4.5 MB of models preload in the background 1.5 s after the learner's first tap (<code>Race.warm</code>), so they are usually ready before the first race.</td></tr>
+<tr><td>Low frame rate in the race</td><td>The first 2.5 s of a race are timed. Below 22 fps the game switches to low mode: no falling leaves, no sun shadows, less side scenery, pixel ratio 1. Pixel ratio is capped at 1.5 in any case.</td></tr>
+<tr><td>Memory growing during a race</td><td>Obstacles and effects free their GPU geometry, materials and textures when removed; shared models stay.</td></tr>
+<tr><td>Loading files from inside the APK</td><td>3D models and sound clips are base64 text inside <code>.js</code> files, so they load with a script tag even where file fetches are blocked.</td></tr>
+<tr><td>Voice delay</td><td>Mira's clips are decoded once and cached in memory.</td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">8</span>Failure handling</h2>
+<div class="tw"><table>
+<tr><th>If this fails…</th><th>…the game does this</th></tr>
+<tr><td>The race cannot start (no WebGL)</td><td>Mira says the race could not start and the level continues to Story order with a race score of 50% and 0 coins.</td></tr>
+<tr><td>A 3D model does not load</td><td>Simple shapes made in code stand in for the runner, patrol or trains.</td></tr>
+<tr><td>A voice clip is missing</td><td>The phone's voice reads the line instead.</td></tr>
+<tr><td>localStorage is blocked or full</td><td>Every read and write is wrapped, so the game keeps running; progress is not kept.</td></tr>
+<tr><td>Saving the CSV is not allowed (Android 7–9, permission refused)</td><td>A copy is kept in the app's own folder and the button tells the teacher to use Share CSV.</td></tr>
+<tr><td>Teacher erases by mistake</td><td>The last erase is kept and can be brought back, merged with anything recorded since.</td></tr>
+</table></div>
+</section>
+
+<section class="num"><h2><span class="n">9</span>Security and privacy</h2>
+<ul>
+<li>No network code, no analytics, no ads, no accounts. The app asks only for vibration and, on Android 7–9, storage (to save the CSV).</li>
+<li>Learner data is a name, a section, scores and summaries, kept only on the phone in the app's private storage.</li>
+<li>Teacher records have no password; ERASE needs a typed word, which guards against accidents, not against learners who deliberately look.</li>
+<li>The repo is public, so the answer key and all content can be read by anyone. The signing key is kept off GitHub.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">10</span>Build and release pipeline</h2>
+<div class="fig"><svg viewBox="0 0 820 120" role="img" aria-label="Build pipeline">
+<defs><marker id="s6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">
+<g fill="#fff" stroke="#16133a" stroke-width="1.3"><rect x="10" y="30" width="140" height="56" rx="9"/><rect x="175" y="30" width="140" height="56" rx="9"/><rect x="340" y="30" width="140" height="56" rx="9"/><rect x="505" y="30" width="140" height="56" rx="9"/><rect x="670" y="30" width="140" height="56" rx="9" fill="#e3f6ea" stroke="#1f9d55"/></g>
+<text x="80" y="53" font-weight="700">Edit web game</text><text x="80" y="71" font-size="10.5" fill="#55536f">assets/www</text>
+<text x="245" y="53" font-weight="700">Test in browser</text><text x="245" y="71" font-size="10.5" fill="#55536f">localhost:8000</text>
+<text x="410" y="53" font-weight="700">Bump version</text><text x="410" y="71" font-size="10.5" fill="#55536f">app/build.gradle</text>
+<text x="575" y="53" font-weight="700">Gradle build</text><text x="575" y="71" font-size="10.5" fill="#55536f">sign with project key</text>
+<text x="740" y="53" font-weight="700">APK to phones</text><text x="740" y="71" font-size="10.5" fill="#55536f">sideload, no store</text>
+<path d="M150 58 L171 58" stroke="#16133a" marker-end="url(#s6)"/><path d="M315 58 L336 58" stroke="#16133a" marker-end="url(#s6)"/><path d="M480 58 L501 58" stroke="#16133a" marker-end="url(#s6)"/><path d="M645 58 L666 58" stroke="#16133a" marker-end="url(#s6)"/>
+</g></svg><figcaption>There is no CI. Release APKs must be built on the PC that holds the signing key; a build signed with any other key cannot update the installed app.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">11</span>Design decisions</h2>
+<div class="tw"><table>
+<tr><th>Decision</th><th>Why</th><th>Trade-off</th></tr>
+<tr><td>Web game in a WebView, not a native or Unity app</td><td>One code base that runs in a browser for fast testing; small APK (~13 MB); v1/v2 in Unity were heavier.</td><td>Depends on the phone's WebView and WebGL.</td></tr>
+<tr><td>No backend</td><td>Classrooms may have no internet; no accounts or personal data on a server.</td><td>Records stay per phone; the teacher must collect CSVs from each device.</td></tr>
+<tr><td>Rules-based summary checker</td><td>Works offline and gives the same result every time.</td><td>Can miss meaning a teacher would catch; the text is saved for the teacher.</td></tr>
+<tr><td>Recorded voice instead of live TTS</td><td>A natural voice on any phone, no download.</td><td>New lines need recording; the build script was lost.</td></tr>
+<tr><td>One big <code>index.html</code>, no framework or build step</td><td>Nothing to install; easy to recover and patch.</td><td>A large file to read; modules are separated by comments, not files.</td></tr>
+<tr><td>Answers in lanes, no pause (1.3.5+)</td><td>Keeps the race moving, per the client's last request.</td><td>Slow readers get 4–9 s of reading time before the gate; still worth a phone test with a slow reader.</td></tr>
+</table></div>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>

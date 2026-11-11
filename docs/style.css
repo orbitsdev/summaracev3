@@ -1,0 +1,60 @@
+/* SummaRace docs: one shared stylesheet, no external files, so the pages work offline. */
+:root{
+  --ink:#16133a; --soft:#55536f; --rule:#e2e5f0; --paper:#fff; --bg:#f4f6fb;
+  --blue:#2563d6; --blue-bg:#e8f0ff; --green:#1f9d55; --green-bg:#e3f6ea;
+  --orange:#e07a10; --orange-bg:#fff1df; --red:#d6453b; --red-bg:#fde8e6; --plum:#3a1460;
+  --code:#f1f3f9;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.page{max-width:900px;margin:24px auto;background:var(--paper);padding:40px 48px 56px;border-radius:10px;box-shadow:0 2px 16px rgba(20,20,60,.08)}
+@media (max-width:640px){.page{margin:0;border-radius:0;padding:24px 16px 40px}}
+nav.top{max-width:900px;margin:16px auto 0;padding:0 16px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px 14px}
+nav.top a{color:var(--blue);text-decoration:none}
+nav.top a[aria-current]{font-weight:700;color:var(--ink)}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:700}
+h1{font-size:2.2rem;line-height:1.15;margin:.2em 0 .1em}
+h1::after{content:"";display:block;width:64px;height:4px;background:var(--blue);border-radius:2px;margin-top:14px}
+.meta{color:var(--soft);font-size:.9rem;margin:10px 0 28px}
+section.num{position:relative;padding-left:48px;margin:34px 0}
+section.num>h2{font-size:1.3rem;margin:0 0 8px;line-height:1.3}
+section.num>h2 .n{position:absolute;left:0;top:-1px;width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font-size:.95rem;display:grid;place-items:center}
+@media (max-width:640px){section.num{padding-left:0}section.num>h2 .n{position:static;display:inline-grid;margin-right:8px;vertical-align:middle}}
+h3{font-size:1.05rem;margin:22px 0 6px}
+p{margin:.4em 0 .8em}
+ul,ol{padding-left:1.3em;margin:.3em 0 .9em}
+li{margin:.15em 0}
+a{color:var(--blue)}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font:.86em/1.4 ui-monospace,Menlo,Consolas,monospace;word-break:break-word}
+pre{background:var(--code);padding:14px 16px;border-radius:8px;overflow-x:auto;font:.82rem/1.5 ui-monospace,Menlo,Consolas,monospace}
+.tw{overflow-x:auto;margin:10px 0 16px;border:1px solid var(--rule);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--rule)}
+th{background:#f7f8fc;font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--blue-bg);color:var(--blue);white-space:nowrap}
+.tag.g{background:var(--green-bg);color:var(--green)}.tag.o{background:var(--orange-bg);color:var(--orange)}.tag.r{background:var(--red-bg);color:var(--red)}
+.note{border-left:4px solid var(--orange);background:var(--orange-bg);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.note.b{border-color:var(--blue);background:var(--blue-bg)}
+.fig{margin:14px 0 18px;padding:14px;border:1px solid var(--rule);border-radius:10px;background:#fbfcff;overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto;min-width:560px}
+.fig figcaption{font-size:.82rem;color:var(--soft);margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin:12px 0}
+.card{border:1px solid var(--rule);border-radius:10px;padding:14px;background:#fff}
+.card h4{margin:0 0 4px;font-size:1rem}
+.card p{margin:0;font-size:.88rem;color:var(--soft)}
+.sw{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.sw div{width:112px;font-size:.76rem;color:var(--soft)}
+.sw i{display:block;height:54px;border-radius:8px;border:1px solid rgba(0,0,0,.12);margin-bottom:4px}
+.sw b{display:block;color:var(--ink);font-size:.8rem}
+footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:.8rem;color:var(--soft)}
+@media print{body{background:#fff}.page{box-shadow:none;margin:0;max-width:none}nav.top{display:none}}
+/* step-by-step install guides */
+ol.steps{padding-left:1.6em}
+ol.steps>li{margin:.2em 0 .9em;padding-left:.2em}
+ol.steps>li::marker{font-weight:700;color:var(--blue)}
+ol.steps .kv{display:block;margin:.15em 0;font-size:.95em}
+ol.steps .kv>i:first-child{font-style:normal;font-weight:700;color:var(--plum);margin-right:4px}
+@media print{ol.steps>li{break-inside:avoid}}
+pre{white-space:pre-wrap;word-break:break-all}
