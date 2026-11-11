@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System Requirements and Setup · SummaRace v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="top" aria-label="Documents"><a href="index.html">Contents</a> <a href="01-prd.html">1 · PRD</a> <a href="02-trd.html">2 · TRD</a> <a href="03-app-flow.html">3 · App Flow</a> <a href="04-design-brief.html">4 · Design Brief</a> <a href="05-data-schema.html">5 · Data Schema</a> <a href="06-implementation-plan.html">6 · Implementation Plan</a> <a href="07-system-design.html">7 · System Design</a> <a href="08-requirements.html" aria-current="page">8 · Requirements</a> <a href="assets.html">Assets & Credits</a> <a href="answer-key.html">Answer Key</a></nav>
+<main class="page">
+<!--title:System Requirements and Setup-->
+<div class="eyebrow">System requirements</div>
+<h1>System Requirements and Setup</h1>
+<p class="meta">SummaRace v3 · version 1.3.6 (versionCode 17) · what a laptop, PC or phone needs to run the game, and how to set it up</p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>SummaRace is made for Android phones, but the game itself is a web page, so it also runs on a laptop or desktop PC in a normal web browser. This document lists what each kind of device needs and gives the steps to get the game running.</p>
+<div class="grid">
+<div class="card"><h4>Play on a laptop or PC</h4><p>Open the game in Chrome or Edge. No install and no internet needed. Good for demos, panel defences and teachers checking the stories. See sections 2–4.</p></div>
+<div class="card"><h4>Play on an Android phone</h4><p>Install the APK. This is how learners use it in class. See section 5.</p></div>
+<div class="card"><h4>Build a new version</h4><p>For a developer changing the game: Android Studio, JDK 17 and the signing key. See section 6.</p></div>
+</div>
+<div class="fig"><svg viewBox="0 0 820 250" role="img" aria-label="Three ways to run SummaRace">
+<defs><marker id="rq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">
+<rect x="300" y="10" width="220" height="50" rx="10" fill="#e8f0ff" stroke="#2563d6" stroke-width="1.5"/>
+<text x="410" y="31" font-weight="700">Source code from GitHub</text><text x="410" y="48" font-size="10.5" fill="#55536f">orbitsdev/summaracev3 · Download ZIP</text>
+<g fill="#fff" stroke="#16133a" stroke-width="1.3">
+<rect x="10" y="110" width="250" height="60" rx="10"/><rect x="285" y="110" width="250" height="60" rx="10"/><rect x="560" y="110" width="250" height="60" rx="10"/></g>
+<text x="135" y="134" font-weight="700">A. Open from the folder</text><text x="135" y="152" font-size="10.5" fill="#55536f">double-click www/index.html</text>
+<text x="410" y="134" font-weight="700">B. Local web server</text><text x="410" y="152" font-size="10.5" fill="#55536f">python -m http.server 8000</text>
+<text x="685" y="134" font-weight="700">C. Build the APK</text><text x="685" y="152" font-size="10.5" fill="#55536f">Android Studio + JDK 17</text>
+<path d="M360 60 L150 106" stroke="#16133a" fill="none" marker-end="url(#rq)"/><path d="M410 60 L410 106" stroke="#16133a" fill="none" marker-end="url(#rq)"/><path d="M460 60 L670 106" stroke="#16133a" fill="none" marker-end="url(#rq)"/>
+<rect x="85" y="200" width="375" height="40" rx="10" fill="#e3f6ea" stroke="#1f9d55" stroke-width="1.5"/>
+<text x="272" y="225" font-weight="700">Plays in Chrome or Edge on the laptop / PC</text>
+<rect x="560" y="200" width="250" height="40" rx="10" fill="#fff1df" stroke="#e07a10" stroke-width="1.5"/>
+<text x="685" y="225" font-weight="700">Install on Android phones</text>
+<path d="M135 170 L200 196" stroke="#1f9d55" fill="none" marker-end="url(#rq)"/><path d="M410 170 L345 196" stroke="#1f9d55" fill="none" marker-end="url(#rq)"/><path d="M685 170 L685 196" stroke="#e07a10" fill="none" marker-end="url(#rq)"/>
+</g></svg><figcaption>Options A and B need no install other than a browser (and Python for B). Option C is only for making a new APK.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">2</span>Laptop or PC requirements</h2>
+<div class="tw"><table>
+<tr><th>Item</th><th>Minimum</th><th>Recommended</th></tr>
+<tr><td>Operating system</td><td>Windows 10, macOS 11, or a recent Linux desktop</td><td>Windows 10 or 11 (64-bit)</td></tr>
+<tr><td>Web browser</td><td>Chrome or Edge 80, Firefox 74, Safari 13.1 (the code uses modern JavaScript such as <code>?.</code>)</td><td>The latest Google Chrome or Microsoft Edge</td></tr>
+<tr><td>3D graphics</td><td>WebGL turned on in the browser (any graphics chip from the last 10 years)</td><td>Hardware acceleration on in the browser settings</td></tr>
+<tr><td>Processor and memory</td><td>Dual-core CPU, 4 GB RAM</td><td>Quad-core CPU, 8 GB RAM</td></tr>
+<tr><td>Disk space</td><td>About 20 MB for the game folder (the <code>www</code> folder is 18 MB)</td><td>About 100 MB if the whole repository ZIP is kept</td></tr>
+<tr><td>Screen</td><td>1280 × 720</td><td>1920 × 1080. The game also fits a narrow window or the browser's phone view.</td></tr>
+<tr><td>Sound</td><td>Speakers or headphones for Teacher Mira's voice and the music</td><td>—</td></tr>
+<tr><td>Input</td><td>Mouse or touchpad and keyboard</td><td>A touch screen also works (swipe like on a phone)</td></tr>
+<tr><td>Internet</td><td>Only to download the files once. The game itself never goes online.</td><td>—</td></tr>
+<tr><td>Python (option B only)</td><td>Python 3.8 or newer, for the local web server</td><td>The latest Python 3 from python.org</td></tr>
+</table></div>
+<p class="note">Tested on 11 November 2026: the full game (title, reading, questions, 3D race, story order, summary, results and records) runs in Chromium both straight from the folder (option A) and from a local server (option B).</p>
+</section>
+
+<section class="num"><h2><span class="n">3</span>Setup on a laptop or PC</h2>
+<h3>Get the game files</h3>
+<ol>
+<li>Open <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>, click <b>Code → Download ZIP</b>, and unzip it. (Or copy the folder from a USB drive.)</li>
+<li>The game is in <code>app/src/main/assets/www</code>. This folder is all that is needed to play; it can be copied on its own.</li>
+</ol>
+<h3>Option A: open from the folder (simplest)</h3>
+<ol>
+<li>Open the <code>www</code> folder.</li>
+<li>Right-click <code>index.html</code> → <b>Open with</b> → Google Chrome or Microsoft Edge.</li>
+<li>Press <b>F11</b> for full screen, then tap <b>PLAY</b>.</li>
+</ol>
+<h3>Option B: run a local web server (recommended for developers)</h3>
+<pre>cd app/src/main/assets/www
+python -m http.server 8000</pre>
+<p>Then open <b>http://localhost:8000</b> in Chrome or Edge. Keep the command window open while playing; close it (or press Ctrl+C) to stop. On Windows, <code>py -m http.server 8000</code> also works.</p>
+<h3>Phone-sized view (optional)</h3>
+<p>To see the game exactly as on a phone, press <b>F12</b> in Chrome or Edge, click the phone icon (device toolbar) and pick a phone size such as 390 × 844.</p>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Playing on a laptop or PC</h2>
+<div class="tw"><table>
+<tr><th>Action</th><th>Keyboard</th><th>Mouse / touch</th></tr>
+<tr><td>Change lane (pick an answer in the race)</td><td>← → or A / D</td><td>Click the left or right side of the track, or swipe</td></tr>
+<tr><td>Jump</td><td>↑, W or Space</td><td>Swipe up</td></tr>
+<tr><td>Roll</td><td>↓ or S</td><td>Swipe down</td></tr>
+<tr><td>Close a popup</td><td>Esc</td><td>The close button</td></tr>
+</table></div>
+<h3>Differences from the phone app</h3>
+<ul>
+<li><b>Saved progress and records stay in that browser</b> on that computer. Another browser, a private window, or "clear browsing data" starts empty. Option A and option B also keep separate records.</li>
+<li><b>Records:</b> use <b>Download CSV</b> (saved to the browser's Downloads folder) or <b>Copy CSV</b>. Share may not be offered on a PC.</li>
+<li><b>Voice:</b> Mira's recorded clips play as normal. The few lines without a clip use the computer's built-in voice.</li>
+<li><b>Exit game</b> is hidden; close the browser tab instead.</li>
+<li>The browser may block sound until the first click. This is normal; sound starts after <b>PLAY</b>.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">5</span>Android phone requirements</h2>
+<div class="tw"><table>
+<tr><th>Item</th><th>Requirement</th></tr>
+<tr><td>Android version</td><td>Android 7.0 (API 24) or newer; built for Android 15 (API 35)</td></tr>
+<tr><td>Memory</td><td>About 2 GB RAM or more</td></tr>
+<tr><td>Storage</td><td>About 50 MB free for the app and its saved records</td></tr>
+<tr><td>Screen</td><td>Portrait phone screen; phones with a notch are supported</td></tr>
+<tr><td>Internet</td><td>Not needed</td></tr>
+<tr><td>Permissions</td><td>Vibration; on Android 7–9 only, storage (to save the CSV to Download/SummaRace)</td></tr>
+</table></div>
+<h3>Install the APK</h3>
+<ol>
+<li>Copy the signed release APK to the phone (USB cable, Google Drive or a messaging app).</li>
+<li>Open it and allow <b>Install unknown apps</b> for that file app when Android asks.</li>
+<li>If an old SummaRace 1.2.0 test build is installed, uninstall it first: it was signed with a different key.</li>
+</ol>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Developer build requirements</h2>
+<div class="tw"><table>
+<tr><th>Tool</th><th>Version</th><th>Note</th></tr>
+<tr><td>Android Studio</td><td>Ladybug (2024.2) or newer</td><td>Easiest way to build; it brings the Android SDK and a JDK.</td></tr>
+<tr><td>JDK</td><td>17</td><td>Required by Android Gradle Plugin 8.7.</td></tr>
+<tr><td>Android Gradle Plugin</td><td>8.7.3</td><td>Set in <code>build.gradle</code>.</td></tr>
+<tr><td>Gradle</td><td>8.9 or newer</td><td>The repository has no Gradle wrapper, so Android Studio or an installed Gradle is used.</td></tr>
+<tr><td>Android SDK</td><td>Platform 35 (compileSdk 35)</td><td>Install from the SDK Manager in Android Studio.</td></tr>
+<tr><td>Disk and memory</td><td>About 10 GB free, 8 GB RAM</td><td>For Android Studio, the SDK and the build.</td></tr>
+<tr><td>Signing key</td><td>The SummaRace release key</td><td>Kept only on the owner's main PC. Without it a build cannot update the app already on the phones.</td></tr>
+</table></div>
+<h3>Build steps</h3>
+<ol>
+<li>Open the repository folder in Android Studio and let Gradle sync.</li>
+<li>Raise <code>versionCode</code> (next free: 18) and <code>versionName</code> in <code>app/build.gradle</code>.</li>
+<li><b>Build → Generate Signed App Bundle / APK → APK</b>, choose the SummaRace release key, build type <i>release</i>.</li>
+<li>The APK is written to <code>app/build/outputs/apk/release/</code>.</li>
+</ol>
+<p class="note">Never commit the keystore, <code>*.jks</code>, <code>*.keystore</code> or <code>local.properties</code>. The repository is public.</p>
+</section>
+
+<section class="num"><h2><span class="n">7</span>Troubleshooting</h2>
+<div class="tw"><table>
+<tr><th>Problem</th><th>Fix</th></tr>
+<tr><td>Blank or white page</td><td>Use Chrome or Edge, and check the whole <code>www</code> folder was copied (not only <code>index.html</code>). If it still fails, use option B.</td></tr>
+<tr><td>"The race could not start"</td><td>WebGL is off. In Chrome or Edge, turn on <b>Settings → System → Use graphics acceleration</b>, then restart the browser.</td></tr>
+<tr><td>The race is slow or jerky</td><td>Close other tabs and plug in the laptop. The game switches to a lighter mode by itself below 22 frames per second.</td></tr>
+<tr><td>No sound</td><td>Click once on the page, check the volume, and check the Voice, Sound and Music switches in Settings.</td></tr>
+<tr><td>Progress is gone</td><td>The browser's data was cleared, or a different browser, private window or option (A or B) is in use.</td></tr>
+<tr><td><code>python</code> is not recognised</td><td>Install Python 3 from python.org and tick <b>Add python.exe to PATH</b>, or try <code>py -m http.server 8000</code>.</td></tr>
+<tr><td>Port 8000 is busy</td><td>Use another number, for example <code>python -m http.server 8080</code> and open http://localhost:8080.</td></tr>
+</table></div>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>

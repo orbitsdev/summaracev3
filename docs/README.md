@@ -17,6 +17,7 @@ The documents are HTML pages with diagrams. GitHub shows HTML as code, so open t
 | [05-data-schema.html](05-data-schema.html) | stories.js, localStorage, CSV format |
 | [06-implementation-plan.html](06-implementation-plan.html) | What was built, by phase |
 | [07-system-design.html](07-system-design.html) | System context, components, data flow, voice pipeline, race state machine, failure handling |
+| [08-requirements.html](08-requirements.html) | What a laptop, PC or phone needs to run the game, setup steps, controls, troubleshooting |
 | [assets.html](assets.html) | Every asset with source, author and license |
 | [answer-key.html](answer-key.html) | Right answers for all 30 stories |
 

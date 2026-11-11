@@ -11,7 +11,7 @@ This source was recovered from the SummaRace 1.2.0 test APK on 2026-10-16 after 
     cd app/src/main/assets/www
     python -m http.server 8000
 
-Then open http://localhost:8000. Opening index.html straight from disk won't load the scripts.
+Then open http://localhost:8000. Opening `index.html` straight from the folder in Chrome or Edge also works. Full requirements for a laptop, PC or phone: [docs/08-requirements.html](docs/08-requirements.html).
 
 ## Build the APK
 
