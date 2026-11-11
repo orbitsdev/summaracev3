@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SummaRace v3 System Requirements</title>
+<style>/* SummaRace docs: one shared stylesheet, no external files, so the pages work offline. */
+:root{
+  --ink:#16133a; --soft:#55536f; --rule:#e2e5f0; --paper:#fff; --bg:#f4f6fb;
+  --blue:#2563d6; --blue-bg:#e8f0ff; --green:#1f9d55; --green-bg:#e3f6ea;
+  --orange:#e07a10; --orange-bg:#fff1df; --red:#d6453b; --red-bg:#fde8e6; --plum:#3a1460;
+  --code:#f1f3f9;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.page{max-width:900px;margin:24px auto;background:var(--paper);padding:40px 48px 56px;border-radius:10px;box-shadow:0 2px 16px rgba(20,20,60,.08)}
+@media (max-width:640px){.page{margin:0;border-radius:0;padding:24px 16px 40px}}
+nav.top{max-width:900px;margin:16px auto 0;padding:0 16px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px 14px}
+nav.top a{color:var(--blue);text-decoration:none}
+nav.top a[aria-current]{font-weight:700;color:var(--ink)}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:700}
+h1{font-size:2.2rem;line-height:1.15;margin:.2em 0 .1em}
+h1::after{content:"";display:block;width:64px;height:4px;background:var(--blue);border-radius:2px;margin-top:14px}
+.meta{color:var(--soft);font-size:.9rem;margin:10px 0 28px}
+section.num{position:relative;padding-left:48px;margin:34px 0}
+section.num>h2{font-size:1.3rem;margin:0 0 8px;line-height:1.3}
+section.num>h2 .n{position:absolute;left:0;top:-1px;width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;font-size:.95rem;display:grid;place-items:center}
+@media (max-width:640px){section.num{padding-left:0}section.num>h2 .n{position:static;display:inline-grid;margin-right:8px;vertical-align:middle}}
+h3{font-size:1.05rem;margin:22px 0 6px}
+p{margin:.4em 0 .8em}
+ul,ol{padding-left:1.3em;margin:.3em 0 .9em}
+li{margin:.15em 0}
+a{color:var(--blue)}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font:.86em/1.4 ui-monospace,Menlo,Consolas,monospace;word-break:break-word}
+pre{background:var(--code);padding:14px 16px;border-radius:8px;overflow-x:auto;font:.82rem/1.5 ui-monospace,Menlo,Consolas,monospace}
+.tw{overflow-x:auto;margin:10px 0 16px;border:1px solid var(--rule);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--rule)}
+th{background:#f7f8fc;font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--blue-bg);color:var(--blue);white-space:nowrap}
+.tag.g{background:var(--green-bg);color:var(--green)}.tag.o{background:var(--orange-bg);color:var(--orange)}.tag.r{background:var(--red-bg);color:var(--red)}
+.note{border-left:4px solid var(--orange);background:var(--orange-bg);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.note.b{border-color:var(--blue);background:var(--blue-bg)}
+.fig{margin:14px 0 18px;padding:14px;border:1px solid var(--rule);border-radius:10px;background:#fbfcff;overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto;min-width:560px}
+.fig figcaption{font-size:.82rem;color:var(--soft);margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin:12px 0}
+.card{border:1px solid var(--rule);border-radius:10px;padding:14px;background:#fff}
+.card h4{margin:0 0 4px;font-size:1rem}
+.card p{margin:0;font-size:.88rem;color:var(--soft)}
+.sw{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.sw div{width:112px;font-size:.76rem;color:var(--soft)}
+.sw i{display:block;height:54px;border-radius:8px;border:1px solid rgba(0,0,0,.12);margin-bottom:4px}
+.sw b{display:block;color:var(--ink);font-size:.8rem}
+footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:.8rem;color:var(--soft)}
+@media print{body{background:#fff}.page{box-shadow:none;margin:0;max-width:none}nav.top{display:none}}
+/* step-by-step install guides */
+ol.steps{padding-left:1.6em}
+ol.steps>li{margin:.2em 0 .9em;padding-left:.2em}
+ol.steps>li::marker{font-weight:700;color:var(--blue)}
+ol.steps .kv{display:block;margin:.15em 0;font-size:.95em}
+ol.steps .kv>i:first-child{font-style:normal;font-weight:700;color:var(--plum);margin-right:4px}
+@media print{ol.steps>li{break-inside:avoid}}
+pre{white-space:pre-wrap;word-break:break-all}
+</style>
+</head>
+<body>
+
+<main class="page">
+<!--title:System Requirements and Setup-->
+<div class="eyebrow">System requirements</div>
+<h1>System Requirements and Setup</h1>
+<p class="meta">SummaRace v3 · version 1.3.6 (versionCode 17) · what a laptop, PC or phone needs to run the game, and how to set it up</p>
+
+<section class="num"><h2><span class="n">1</span>Overview</h2>
+<p>SummaRace is made for Android phones, but the game itself is a web page, so it also runs on a laptop or desktop PC in a normal web browser. This document lists what each kind of device needs and gives the steps to get the game running.</p>
+<div class="grid">
+<div class="card"><h4>Play on a laptop or PC</h4><p>Open the game in Chrome or Edge. No install and no internet needed. Good for demos, panel defences and teachers checking the stories. See sections 2–4.</p></div>
+<div class="card"><h4>Play on an Android phone</h4><p>Install the APK. This is how learners use it in class. See section 5.</p></div>
+<div class="card"><h4>Build a new version</h4><p>For a developer changing the game: Android Studio, JDK 17 and the signing key. See section 6.</p></div>
+</div>
+<div class="fig"><svg viewBox="0 0 820 250" role="img" aria-label="Three ways to run SummaRace">
+<defs><marker id="rq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16133a"/></marker></defs>
+<g font-family="system-ui,sans-serif" font-size="12" text-anchor="middle">
+<rect x="300" y="10" width="220" height="50" rx="10" fill="#e8f0ff" stroke="#2563d6" stroke-width="1.5"/>
+<text x="410" y="31" font-weight="700">Source code from GitHub</text><text x="410" y="48" font-size="10.5" fill="#55536f">orbitsdev/summaracev3 · Download ZIP</text>
+<g fill="#fff" stroke="#16133a" stroke-width="1.3">
+<rect x="10" y="110" width="250" height="60" rx="10"/><rect x="285" y="110" width="250" height="60" rx="10"/><rect x="560" y="110" width="250" height="60" rx="10"/></g>
+<text x="135" y="134" font-weight="700">A. Open from the folder</text><text x="135" y="152" font-size="10.5" fill="#55536f">double-click www/index.html</text>
+<text x="410" y="134" font-weight="700">B. Local web server</text><text x="410" y="152" font-size="10.5" fill="#55536f">python -m http.server 8000</text>
+<text x="685" y="134" font-weight="700">C. Build the APK</text><text x="685" y="152" font-size="10.5" fill="#55536f">Android Studio + JDK 17</text>
+<path d="M360 60 L150 106" stroke="#16133a" fill="none" marker-end="url(#rq)"/><path d="M410 60 L410 106" stroke="#16133a" fill="none" marker-end="url(#rq)"/><path d="M460 60 L670 106" stroke="#16133a" fill="none" marker-end="url(#rq)"/>
+<rect x="85" y="200" width="375" height="40" rx="10" fill="#e3f6ea" stroke="#1f9d55" stroke-width="1.5"/>
+<text x="272" y="225" font-weight="700">Plays in Chrome or Edge on the laptop / PC</text>
+<rect x="560" y="200" width="250" height="40" rx="10" fill="#fff1df" stroke="#e07a10" stroke-width="1.5"/>
+<text x="685" y="225" font-weight="700">Install on Android phones</text>
+<path d="M135 170 L200 196" stroke="#1f9d55" fill="none" marker-end="url(#rq)"/><path d="M410 170 L345 196" stroke="#1f9d55" fill="none" marker-end="url(#rq)"/><path d="M685 170 L685 196" stroke="#e07a10" fill="none" marker-end="url(#rq)"/>
+</g></svg><figcaption>Options A and B need no install other than a browser (and Python for B). Option C is only for making a new APK.</figcaption></div>
+</section>
+
+<section class="num"><h2><span class="n">2</span>Laptop or PC requirements</h2>
+<div class="tw"><table>
+<tr><th>Item</th><th>Minimum</th><th>Recommended</th></tr>
+<tr><td>Operating system</td><td>Windows 10, macOS 11, or a recent Linux desktop</td><td>Windows 10 or 11 (64-bit)</td></tr>
+<tr><td>Web browser</td><td>Chrome or Edge 80, Firefox 74, Safari 13.1 (the code uses modern JavaScript such as <code>?.</code>)</td><td>The latest Google Chrome or Microsoft Edge</td></tr>
+<tr><td>3D graphics</td><td>WebGL turned on in the browser (any graphics chip from the last 10 years)</td><td>Hardware acceleration on in the browser settings</td></tr>
+<tr><td>Processor and memory</td><td>Dual-core CPU, 4 GB RAM</td><td>Quad-core CPU, 8 GB RAM</td></tr>
+<tr><td>Disk space</td><td>About 20 MB for the game folder (the <code>www</code> folder is 18 MB)</td><td>About 100 MB if the whole repository ZIP is kept</td></tr>
+<tr><td>Screen</td><td>1280 × 720</td><td>1920 × 1080. The game also fits a narrow window or the browser's phone view.</td></tr>
+<tr><td>Sound</td><td>Speakers or headphones for Teacher Mira's voice and the music</td><td>—</td></tr>
+<tr><td>Input</td><td>Mouse or touchpad and keyboard</td><td>A touch screen also works (swipe like on a phone)</td></tr>
+<tr><td>Internet</td><td>Only to download the files once. The game itself never goes online.</td><td>—</td></tr>
+<tr><td>Python (option B only)</td><td>Python 3.8 or newer, for the local web server</td><td>The latest Python 3 from python.org</td></tr>
+</table></div>
+<p class="note">Tested on 11 November 2026: the full game (title, reading, questions, 3D race, story order, summary, results and records) runs in Chromium both straight from the folder (option A) and from a local server (option B).</p>
+</section>
+
+<section class="num"><h2><span class="n">3</span>Install guide: play on a Windows laptop or PC</h2>
+<p>Each step says <b>what</b> to do, <b>where</b> to do it, the <b>command</b> to type (if any) and what you <b>should see</b> when it worked. Option A needs only a browser. Option B also needs Python.</p>
+<ol class="steps">
+<li><b>Check the browser</b>
+<span class="kv"><i>Where:</i> Google Chrome or Microsoft Edge (Edge is already on every Windows 10/11 PC).</span>
+<span class="kv"><i>Type in the address bar:</i> <code>chrome://settings/help</code> (Chrome) or <code>edge://settings/help</code> (Edge), then press Enter.</span>
+<span class="kv"><i>You should see:</i> "Chrome is up to date" or "Microsoft Edge is up to date" and a version number of 80 or higher.</span>
+<span class="kv"><i>If Chrome is missing:</i> download it from <a href="https://www.google.com/chrome/">google.com/chrome</a>.</span></li>
+<li><b>Turn on graphics acceleration (needed for the 3D race)</b>
+<span class="kv"><i>Type in the address bar:</i> <code>chrome://settings/system</code> or <code>edge://settings/system</code></span>
+<span class="kv"><i>Do:</i> switch on <b>Use graphics acceleration when available</b> and click <b>Relaunch</b> if it asks.</span></li>
+<li><b>Download the game</b>
+<span class="kv"><i>Where:</i> in the browser, open <a href="https://github.com/orbitsdev/summaracev3/archive/refs/heads/main.zip">github.com/orbitsdev/summaracev3/archive/refs/heads/main.zip</a> (or open <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a> and click the green <b>Code</b> button → <b>Download ZIP</b>).</span>
+<span class="kv"><i>You should see:</i> <code>summaracev3-main.zip</code> in your <b>Downloads</b> folder.</span></li>
+<li><b>Unzip it</b>
+<span class="kv"><i>Where:</i> File Explorer → <b>Downloads</b>. Right-click <code>summaracev3-main.zip</code> → <b>Extract All…</b> → choose a folder such as <code>C:\Users\&lt;you&gt;\Documents</code> → <b>Extract</b>.</span>
+<span class="kv"><i>You should see:</i> a folder <code>Documents\summaracev3-main</code>. The game itself is in <code>summaracev3-main\app\src\main\assets\www</code> (it contains <code>index.html</code>, <code>stories.js</code> and the <code>models</code>, <code>voice</code> and <code>fonts</code> folders).</span></li>
+</ol>
+<h3>Option A: open the game straight from the folder (no install)</h3>
+<ol class="steps">
+<li><b>Open the game</b>
+<span class="kv"><i>Where:</i> File Explorer → <code>summaracev3-main\app\src\main\assets\www</code></span>
+<span class="kv"><i>Do:</i> right-click <code>index.html</code> → <b>Open with</b> → <b>Google Chrome</b> or <b>Microsoft Edge</b>.</span>
+<span class="kv"><i>You should see:</i> the SummaRace title screen with Teacher Mira and a green <b>PLAY</b> button. The address bar starts with <code>file:///C:/</code>.</span></li>
+<li><b>Go full screen</b> with <b>F11</b> (press F11 again to leave), then click <b>PLAY</b>.</li>
+</ol>
+<h3>Option B: run it from a local web server (for developers)</h3>
+<ol class="steps">
+<li><b>Install Python 3</b>
+<span class="kv"><i>Download:</i> <a href="https://www.python.org/downloads/windows/">python.org/downloads/windows</a> → latest <b>Python 3</b> Windows installer (64-bit).</span>
+<span class="kv"><i>Do:</i> run the installer and <b>tick "Add python.exe to PATH"</b> on the first screen, then <b>Install Now</b>.</span></li>
+<li><b>Check that Python works</b>
+<span class="kv"><i>Where:</i> press the <b>Windows key</b>, type <code>cmd</code>, press Enter (Command Prompt opens).</span>
+<span class="kv"><i>Type:</i> <code>python --version</code></span>
+<span class="kv"><i>You should see:</i> <code>Python 3.x.x</code>. If it says "not recognized", see section 7.</span></li>
+<li><b>Open a Command Prompt inside the game folder</b>
+<span class="kv"><i>Where:</i> File Explorer → <code>summaracev3-main\app\src\main\assets\www</code>. Click the <b>address bar</b> at the top, type <code>cmd</code> and press Enter.</span>
+<span class="kv"><i>You should see:</i> a Command Prompt whose line ends with <code>...\app\src\main\assets\www&gt;</code></span></li>
+<li><b>Start the server</b>
+<span class="kv"><i>Type:</i> <code>python -m http.server 8000</code></span>
+<span class="kv"><i>You should see:</i> a line like <code>Serving HTTP on :: port 8000 ...</code>. Leave this window open while playing.</span></li>
+<li><b>Open the game</b>
+<span class="kv"><i>Where:</i> Chrome or Edge address bar.</span>
+<span class="kv"><i>Type:</i> <code>http://localhost:8000</code></span>
+<span class="kv"><i>You should see:</i> the title screen. To stop the server, click the Command Prompt window and press <b>Ctrl + C</b>, or close it.</span></li>
+</ol>
+<h3>Phone-sized view (optional)</h3>
+<p>In Chrome or Edge press <b>F12</b>, click the phone-and-tablet icon at the top left of the panel (or press <b>Ctrl + Shift + M</b>), pick a phone such as <i>iPhone 12 Pro</i> (390 × 844), then press <b>F5</b> to reload.</p>
+</section>
+
+<section class="num"><h2><span class="n">4</span>Playing on a laptop or PC</h2>
+<div class="tw"><table>
+<tr><th>Action</th><th>Keyboard</th><th>Mouse / touch</th></tr>
+<tr><td>Change lane (pick an answer in the race)</td><td>← → or A / D</td><td>Click the left or right side of the track, or swipe</td></tr>
+<tr><td>Jump</td><td>↑, W or Space</td><td>Swipe up</td></tr>
+<tr><td>Roll</td><td>↓ or S</td><td>Swipe down</td></tr>
+<tr><td>Close a popup</td><td>Esc</td><td>The close button</td></tr>
+</table></div>
+<h3>Differences from the phone app</h3>
+<ul>
+<li><b>Saved progress and records stay in that browser</b> on that computer. Another browser, a private window, or "clear browsing data" starts empty. Option A and option B also keep separate records.</li>
+<li><b>Records:</b> use <b>Download CSV</b> (saved to the browser's Downloads folder) or <b>Copy CSV</b>. Share may not be offered on a PC.</li>
+<li><b>Voice:</b> Mira's recorded clips play as normal. The few lines without a clip use the computer's built-in voice.</li>
+<li><b>Exit game</b> is hidden; close the browser tab instead.</li>
+<li>The browser may block sound until the first click. This is normal; sound starts after <b>PLAY</b>.</li>
+</ul>
+</section>
+
+<section class="num"><h2><span class="n">5</span>Android phone requirements</h2>
+<div class="tw"><table>
+<tr><th>Item</th><th>Requirement</th></tr>
+<tr><td>Android version</td><td>Android 7.0 (API 24) or newer; built for Android 15 (API 35)</td></tr>
+<tr><td>Memory</td><td>About 2 GB RAM or more</td></tr>
+<tr><td>Storage</td><td>About 50 MB free for the app and its saved records</td></tr>
+<tr><td>Screen</td><td>Portrait phone screen; phones with a notch are supported</td></tr>
+<tr><td>Internet</td><td>Not needed</td></tr>
+<tr><td>Permissions</td><td>Vibration; on Android 7–9 only, storage (to save the CSV to Download/SummaRace)</td></tr>
+</table></div>
+<h3>Install the APK</h3>
+<ol>
+<li><b>Copy the APK to the phone:</b> connect the phone with a USB cable, choose <b>File transfer</b> on the phone, then in File Explorer drag <code>app-release.apk</code> into the phone's <b>Download</b> folder. (Google Drive or a messaging app also works.)</li>
+<li><b>Open it on the phone:</b> <b>Files</b> app → <b>Downloads</b> → tap <code>app-release.apk</code>. When Android asks, allow <b>Install unknown apps</b> for the Files app, go back and tap <b>Install</b>.</li>
+<li><b>You should see:</b> "App installed" and a SummaRace icon on the home screen. Open it and play the first page to check it works.</li>
+<li>If an old SummaRace 1.2.0 test build is installed, uninstall it first: it was signed with a different key.</li>
+</ol>
+</section>
+
+<section class="num"><h2><span class="n">6</span>Install guide: build a new APK (developers)</h2>
+<div class="tw"><table>
+<tr><th>Tool</th><th>Version</th><th>Where to get it</th></tr>
+<tr><td>Android Studio</td><td>Ladybug (2024.2) or newer</td><td><a href="https://developer.android.com/studio">developer.android.com/studio</a>. It includes the JDK and installs the Android SDK.</td></tr>
+<tr><td>JDK</td><td>17 or newer</td><td>Comes inside Android Studio; nothing to install separately.</td></tr>
+<tr><td>Android Gradle Plugin</td><td>8.7.3</td><td>Downloaded automatically on the first sync (set in <code>build.gradle</code>).</td></tr>
+<tr><td>Gradle</td><td>8.9 or newer</td><td>The repository has no Gradle wrapper; see step 4.</td></tr>
+<tr><td>Android SDK Platform</td><td>Android 15 (API 35)</td><td>Android Studio → SDK Manager (step 3).</td></tr>
+<tr><td>Git (optional)</td><td>Any</td><td><a href="https://git-scm.com/download/win">git-scm.com/download/win</a>, or use GitHub Desktop, or the ZIP from section 3.</td></tr>
+<tr><td>PC</td><td>8 GB RAM, about 10 GB free disk</td><td>—</td></tr>
+<tr><td>Signing key</td><td>The SummaRace release key (<code>.jks</code>) and its passwords</td><td>Only on the owner's main PC (<code>Documents\SummaRace-signing</code>). Only needed to build a release APK, not to read these docs or play on a PC. To make a new one, see the end of this section.</td></tr>
+</table></div>
+<ol class="steps">
+<li><b>Get the source code</b>
+<span class="kv"><i>Either:</i> download and unzip the ZIP as in section 3, steps 3–4.</span>
+<span class="kv"><i>Or with Git:</i> open Command Prompt in <code>Documents\GitHub</code> and type <code>git clone https://github.com/orbitsdev/summaracev3.git</code></span>
+<span class="kv"><i>You should see:</i> a folder that contains <code>settings.gradle</code>, <code>build.gradle</code> and the <code>app</code> folder. This is the <b>project folder</b>.</span></li>
+<li><b>Install Android Studio</b>
+<span class="kv"><i>Download:</i> <a href="https://developer.android.com/studio">developer.android.com/studio</a> → run the installer with the default options.</span>
+<span class="kv"><i>First start:</i> the Setup Wizard opens. Choose <b>Standard</b>, accept the licences and click <b>Finish</b>. It downloads the Android SDK (this takes a while).</span></li>
+<li><b>Install Android 15 (API 35)</b>
+<span class="kv"><i>Where:</i> Android Studio → <b>Tools → SDK Manager</b> (on the Welcome screen: <b>More Actions → SDK Manager</b>) → tab <b>SDK Platforms</b>.</span>
+<span class="kv"><i>Do:</i> tick <b>Android 15.0 ("VanillaIceCream") API 35</b> → <b>Apply</b> → <b>OK</b>.</span></li>
+<li><b>Open the project</b>
+<span class="kv"><i>Where:</i> Android Studio → <b>File → Open</b> (Welcome screen: <b>Open</b>) → select the <b>project folder</b> from step 1 → <b>OK</b>. Choose <b>Trust Project</b> if asked.</span>
+<span class="kv"><i>Wait:</i> for the Gradle sync to finish (progress bar at the bottom right). Check <b>View → Tool Windows → Build</b>.</span>
+<span class="kv"><i>You should see:</i> <code>BUILD SUCCESSFUL</code> or "Gradle sync finished", and <b>app</b> in the Project panel on the left.</span>
+<span class="kv"><i>If it says Gradle or the wrapper is missing:</i> open <b>File → Settings → Build, Execution, Deployment → Build Tools → Gradle</b>, check <b>Gradle JDK</b> is 17 or newer, and accept Android Studio's offer to set up Gradle (8.9 or newer). Then <b>File → Sync Project with Gradle Files</b>.</span></li>
+<li><b>Raise the version number</b>
+<span class="kv"><i>Where:</i> Project panel → <code>app</code> → <code>build.gradle</code> (Module :app).</span>
+<span class="kv"><i>Change:</i> <code>versionCode 17</code> → <code>versionCode 18</code> and <code>versionName '1.3.6'</code> → the new version, e.g. <code>'1.3.7'</code>. Then click <b>Sync Now</b> at the top of the file.</span></li>
+<li><b>Test build (optional, not for learners)</b>
+<span class="kv"><i>Where:</i> <b>Build → Build App Bundle(s) / APK(s) → Build APK(s)</b>.</span>
+<span class="kv"><i>You should see:</i> a pop-up "APK(s) generated successfully" with a <b>locate</b> link. The file is <code>app\build\outputs\apk\debug\app-debug.apk</code>. A debug APK cannot update the release app on the phones.</span></li>
+<li><b>Release build, signed with the SummaRace key</b>
+<span class="kv"><i>Where:</i> <b>Build → Generate Signed App Bundle or APK…</b> → choose <b>APK</b> → <b>Next</b>.</span>
+<span class="kv"><i>Key store path:</i> <b>Choose existing…</b> → the <code>.jks</code> file in <code>Documents\SummaRace-signing</code> → enter the key store password, key alias and key password → <b>Next</b>.</span>
+<span class="kv"><i>Build variant:</i> <b>release</b> → <b>Create</b> (Finish).</span>
+<span class="kv"><i>You should see:</i> "APK(s) generated successfully" → click <b>locate</b>. The file is <code>app\release\app-release.apk</code> in the project folder.</span></li>
+<li><b>Install it on a phone</b> as in section 5, then play one full level before handing it out.</li>
+</ol>
+<p class="note">Never commit the keystore, <code>*.jks</code>, <code>*.keystore</code> or <code>local.properties</code>. The repository is public. A build signed with any other key cannot update the app already on the phones.</p>
+<h3>Create a new signing key (only when the current key is not available)</h3>
+<p class="note"><b>Read this first.</b> Android only lets an app update itself when the new APK is signed with the <b>same key</b>. An APK signed with a new key <b>cannot update</b> SummaRace already on a phone: the old app must be <b>uninstalled first</b>, and uninstalling <b>deletes every learner's progress and records on that phone</b>. Before switching keys, the teacher must <b>Download CSV</b> from Teacher records on every phone.</p>
+<ol class="steps">
+<li><b>Make a folder for the key, outside the project folder</b>
+<span class="kv"><i>Where:</i> File Explorer → <code>Documents</code> → right-click → <b>New → Folder</b> → name it <code>SummaRace-signing</code>.</span>
+<span class="kv"><i>Why:</i> anything inside the project folder can end up on GitHub by mistake.</span></li>
+<li><b>Easiest way: create the key in Android Studio</b>
+<span class="kv"><i>Where:</i> <b>Build → Generate Signed App Bundle or APK…</b> → <b>APK</b> → <b>Next</b> → under Key store path click <b>Create new…</b></span>
+<span class="kv"><i>Fill in:</i> Key store path <code>C:\Users\&lt;you&gt;\Documents\SummaRace-signing\summarace-release.jks</code>, a password (twice), Alias <code>summarace</code>, a key password, Validity <code>25</code> years, and at least one name field (for example Organization) → <b>OK</b>.</span>
+<span class="kv"><i>Then:</i> continue with step 7 above (release → Create).</span></li>
+<li><b>Or create it with a command (keytool)</b>
+<span class="kv"><i>Where:</i> Command Prompt opened in <code>Documents\SummaRace-signing</code> (address bar → <code>cmd</code> → Enter).</span>
+<span class="kv"><i>Type</i> (one line; keytool comes with Android Studio):</span>
+<pre>"C:\Program Files\Android\Android Studio\jbr\bin\keytool.exe" -genkeypair -v -keystore summarace-release.jks -alias summarace -keyalg RSA -keysize 2048 -validity 10000</pre>
+<span class="kv"><i>Answer:</i> the password questions and the name questions, then type <code>yes</code> to confirm.</span>
+<span class="kv"><i>You should see:</i> <code>[Storing summarace-release.jks]</code>, and the file <code>summarace-release.jks</code> in the folder.</span></li>
+<li><b>Write down and back up</b>
+<span class="kv"><i>Keep:</i> the <code>.jks</code> file, the key store password, the alias (<code>summarace</code>) and the key password.</span>
+<span class="kv"><i>Back up:</i> copy the <code>.jks</code> to a USB drive and to private cloud storage. If it is lost again, every phone will need another uninstall.</span></li>
+<li><b>Never commit it</b>
+<span class="kv">Do not put <code>*.jks</code>, <code>*.keystore</code>, passwords or <code>local.properties</code> in the project folder or on GitHub; the repository is public. The project's <code>build.gradle</code> has no signing settings, so nothing in the code needs to change: the key is picked in the step 7 wizard each time.</span></li>
+</ol>
+
+</section>
+
+<section class="num"><h2><span class="n">7</span>Troubleshooting</h2>
+<div class="tw"><table>
+<tr><th>Problem</th><th>Fix</th></tr>
+<tr><td>Blank or white page</td><td>Use Chrome or Edge, and check the whole <code>www</code> folder was copied (not only <code>index.html</code>). If it still fails, use option B.</td></tr>
+<tr><td>"The race could not start"</td><td>WebGL is off. In Chrome or Edge, turn on <b>Settings → System → Use graphics acceleration</b>, then restart the browser.</td></tr>
+<tr><td>The race is slow or jerky</td><td>Close other tabs and plug in the laptop. The game switches to a lighter mode by itself below 22 frames per second.</td></tr>
+<tr><td>No sound</td><td>Click once on the page, check the volume, and check the Voice, Sound and Music switches in Settings.</td></tr>
+<tr><td>Progress is gone</td><td>The browser's data was cleared, or a different browser, private window or option (A or B) is in use.</td></tr>
+<tr><td><code>python</code> is not recognised</td><td>Install Python 3 from python.org and tick <b>Add python.exe to PATH</b>, or try <code>py -m http.server 8000</code>.</td></tr>
+<tr><td>Port 8000 is busy</td><td>Use another number, for example <code>python -m http.server 8080</code> and open http://localhost:8080.</td></tr>
+</table></div>
+</section>
+<footer>SummaRace v3 · documents describe version 1.3.6 (versionCode 17), the <code>main</code> branch on 2026-11-05. Source: <a href="https://github.com/orbitsdev/summaracev3">github.com/orbitsdev/summaracev3</a>.</footer>
+</main>
+</body>
+</html>

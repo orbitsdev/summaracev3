@@ -50,3 +50,11 @@ tr:last-child td{border-bottom:0}
 .sw b{display:block;color:var(--ink);font-size:.8rem}
 footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:.8rem;color:var(--soft)}
 @media print{body{background:#fff}.page{box-shadow:none;margin:0;max-width:none}nav.top{display:none}}
+/* step-by-step install guides */
+ol.steps{padding-left:1.6em}
+ol.steps>li{margin:.2em 0 .9em;padding-left:.2em}
+ol.steps>li::marker{font-weight:700;color:var(--blue)}
+ol.steps .kv{display:block;margin:.15em 0;font-size:.95em}
+ol.steps .kv>i:first-child{font-style:normal;font-weight:700;color:var(--plum);margin-right:4px}
+@media print{ol.steps>li{break-inside:avoid}}
+pre{white-space:pre-wrap;word-break:break-all}
