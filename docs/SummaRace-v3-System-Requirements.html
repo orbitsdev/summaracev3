@@ -72,7 +72,7 @@ pre{white-space:pre-wrap;word-break:break-all}
 <!--title:System Requirements and Setup-->
 <div class="eyebrow">System requirements</div>
 <h1>System Requirements and Setup</h1>
-<p class="meta">SummaRace v3 · version 1.3.6 (versionCode 17) · what a laptop, PC or phone needs to run the game, and how to set it up</p>
+<p class="meta">SummaRace v3 · release 1.3.7 (versionCode 18) · what a laptop, PC or phone needs to run the game, and how to set it up</p>
 
 <section class="num"><h2><span class="n">1</span>Overview</h2>
 <p>SummaRace is made for Android phones, but the game itself is a web page, so it also runs on a laptop or desktop PC in a normal web browser. This document lists what each kind of device needs and gives the steps to get the game running.</p>
@@ -195,12 +195,23 @@ pre{white-space:pre-wrap;word-break:break-all}
 <tr><td>Internet</td><td>Not needed</td></tr>
 <tr><td>Permissions</td><td>Vibration; on Android 7–9 only, storage (to save the CSV to Download/SummaRace)</td></tr>
 </table></div>
+<h3>Before installing 1.3.7: export records, then uninstall the old app</h3>
+<p class="note"><b>Important.</b> Version 1.3.7 (versionCode 18) is signed with a <b>new key</b>. It cannot update any earlier SummaRace on a phone: the 1.2.0 test build and every 1.3.x build, <b>including 1.3.6</b>, must be <b>uninstalled first</b>. Uninstalling <b>deletes all learner progress and records</b> on that phone, and the game cannot import them back. Do these steps on every phone first:</p>
+<ol class="steps">
+<li><b>Export the records</b>
+<span class="kv"><i>Where:</i> on the phone, open SummaRace → <b>PLAY</b> → <b>Teacher records</b> (or Settings → Teacher records).</span>
+<span class="kv"><i>Do:</i> tap <b>Download CSV</b>. Also tap <b>Share CSV</b> and send it to yourself (email or Drive) as a second copy.</span>
+<span class="kv"><i>You should see:</i> <code>summarace-records-YYYY-MM-DD.csv</code> in the phone's <b>Download/SummaRace</b> folder. Copy it to a PC before going on.</span></li>
+<li><b>Uninstall the old app</b>
+<span class="kv"><i>Where:</i> press and hold the SummaRace icon → <b>App info</b> (or Settings → Apps → SummaRace) → <b>Uninstall</b> → <b>OK</b>.</span>
+<span class="kv"><i>Note:</i> learners start again from level 1 in 1.3.7. Their earlier results stay only in the exported CSV.</span></li>
+</ol>
 <h3>Install the APK</h3>
 <ol>
 <li><b>Copy the APK to the phone:</b> connect the phone with a USB cable, choose <b>File transfer</b> on the phone, then in File Explorer drag <code>app-release.apk</code> into the phone's <b>Download</b> folder. (Google Drive or a messaging app also works.)</li>
 <li><b>Open it on the phone:</b> <b>Files</b> app → <b>Downloads</b> → tap <code>app-release.apk</code>. When Android asks, allow <b>Install unknown apps</b> for the Files app, go back and tap <b>Install</b>.</li>
 <li><b>You should see:</b> "App installed" and a SummaRace icon on the home screen. Open it and play the first page to check it works.</li>
-<li>If an old SummaRace 1.2.0 test build is installed, uninstall it first: it was signed with a different key.</li>
+
 </ol>
 </section>
 
@@ -208,14 +219,16 @@ pre{white-space:pre-wrap;word-break:break-all}
 <div class="tw"><table>
 <tr><th>Tool</th><th>Version</th><th>Where to get it</th></tr>
 <tr><td>Android Studio</td><td>Ladybug (2024.2) or newer</td><td><a href="https://developer.android.com/studio">developer.android.com/studio</a>. It includes the JDK and installs the Android SDK.</td></tr>
-<tr><td>JDK</td><td>17 or newer</td><td>Comes inside Android Studio; nothing to install separately.</td></tr>
+<tr><td>JDK</td><td>17 (tested)</td><td>Comes inside Android Studio. For the command line, install it yourself (Way 2, step 1).</td></tr>
 <tr><td>Android Gradle Plugin</td><td>8.7.3</td><td>Downloaded automatically on the first sync (set in <code>build.gradle</code>).</td></tr>
-<tr><td>Gradle</td><td>8.9 or newer</td><td>The repository has no Gradle wrapper; see step 4.</td></tr>
+<tr><td>Gradle</td><td>8.9 or newer (tested: 8.14)</td><td>The repository has no Gradle wrapper. Install Gradle yourself (Way 2, step 4) or let Android Studio set it up.</td></tr>
 <tr><td>Android SDK Platform</td><td>Android 15 (API 35)</td><td>Android Studio → SDK Manager (step 3).</td></tr>
 <tr><td>Git (optional)</td><td>Any</td><td><a href="https://git-scm.com/download/win">git-scm.com/download/win</a>, or use GitHub Desktop, or the ZIP from section 3.</td></tr>
 <tr><td>PC</td><td>8 GB RAM, about 10 GB free disk</td><td>—</td></tr>
-<tr><td>Signing key</td><td>The SummaRace release key (<code>.jks</code>) and its passwords</td><td>Only on the owner's main PC (<code>Documents\SummaRace-signing</code>). Only needed to build a release APK, not to read these docs or play on a PC. To make a new one, see the end of this section.</td></tr>
+<tr><td>Signing key</td><td>The SummaRace release key (<code>.jks</code>) and its passwords</td><td>The new key made for 1.3.7 (11 November 2026), kept only on the owner's PC, never in the repository. Only needed to build a release APK, not to read these docs or play on a PC. To make a new one, see the end of this section.</td></tr>
 </table></div>
+<p>There are two ways to build: <b>Way 1, Android Studio</b> (easier, but these steps have <b>not yet been tested</b> end to end on this project) and <b>Way 2, the command line</b> (tested: it built 1.3.7).</p>
+<h3>Way 1: build in Android Studio (not yet tested)</h3>
 <ol class="steps">
 <li><b>Get the source code</b>
 <span class="kv"><i>Either:</i> download and unzip the ZIP as in section 3, steps 3–4.</span>
@@ -234,7 +247,7 @@ pre{white-space:pre-wrap;word-break:break-all}
 <span class="kv"><i>If it says Gradle or the wrapper is missing:</i> open <b>File → Settings → Build, Execution, Deployment → Build Tools → Gradle</b>, check <b>Gradle JDK</b> is 17 or newer, and accept Android Studio's offer to set up Gradle (8.9 or newer). Then <b>File → Sync Project with Gradle Files</b>.</span></li>
 <li><b>Raise the version number</b>
 <span class="kv"><i>Where:</i> Project panel → <code>app</code> → <code>build.gradle</code> (Module :app).</span>
-<span class="kv"><i>Change:</i> <code>versionCode 17</code> → <code>versionCode 18</code> and <code>versionName '1.3.6'</code> → the new version, e.g. <code>'1.3.7'</code>. Then click <b>Sync Now</b> at the top of the file.</span></li>
+<span class="kv"><i>Change:</i> raise <code>versionCode</code> by 1 (after 1.3.7 / 18, the next is <code>versionCode 19</code>) and set <code>versionName</code> to the new version, e.g. <code>'1.3.8'</code>. Then click <b>Sync Now</b> at the top of the file.</span></li>
 <li><b>Test build (optional, not for learners)</b>
 <span class="kv"><i>Where:</i> <b>Build → Build App Bundle(s) / APK(s) → Build APK(s)</b>.</span>
 <span class="kv"><i>You should see:</i> a pop-up "APK(s) generated successfully" with a <b>locate</b> link. The file is <code>app\build\outputs\apk\debug\app-debug.apk</code>. A debug APK cannot update the release app on the phones.</span></li>
@@ -246,6 +259,47 @@ pre{white-space:pre-wrap;word-break:break-all}
 <li><b>Install it on a phone</b> as in section 5, then play one full level before handing it out.</li>
 </ol>
 <p class="note">Never commit the keystore, <code>*.jks</code>, <code>*.keystore</code> or <code>local.properties</code>. The repository is public. A build signed with any other key cannot update the app already on the phones.</p>
+<h3>Way 2: build from the command line (tested)</h3>
+<p class="note b">Tested on 11 November 2026: version 1.3.7 (versionCode 18) was built this way on Windows with <b>JDK 17</b>, <b>Android SDK Platform 35</b> and <b>Gradle 8.14</b>, with no Gradle wrapper.</p>
+<ol class="steps">
+<li><b>Install JDK 17</b>
+<span class="kv"><i>Download:</i> <a href="https://adoptium.net/temurin/releases/?version=17">adoptium.net</a> → Temurin <b>17</b>, Windows x64, <b>.msi</b>. In the installer, turn on <b>Set JAVA_HOME</b> and <b>Add to PATH</b>.</span>
+<span class="kv"><i>Check in a new Command Prompt:</i> <code>java -version</code></span>
+<span class="kv"><i>You should see:</i> <code>openjdk version "17.…"</code></span></li>
+<li><b>Get the Android SDK (Platform 35 and Build-Tools)</b>
+<span class="kv"><i>Easiest:</i> install Android Studio once (steps 2–3 of Way 1); it puts the SDK in <code>C:\Users\&lt;you&gt;\AppData\Local\Android\Sdk</code>. In SDK Manager, tab <b>SDK Tools</b>, also tick <b>Android SDK Build-Tools</b> (35.x).</span>
+<span class="kv"><i>Without Android Studio:</i> download the <b>Command line tools only</b> ZIP from <a href="https://developer.android.com/studio#command-line-tools-only">developer.android.com/studio</a>, then run <code>sdkmanager "platforms;android-35" "build-tools;35.0.0"</code></span>
+<span class="kv"><i>You should see:</i> folders <code>Sdk\platforms\android-35</code> and <code>Sdk\build-tools\35.0.0</code> (your Build-Tools number may differ; use the folder you have in the commands below).</span></li>
+<li><b>Tell the build where the SDK is</b>
+<span class="kv"><i>Where:</i> Windows key → type <code>environment variables</code> → <b>Edit the system environment variables</b> → <b>Environment Variables…</b> → under <i>User variables</i> click <b>New</b>.</span>
+<span class="kv"><i>Add:</i> name <code>ANDROID_HOME</code>, value <code>C:\Users\&lt;you&gt;\AppData\Local\Android\Sdk</code> → <b>OK</b>. Open a <b>new</b> Command Prompt afterwards.</span>
+<span class="kv"><i>Or:</i> create <code>local.properties</code> in the project folder with the line <code>sdk.dir=C\:\\Users\\&lt;you&gt;\\AppData\\Local\\Android\\Sdk</code>. This file is in <code>.gitignore</code>; never commit it.</span></li>
+<li><b>Install Gradle 8.14</b> (the repository has no Gradle wrapper)
+<span class="kv"><i>Download:</i> <a href="https://gradle.org/releases/">gradle.org/releases</a> → <b>v8.14</b> → <b>binary-only</b>. Unzip to <code>C:\Gradle</code>, so that <code>C:\Gradle\gradle-8.14\bin</code> exists.</span>
+<span class="kv"><i>Add to PATH:</i> in the same Environment Variables window, select <b>Path</b> → <b>Edit</b> → <b>New</b> → <code>C:\Gradle\gradle-8.14\bin</code> → <b>OK</b>.</span>
+<span class="kv"><i>Check in a new Command Prompt:</i> <code>gradle --version</code></span>
+<span class="kv"><i>You should see:</i> <code>Gradle 8.14</code> and a line with JVM 17.</span></li>
+<li><b>Raise the version number</b>
+<span class="kv">In <code>app\build.gradle</code> (any text editor), raise <code>versionCode</code> and <code>versionName</code> as in Way 1, step 5.</span></li>
+<li><b>Build the release APK (unsigned)</b>
+<span class="kv"><i>Where:</i> Command Prompt in the <b>project folder</b> (File Explorer → project folder → address bar → <code>cmd</code> → Enter).</span>
+<span class="kv"><i>Type:</i> <code>gradle assembleRelease</code></span>
+<span class="kv"><i>You should see:</i> <code>BUILD SUCCESSFUL</code> and the file <code>app\build\outputs\apk\release\app-release-unsigned.apk</code>. The first build downloads the Android Gradle Plugin, so it needs internet and takes a few minutes.</span></li>
+<li><b>Align the APK (zipalign)</b>
+<span class="kv"><i>Type</i> (same window, one line):</span>
+<pre>"%ANDROID_HOME%\build-tools\35.0.0\zipalign.exe" -p -f 4 app\build\outputs\apk\release\app-release-unsigned.apk app-release-aligned.apk</pre>
+<span class="kv"><i>You should see:</i> no error, and <code>app-release-aligned.apk</code> in the project folder.</span></li>
+<li><b>Sign it (apksigner)</b>
+<span class="kv"><i>Type</i> (one line; change the key path, alias and version to yours):</span>
+<pre>"%ANDROID_HOME%\build-tools\35.0.0\apksigner.bat" sign --ks "C:\Users\&lt;you&gt;\Documents\SummaRace-signing\summarace-release.jks" --ks-key-alias summarace --out SummaRace-1.3.7.apk app-release-aligned.apk</pre>
+<span class="kv"><i>Then:</i> type the key store password when asked (nothing shows while typing; that is normal).</span>
+<span class="kv"><i>You should see:</i> <code>SummaRace-1.3.7.apk</code> in the project folder. This is the file to install on phones.</span></li>
+<li><b>Check the signature</b>
+<span class="kv"><i>Type:</i> <code>"%ANDROID_HOME%\build-tools\35.0.0\apksigner.bat" verify --print-certs SummaRace-1.3.7.apk</code></span>
+<span class="kv"><i>You should see:</i> <code>Signer #1 certificate DN: …</code> with the names you gave the key, and no error.</span></li>
+</ol>
+<p class="note">Always zipalign <b>before</b> apksigner. Signing first and aligning afterwards breaks the signature.</p>
+
 <h3>Create a new signing key (only when the current key is not available)</h3>
 <p class="note"><b>Read this first.</b> Android only lets an app update itself when the new APK is signed with the <b>same key</b>. An APK signed with a new key <b>cannot update</b> SummaRace already on a phone: the old app must be <b>uninstalled first</b>, and uninstalling <b>deletes every learner's progress and records on that phone</b>. Before switching keys, the teacher must <b>Download CSV</b> from Teacher records on every phone.</p>
 <ol class="steps">
@@ -255,7 +309,7 @@ pre{white-space:pre-wrap;word-break:break-all}
 <li><b>Easiest way: create the key in Android Studio</b>
 <span class="kv"><i>Where:</i> <b>Build → Generate Signed App Bundle or APK…</b> → <b>APK</b> → <b>Next</b> → under Key store path click <b>Create new…</b></span>
 <span class="kv"><i>Fill in:</i> Key store path <code>C:\Users\&lt;you&gt;\Documents\SummaRace-signing\summarace-release.jks</code>, a password (twice), Alias <code>summarace</code>, a key password, Validity <code>25</code> years, and at least one name field (for example Organization) → <b>OK</b>.</span>
-<span class="kv"><i>Then:</i> continue with step 7 above (release → Create).</span></li>
+<span class="kv"><i>Then:</i> continue with Way 1, step 7 (release → Create), or use the new <code>.jks</code> in Way 2, step 8.</span></li>
 <li><b>Or create it with a command (keytool)</b>
 <span class="kv"><i>Where:</i> Command Prompt opened in <code>Documents\SummaRace-signing</code> (address bar → <code>cmd</code> → Enter).</span>
 <span class="kv"><i>Type</i> (one line; keytool comes with Android Studio):</span>
